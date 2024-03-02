@@ -1,0 +1,126 @@
+---No further cheat will get added, only bugfix or support to other version until the game is updated---
+
+v.1.0.14
+	• Bugfix
+	• Add support for firebase NWJS version.
+	
+v.1.0.13
+	• added support for online DoL versions, this is not fully tested yet, if any problem occour, you can contact me.
+		
+v.1.0.12
+	• fix some cheat doesnt work after changes
+		• unlimited cum : cum not intense
+		• array fix : function unable to get accessed
+	
+v.1.0.11
+	server version changes :
+		• everything including the cheat script is moved to index.php, less files to see.
+		• Add warning before server save if the version is different.
+	changes :
+		• add information about server save and why array error exist
+		• array error fix is now become a tool.
+	update :
+		• New accessibility, enable history button, sidebar button, simplify cheat button, aimed to make mobile user easily open/close sidebar and access history button.
+		• Brought back the sex skill cheat. I just forgot to re-add them again.
+v.1.0.10
+	server version changes :
+		• new start-admin.bat, to run the server with admin privilege if error : Failed to open stream: Permission denied when opening the ip.
+	non server version changes :
+		• compatibility fix : due to Cross-Origin Resource Sharing (CORS) policy in some browser, the cheat might be refuse to load, so the script now moved one with the DoL.
+		
+v.1.0.9
+	bugfix :
+		• pregnancy lock for npc error
+		• Cheat prevention in main menu fix
+	update :
+		• wolf ferocity changed from toggle to regular cheat at misc tab.
+		• MC offspring manager now available.
+	optimization :
+		• new daily toggle to reduce computing.
+		• info fetcher optimization.
+		
+v.1.0.8
+	update :
+		• pregnancy manager : pregnancy lock and day control.
+		• UI small changes, description now using tooltip.
+		
+v.1.0.7
+	update :
+		• school reputation
+		• farm vegetables sold in process checker in misc
+		• quick performance settings in misc
+	bugfix :
+		• pregnancy detector
+	optimization :
+		• code improovement
+		
+v.1.0.6
+	major changes:
+	• 2 cheat version :
+		•  server version
+			•  allows the cheat to work on any version(might cause bug on not tested version)
+		•  non server version
+			• only works on current version
+			• no server save
+			• work without server like the game itself
+			
+	update :
+		• cheat info
+		• pregnancy detection for npc/player
+
+	optimization :
+		• more script optimization, especially for toggles.
+
+	bugfix :
+		• wolf ferocity and harmony not working
+
+v.1.0.5
+	update : 
+		• wolfpack ferocity and harmony max
+		• auto interact with child
+
+	optimization :
+		• script optimization
+		• sync optimization
+
+	removed :
+		• mayor project fix(array error fix able to fix it)
+
+v.1.0.4
+	update :
+		• Array error fix : fix wrong array usage that causing data loss (beta, might cause problem)
+		• Auto detect array error : game sometimes create new wrong array usage that might cause another data loss.
+
+	bugfix :
+		• Upgrade crime mod that cause problem.
+
+	Upgrade :
+		• debug deep search now more detail.
+		• codes improovement.
+
+v.1.0.3
+	update :
+		• mayor project fix, this caused by the game, so this cheat will fix it if its gone in your gameplay, only works if all of the project is undiscovered. (it'll mark all project finished)
+
+	bugfix :
+		• parasite removal or infection didnt work
+
+v.1.0.2
+	update :
+		• fame and npc manager add scope to see the current variable
+		• exam manager
+		• talent manager
+
+	bugfix :
+		• fix cumming only little to nothing, now its become always intense when activate unlimited cum
+		• more error handling for server save function.
+		
+v.1.0.1
+	bugfix :
+		• server import/export not yet done but alert already shown
+		• server import/export not exporting if there's a gap from 1• 9 of the save
+		• unlimited toggle didnt work properly
+		• add prevention to activate cheat in main menu.
+		
+v.1.0.0
+	initial
