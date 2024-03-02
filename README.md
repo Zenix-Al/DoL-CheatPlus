@@ -175,7 +175,8 @@ Just press blue button that says cheat on the top right corner.
 ## Roadmap
 - [x] Add Changelog.
 - [x] Add support for other DoL version.
-- [ ] More cheat will come after update since i only update it when i played the game.
+- [ ] Update source for tampermonkey and NWJS, since it new im still not include it in compile list.
+- [ ]  More cheat will come after update since i only update it when i played the game.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
