@@ -296,7 +296,7 @@ const firstload = {
 	
 }
 function loadall() {
-	if (SugarCube.State.variables.saveName=='') return;
+	if (SugarCube.State.variables.passage=='Start') return;
 	document.getElementById("moneyinput").value=SugarCube.State.variables.money;
 	for (const functionName in firstload) {
 		if (typeof firstload[functionName] === 'function') setTimeout(function() {
