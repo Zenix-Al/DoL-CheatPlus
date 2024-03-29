@@ -1,4 +1,8 @@
----No further cheat will get added, only bugfix or support to other version until the game is updated---
+v.1.0.16
+	• Update cheat for v0.4.6.3 for vanilla version
+	• other version dont need update.
+	• Important : Current cheat version isnt fully tested to v0.4.6.3.
+
 v.1.0.15
 	• Now you able to see sources from github!
 	• The previous changelog is seen in the zip files
