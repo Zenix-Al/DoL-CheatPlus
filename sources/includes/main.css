@@ -1,16 +1,33 @@
 #floating-button {
       position: fixed;
-      top: 20px;
+      top: 2%;
       right: 20px;
-      z-index: 999;
+      z-index: 899;
+	  transition: top 0.5s ease-in-out;
     }
+#floating-button.moved {
+  top: 90%;
+}
+#effect-layer {
+  z-index: 999;
+  background-color: red;
+  opacity: 0; /* Initially transparent */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.hidden {
+	display: none;
+}
 /* Styles for the toast notifications */
 #toastContainer {
     position: fixed;
     top: 20px; /* Adjust the top position as needed */
     left: 50%;
     transform: translateX(-50%);
-    z-index: 9999; /* Ensure the container is on top of other content */
+    z-index: 999; /* Ensure the container is on top of other content */
 }
 @media (prefers-reduced-motion: reduce) {
   .fade {
@@ -62,7 +79,7 @@
     .modal {
       display: none;
       position: fixed;
-      z-index: 1000;
+      z-index: 900;
       left: 0;
       top: 0;
       width: 100%;
@@ -147,3 +164,11 @@
         .content.active {
             display: block;
         }
+		
+@keyframes shake {
+  0% { transform: translateX(0px); }
+  25% { transform: translateX(-5px); } /* Shake left slightly */
+  50% { transform: translateX(5px); }  /* Shake right slightly */
+  75% { transform: translateX(-3px); } /* Minor left shake */
+  100% { transform: translateX(3px); }  /* Minor right shake */
+}

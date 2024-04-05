@@ -682,6 +682,116 @@ mycode = { ...mycode,
 			  cheat_button.innerHTML="⚙";
 			  cheat_button.style="font-size: 89%;";
 		  }
+	  }, 
+	  abortion_notice: function(){
+		  showToast('Aborting...');
+		  setTimeout(function(){bloodEffect();}, 1000);
+		  setTimeout(function(){showToast('baby is aborted!');}, 3200);
+	  },
+	  mc_abortion_set: function() {
+		  var checkboxes=document.getElementById("mc_abortion_checkbox").checked;
+		  if (checkboxes==false) {
+			showToast('check the checkbox to confirm');
+			return false;
+		  }
+		  var locations=document.getElementById("mc_abortion_location").value;
+		  var selected=document.getElementById("mc_abortion_select").value;
+		  var length=SugarCube.State.variables.sexStats[locations].pregnancy.fetus.length;
+		  if (length==0) {
+			  showToast('No baby!');
+			  return false;
+		  } else if (length==1) {
+			  SugarCube.State.variables.sexStats[locations].pregnancy.fetus=[];
+			  SugarCube.State.variables.sexStats[locations].pregnancy.awareOf=null;
+			  SugarCube.State.variables.sexStats[locations].pregnancy.awareOfDetails=null;
+			  SugarCube.State.variables.sexStats[locations].pregnancy.awareOfMultiple=null;
+			  SugarCube.State.variables.sexStats[locations].pregnancy.potentialFathers=[];
+			  SugarCube.State.variables.sexStats[locations].pregnancy.timer=0;
+			  SugarCube.State.variables.sexStats[locations].pregnancy.timerEnd=null;
+			  SugarCube.State.variables.sexStats[locations].pregnancy.type=null;
+			  SugarCube.State.variables.sexStats[locations].pregnancy.waterBreaking=false;
+			  SugarCube.State.variables.sexStats[locations].pregnancy.waterBreakingTimer=null;
+			  mycode.abortion_notice();
+		  } else {
+			  SugarCube.State.variables.sexStats[locations].pregnancy.fetus.splice(length, 1);
+			  mycode.abortion_notice();
+		  }
+		  firstload.update_mc_abortion_list();
+	  }, 
+	  named_npc_abortion_set: function() {
+		  var checkboxes=document.getElementById("named_npc_abortion_checkbox").checked;
+		  if (checkboxes==false) {
+			showToast('check the checkbox to confirm');
+			return false;
+		  }
+		  var selected=document.getElementById("named_npc_abortion_chara_select").value;
+		  var fetus=document.getElementById("named_npc_abortion_select").value;
+		  for (let i = 0; i < npcnamelist.length; i++) {
+			  if (SugarCube.State.variables.NPCName[i].description === selected) { 
+			  var totalFetus=0;
+			  var selected=i;
+				  if (typeof(SugarCube.State.variables.NPCName[i].pregnancy.fetus)==='object') totalFetus=SugarCube.State.variables.NPCName[i].pregnancy.fetus.length;
+			  }
+			}
+		  if (totalFetus==0) {
+			  showToast('No baby!');
+			  return false;
+		  } else if (totalFetus==1) {
+			  SugarCube.State.variables.NPCName[selected].pregnancy.fetus=[];
+			  SugarCube.State.variables.NPCName[selected].pregnancy.potentialFathers=[];
+			  SugarCube.State.variables.NPCName[selected].pregnancy.timer=0;
+			  SugarCube.State.variables.NPCName[selected].pregnancy.timerEnd=null;
+			  SugarCube.State.variables.NPCName[selected].pregnancy.type=null;
+			  SugarCube.State.variables.NPCName[selected].pregnancy.waterBreaking=false;
+			  SugarCube.State.variables.NPCName[selected].pregnancy.waterBreakingTimer=null;
+			  mycode.abortion_notice();
+		  } else {
+			  SugarCube.State.variables.NPCName[selected].pregnancy.fetus.splice(fetus, 1);
+			  mycode.abortion_notice();
+		  }
+		  firstload.update_named_npc_abortion_list();
+	  },
+	  npc_abortion_set: function() {
+		  var checkboxes=document.getElementById("npc_abortion_set").checked;
+		  if (checkboxes==false) {
+			showToast('check the checkbox to confirm');
+			return false;
+		  }
+		  var selected=document.getElementById("npc_abortion_chara_select").value;
+		  if (!selected) return false;
+		  var fetus=document.getElementById("npc_abortion_select").value;
+		  var totalFetus=SugarCube.State.variables.storedNPCs[selected].pregnancy.fetus.length;
+		  if (totalFetus==0) {
+			  showToast('No baby!');
+			  return false;
+		  } else if (totalFetus==1) {
+			  SugarCube.State.variables.storedNPCs[selected].pregnancy.fetus=[];
+			  SugarCube.State.variables.storedNPCs[selected].pregnancy.potentialFathers=[];
+			  SugarCube.State.variables.storedNPCs[selected].pregnancy.timer=0;
+			  SugarCube.State.variables.storedNPCs[selected].pregnancy.timerEnd=null;
+			  SugarCube.State.variables.storedNPCs[selected].pregnancy.type=null;
+			  SugarCube.State.variables.storedNPCs[selected].pregnancy.waterBreaking=false;
+			  SugarCube.State.variables.storedNPCs[selected].pregnancy.waterBreakingTimer=null;
+			  var execute=false;
+			  var prev;
+			  for (var key in SugarCube.State.variables.storedNPCs) {
+				  if (key === selected) {
+					prev=key;					  
+					execute=true;
+				  }
+				  if (execute) {
+					  SugarCube.State.variables.storedNPCs[prev]=SugarCube.State.variables.storedNPCs[key];
+					  prev=key;
+				  }
+			  }
+			  delete  SugarCube.State.variables.storedNPCs[prev];
+			  mycode.abortion_notice();
+			  firstload.update_npc_abortion_list();
+		  } else {
+			  SugarCube.State.variables.storedNPCs[selected].pregnancy.fetus.splice(fetus, 1);
+			  mycode.abortion_notice();
+		  }
+		  firstload.update_npc_fetus_abortion_list();
 	  }
 
 }

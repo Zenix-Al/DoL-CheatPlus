@@ -7,16 +7,6 @@ const obj = {};
   }
   return obj;
   };
-  /*
-function convertStringIndexArrayToObject(arr) {
-  const obj = {};
-  for (const key in arr) {
-	if (typeof key === "string") {
-	  obj[key] = arr[key];
-	}
-  }
-  return obj;
-}*/
 //generate (ids, inputs, textInputs)
 //quick
 if (curVer==testedOn) {
@@ -27,12 +17,12 @@ if (curVer==testedOn) {
 	var isCheatWorkSymbol="⚠";
 }
 if (isServer==1) {
-	cheatVerType="Server version";
+	cheatVerType="CheatP Server";
 } else {
-	cheatVerType="Non Server Version";
+	cheatVerType="CheatP";
 }
 generatetext(['', '', '', 'info_cheat'], ['text', 'text', 'text', 'tooltip'], ['Tested on :' + testedOn, 'Current ver :'+curVer, isCheatWorkSymbol, isCheatWork], 'quick-content');
-generatetext(['', 'https://www.mediafire.com/folder/d6uiwpcm3y0gu/degrees_of_lewdity'], ['text', "link"], ['cheat ver : '+cheatVer+" "+cheatVerType, 'Check for update here'], 'quick-content');
+generatetext(['', 'https://www.mediafire.com/folder/d6uiwpcm3y0gu/degrees_of_lewdity', 'https://github.com/Zenix-Al/DoL-CheatPlus'], ['text', "link", "link"], ['cheat ver : '+cheatVer+" "+cheatVerType, 'Check for update here', 'Source Code'], 'quick-content');
 
 generatetext([''], ['newline'], [''], 'quick-content');
 generatetext([''], ['header'], ['Quick cheat'], 'quick-content');
@@ -112,9 +102,14 @@ generatetext(['','pregnancy_manager_time_tooltip'], ['header', 'tooltip'], ['Pre
 generatetext(['', 'named_npc_pregnancy_manager', 'named_npc_pregnancy_input', 'named_npc_pregnancy_toggle', 'named_npc_pregnancy_set'], ['text', 'select', 'input', 'checkbox','button'], ['Named NPC', ['placeholder'], '','lock preg','Set'], 'misc-content');
 generatetext(['', 'npc_pregnancy_manager', 'npc_pregnancy_input', 'npc_pregnancy_toggle', 'npc_pregnancy_set'], ['text', 'select', 'input', 'checkbox','button'], ['NPC', ['placeholder'], '','lock preg','Set'], 'misc-content');
 generatetext(['', 'mc_pregnancy_hole', 'mc_pregnancy_manager', 'mc_pregnancy_input', 'mc_pregnancy_toggle', 'mc_pregnancy_set'], ['text', 'select', 'select', 'input', 'checkbox','button'], ['Player', ['vagina', 'anus'], ['placeholder'], '','lock preg','Set'], 'misc-content');
-generatetext(['','pregnancy_manager_time_tooltip'], ['header'], ['MC Offspring'], 'misc-content');
+generatetext([''], ['header'], ['MC Offspring'], 'misc-content');
 generatetext(['', 'mc_tentacle_location', 'mc_tentacle_select', 'mc_tentacle_input', 'mc_tentacle_set', 'mc_tentacle_tooltip'], ['text', 'select', 'select', 'input', 'button', 'tooltip'], ['Tentacle Speed', ['home', 'lake', 'farm'], ['placeholder'], '','Set', 'The lower the better'], 'misc-content');
 generatetext(['', 'mc_baby_select', 'mc_baby_tooltip', 'mc_baby_action_select', 'mc_baby_input', 'mc_baby_set'], ['text', 'select', 'tooltip', 'select', 'checkbox', 'button'], ['Baby', ['placeholder'], "placeholder", ['placeholder'], '','Set'], 'misc-content');
+
+generatetext([''], ['header'], ['Abortion'], 'misc-content');
+generatetext(['', 'mc_abortion_location', 'mc_abortion_select', 'mc_abortion_checkbox', 'mc_abortion_set'], ['text', 'select', 'select', 'checkbox', 'button'], ['MC', ['anus', 'vagina'], ['placeholder'], '','Set'], 'misc-content');
+generatetext(['', 'named_npc_abortion_chara_select','named_npc_abortion_select', 'named_npc_abortion_checkbox', 'named_npc_abortion_set'], ['text', 'select', 'select', 'checkbox', 'button'], ['Named NPC', npcnamelist, ['placeholder'], '','Set'], 'misc-content');
+generatetext(['', 'npc_abortion_chara_select', 'npc_abortion_select', 'npc_abortion_checkbox', 'npc_abortion_set'], ['text', 'select', 'select', 'checkbox', 'button'], ['NPC', ['placeholder'], ['placeholder'], '','Set'], 'misc-content');
 
 generatetext([''], ['newline'], [''], 'misc-content');
 generatetext([''], ['header'], ['Farm'], 'misc-content');

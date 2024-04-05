@@ -82,7 +82,10 @@ document.addEventListener("click", function(event) {
 		  "set_hentai_skill":mycode.set_hentai_skill,
 		  "Enable_cheat_history":mycode.Enable_cheat_history,
 		  "Enable_sidebar_button":mycode.Enable_sidebar_button,
-		  "simple_cheat_button":mycode.simple_cheat_button
+		  "simple_cheat_button":mycode.simple_cheat_button,
+		  "mc_abortion_set":mycode.mc_abortion_set,
+		  "named_npc_abortion_set":mycode.named_npc_abortion_set,
+		  "npc_abortion_set":mycode.npc_abortion_set
 		};
 		if (SugarCube.State.variables.passage=='Start' && !(buttonId=='save_data' || buttonId=='load_data')){
 			showToast('Still in the main menu!');
@@ -163,6 +166,12 @@ cheat.addEventListener("change", function(event) {
 	  firstload.update_mc_tentacle_input();
   } else if (target.id === "mc_baby_action_select" || target.id === "mc_baby_select") {
 	  firstload.update_mc_baby_info();
+  } else if (target.id === "mc_abortion_location") {
+	  firstload.update_mc_abortion_list();
+  } else if (target.id === "named_npc_abortion_chara_select") {
+	  firstload.update_named_npc_abortion_list();
+  } else if (target.id === "npc_abortion_chara_select") {
+	  firstload.update_npc_fetus_abortion_list();
   }
   
 });

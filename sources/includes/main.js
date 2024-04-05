@@ -63,6 +63,18 @@ function showToast(text) {
     }, 3000);
 }
 
+function bloodEffect(){
+	var effect = document.getElementById('effect-layer');
+	effect.classList.remove('hidden');
+	effect.style.transition="opacity 0.1s ease-in-out";
+	effect.style.opacity = 0;
+	setTimeout(function(){effect.style.transition="opacity 2s ease-in-out";
+	effect.style.opacity = 1;}, 200);
+	var bodyElement = document.body;
+	bodyElement.style.animation="shake 0.3s linear infinite";
+	setTimeout(function(){bodyElement.style.animation = 'none';}, 2200);
+	setTimeout(function(){effect.classList.add('hidden');}, 2200);
+}
  
  function openModal() {
   modal.style.display = "block";
@@ -78,11 +90,11 @@ function closeModal() {
 function moveButton(direction) {
     const floatingButton = document.getElementById("floating-button");
     if (direction === "up") {
-        floatingButton.style.top = "2%";
+	    floatingButton.classList.toggle('moved');
         document.getElementById("cheat-up").hidden = true;
         document.getElementById("cheat-down").hidden = false;
     } else if (direction === "down") {
-        floatingButton.style.top = "90%";
+	    floatingButton.classList.toggle('moved');
         document.getElementById("cheat-up").hidden = false;
         document.getElementById("cheat-down").hidden = true;
     }
@@ -103,7 +115,7 @@ function generatetext(ids, inputs, textInputs, category) {
 	modalInputs.style.paddingBottom = '5px';
 	for (var i = 0; i < inputs.length; i++) {
 	  if (inputs[i] === "input") {
-		var input = '<input id="' + ids[i] + '" style="width: 90px;">';
+		var input = '<input id="' + ids[i] + '" style="width: 90px;" autocomplete="off">';
 	  } else if (inputs[i] === "textarea") {
 		var input = '<textarea id="' + ids[i] + '" style="width: 90px;"></textarea>';
 	  } else if (inputs[i] === "select") {

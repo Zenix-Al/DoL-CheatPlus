@@ -292,6 +292,99 @@ const firstload = {
 				selectElement.appendChild(option);
 			}
 		}
+	},
+	update_mc_baby_list: function(){
+		var selectElement = document.getElementById("mc_baby_select");
+		while (selectElement.firstChild) {
+			selectElement.removeChild(selectElement.firstChild);
+		}
+		for (var key in SugarCube.State.variables.children) {
+			const option = document.createElement("option");
+			option.value = key;
+			option.text = key;
+			selectElement.appendChild(option);
+		}
+		this.update_mc_baby_info();
+		if (this.update_mc_baby_list_options===0) {
+			this.update_mc_baby_list_options=1;
+			document.getElementById("mc_baby_input").style=""
+			selectElement = document.getElementById("mc_baby_action_select");
+			while (selectElement.firstChild) {
+				selectElement.removeChild(selectElement.firstChild);
+			}
+			for (var key in babyOptions) {
+				const option = document.createElement("option");
+				option.value = babyOptions[key];
+				option.text = babyOptionsText[key];
+				selectElement.appendChild(option);
+			}
+		}
+	},
+	update_mc_abortion_list: function(){
+		var locations = document.getElementById("mc_abortion_location").value;
+		var abortionSelect = document.getElementById("mc_abortion_select");
+		var totalFetus=SugarCube.State.variables.sexStats[locations].pregnancy.fetus.length;
+		while (abortionSelect.firstChild) {
+			abortionSelect.removeChild(abortionSelect.firstChild);
+		}
+		for (var i=0; i<totalFetus; i++) {
+			const option = document.createElement("option");
+			option.value = i;
+			option.text = i;
+			abortionSelect.appendChild(option);
+		}
+	},
+	update_named_npc_abortion_list: function(){
+		var npcSelect = document.getElementById("named_npc_abortion_chara_select").value;
+		var abortionSelect = document.getElementById("named_npc_abortion_select");
+		for (let i = 0; i < npcnamelist.length; i++) {
+		  if (SugarCube.State.variables.NPCName[i].description === npcSelect) { 
+		  var totalFetus=0;
+			  if (typeof(SugarCube.State.variables.NPCName[i].pregnancy.fetus)==='object') totalFetus=SugarCube.State.variables.NPCName[i].pregnancy.fetus.length;
+		  }
+		}
+		
+		while (abortionSelect.firstChild) {
+			abortionSelect.removeChild(abortionSelect.firstChild);
+		}
+			
+		for (var i=0; i<totalFetus; i++) {
+			const option = document.createElement("option");
+			option.value = i;
+			option.text = i;
+			abortionSelect.appendChild(option);
+		}
+	},
+	update_npc_abortion_list: function(){
+		if (!typeof(SugarCube.State.variables.storedNPCs.pregnancy_0)==='object') return false;
+		var abortionCharaSelect = document.getElementById("npc_abortion_chara_select");
+		while (abortionCharaSelect.firstChild) {
+			abortionCharaSelect.removeChild(abortionCharaSelect.firstChild);
+		}
+		var number=1;
+		for (var key in SugarCube.State.variables.storedNPCs) {
+			const option = document.createElement("option");
+			option.value = key;
+			option.text = number+". "+SugarCube.State.variables.storedNPCs[key].pregnancy.fetus[0].mother;
+			abortionCharaSelect.appendChild(option);
+			number++;
+		}
+	},
+	update_npc_fetus_abortion_list: function(){
+		if (typeof(SugarCube.State.variables.storedNPCs.pregnancy_0)!=='object') return false;
+		var abortionSelect = document.getElementById("npc_abortion_select");
+		var abortionCharaSelect = document.getElementById("npc_abortion_chara_select").value;
+		var totalFetus=0;
+		if (typeof(SugarCube.State.variables.storedNPCs[abortionCharaSelect].pregnancy.fetus)==='object') totalFetus = SugarCube.State.variables.storedNPCs[abortionCharaSelect].pregnancy.fetus.length;
+		while (abortionSelect.firstChild) {
+			abortionSelect.removeChild(abortionSelect.firstChild);
+		}
+		for (var i=0; i<totalFetus; i++) {
+			const option = document.createElement("option");
+			option.value = i;
+			option.text = i;
+			abortionSelect.appendChild(option);
+		}
 	}
 	
 }
