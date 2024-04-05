@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         DoL Cheat tampermonkey version
 // @namespace    http://tampermonkey.net/
-// @version      1.0.15
+// @version      1.0.17
 // @description  try to take over the world!
 // @author       X Death on F95zone
 // @match        https://beeesss.dolmods.net/
