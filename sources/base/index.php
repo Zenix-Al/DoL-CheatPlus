@@ -8,6 +8,7 @@
     <button id="cheat-down">&#9660;</button>
 </div>
 <div id="toastContainer"></div>
+<div id="effect-layer" class="hidden"></div>
   
 
   <div id="modal" class="modal">
@@ -34,5 +35,4 @@
        </div>
     </div>
   </div>
-</div>
 <?php require_once("main.html"); ?>
