@@ -118,6 +118,8 @@ Instruction for installation is different for each cheat version!
 ```npm install uglify-js -g```
 3. Due to github size limit, i zip one of the required file in ``\sources\base\game.zip``` (vanilla game html) extract it.
 4. run compile.bat in source/ or release.bat in release/
+5. output in _compiled or release.
+6. for how to use the cheat is shown below.
 
 * Vanilla
 1. Extract the game
@@ -183,7 +185,7 @@ Just press blue button that says cheat on the top right corner.
 ## Roadmap
 - [x] Add Changelog.
 - [x] Add support for other DoL version.
-- [ ] Update source for tampermonkey and NWJS, since it new im still not include it in compile list.
+- [x] Update source for tampermonkey and NWJS, since it new im still not include it in compile list.
 - [ ]  More cheat will come after update since i only update it when i played the game.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
