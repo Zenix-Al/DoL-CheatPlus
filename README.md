@@ -98,18 +98,26 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
+For compiling, Ensure you have Node.js (version 8 or later) installed on your system. You can download it from the official website: <a href="https://nodejs.org/en">Official nodejs</a>
+
 You need DoL for the cheat.
 <a href="https://vrelnir.blogspot.com">Official DoL Blog</a>
 ·
 <a href="https://dolmods.net">Online DoL Versions</a>
 ·
-<a href="https://dolmods.net/](https://f95zone.to/threads/degrees-of-lewdity-v0-4-5-3-vrelnir.20259">DoL in F95Zone</a>
+<a href="https://f95zone.to/threads/degrees-of-lewdity-v0-4-5-3-vrelnir.20259">DoL in F95Zone</a>
 
 Cheat download link :
 <a href="https://app.mediafire.com/d6uiwpcm3y0gu">Mediafire</a>
 ### Installation
 
 Instruction for installation is different for each cheat version!
+* Compiling
+1. Open your terminal or command prompt.
+2. Run the following command to install UglifyJS globally (accessible from anywhere on your system):
+```npm install uglify-js -g```
+3. Due to github size limit, i zip one of the required file in ``\sources\base\game.zip``` (vanilla game html) extract it.
+4. run compile.bat in source/ or release.bat in release/
 
 * Vanilla
 1. Extract the game
