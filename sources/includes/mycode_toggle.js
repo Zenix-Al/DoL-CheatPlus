@@ -251,15 +251,22 @@ edengarden: function() {
 	prevAngelBuild: 0,
 	restoreAngel: false,
 	invincibleAngel: function(){
-		if (SugarCube.State.variables.penisstate.match(/entrance/)) {
+		if (SugarCube.State.variables.penisstate) {
+			var trigger=false;
+			if (SugarCube.State.variables.penisstate.match(/entrance/)) trigger=true;
+		} else if (SugarCube.State.variables.vaginastate) {
+			var trigger=false;
+			if (SugarCube.State.variables.vaginastate.match(/imminent/)) trigger=true;
+		}
+		if (trigger) {
 			if (!this.restoreAngel) this.prevAngelBuild=SugarCube.State.variables.angel;
 			SugarCube.State.variables.angel=0;
 			SugarCube.State.variables.angelbuild=100;
 			this.restoreAngel=true;
-		} else if (!SugarCube.State.variables.penisstate.match(/entrance/) && this.restoreAngel){
+		} else if (!trigger && this.restoreAngel){
 			this.restoreAngel=false;
 			SugarCube.State.variables.angel=this.prevAngelBuild;
 			SugarCube.State.variables.angelbuild=100;
-} 
+		} 
 	}
 }
