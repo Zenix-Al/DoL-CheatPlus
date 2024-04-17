@@ -254,6 +254,7 @@ edengarden: function() {
 		if (SugarCube.State.variables.penisstate) {
 			var trigger=false;
 			if (SugarCube.State.variables.penisstate.match(/entrance/)) trigger=true;
+			if (SugarCube.State.variables.penisstate.match(/imminent/)) trigger=true;
 		} else if (SugarCube.State.variables.vaginastate) {
 			var trigger=false;
 			if (SugarCube.State.variables.vaginastate.match(/imminent/)) trigger=true;
