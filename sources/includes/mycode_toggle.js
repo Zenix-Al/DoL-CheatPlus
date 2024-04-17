@@ -158,9 +158,8 @@ edengarden: function() {
     SugarCube.State.variables.arousal=10000;
   },
    virginity: function(){
-	for (const key in SugarCube.State.variables.player.virginity) {
-	  SugarCube.State.variables.player.virginity[key]=true;
-	}
+	  SugarCube.State.variables.player.virginity.penile=true;
+	  SugarCube.State.variables.player.virginity.vaginal=true;
   },
   maxchruchtask: function() {
 	SugarCube.State.variables.temple_garden=100;
@@ -248,5 +247,19 @@ edengarden: function() {
 				SugarCube.State.variables.sexStats[this.mc_pregnancy_locked_hole[lap]].pregnancy.timer=time;
 			}
 		}
+	},
+	prevAngelBuild: 0,
+	restoreAngel: false,
+	invincibleAngel: function(){
+		if (SugarCube.State.variables.penisstate.match(/entrance/)) {
+			if (!this.restoreAngel) this.prevAngelBuild=SugarCube.State.variables.angel;
+			SugarCube.State.variables.angel=0;
+			SugarCube.State.variables.angelbuild=100;
+			this.restoreAngel=true;
+		} else if (!SugarCube.State.variables.penisstate.match(/entrance/) && this.restoreAngel){
+			this.restoreAngel=false;
+			SugarCube.State.variables.angel=this.prevAngelBuild;
+			SugarCube.State.variables.angelbuild=100;
+} 
 	}
 }

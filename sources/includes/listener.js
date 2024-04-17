@@ -29,6 +29,7 @@ document.addEventListener("click", function(event) {
 		  "checkArray": mycode.toggle.bind(mycode, 'checkArray', 'Scan'),
 		  "interact_child": mycode.toggle.bind(mycode, 'interact_child', 'Auto'),
 		  "pregnancy_detection": mycode.toggle.bind(mycode, 'pregnancy_detection', 'Activate'),
+		  "invincibleAngel": mycode.toggle.bind(mycode, 'invincibleAngel', 'Activate'),
 		  //togglesend
 		  "max_harmony": mycode.max_harmony,
 		  "max_Ferocity": mycode.max_Ferocity,

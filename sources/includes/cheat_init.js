@@ -22,7 +22,7 @@ if (isServer==1) {
 	cheatVerType="CheatP";
 }
 generatetext(['', '', '', 'info_cheat'], ['text', 'text', 'text', 'tooltip'], ['Tested on :' + testedOn, 'Current ver :'+curVer, isCheatWorkSymbol, isCheatWork], 'quick-content');
-generatetext(['', 'https://www.mediafire.com/folder/d6uiwpcm3y0gu/degrees_of_lewdity', 'https://github.com/Zenix-Al/DoL-CheatPlus'], ['text', "link", "link"], ['cheat ver : '+cheatVer+" "+cheatVerType, 'Check for update here', 'Source Code'], 'quick-content');
+generatetext(['', 'https://www.mediafire.com/folder/d6uiwpcm3y0gu/degrees_of_lewdity', 'https://github.com/Zenix-Al/DoL-CheatPlus'], ['text', "link", "link"], ['cheat ver : '+cheatVer+" "+cheatVerType, 'Check for update', 'Source Code'], 'quick-content');
 
 generatetext([''], ['newline'], [''], 'quick-content');
 generatetext([''], ['header'], ['Quick cheat'], 'quick-content');
@@ -41,6 +41,7 @@ generatetext(['', 'everyone_horny'], ['text', 'button'], ['Everyone is horny', '
 generatetext(['', 'farm_safe'], ['text', 'button'], ['Farm safety', 'Safe'], 'quick-content');
 generatetext(['', 'unlicum', 'unliarousal'], ['text', 'button', 'button'], ['Unlimited', 'cum', 'arousal'], 'quick-content');
 generatetext(['', 'virginity', 'purity'], ['text', 'button', 'button'], ['Maintain pure', 'virgin', 'pure'], 'quick-content');
+generatetext(['', 'invincibleAngel', 'invincibleAngelInfo'], ['text', 'button', 'tooltip'], ['Invincible Angel', 'Activate', 'it will prevent angel build progress lower or become fallen.(combine it with pure cheat)'], 'quick-content');
 generatetext(['', 'interact_child','info_interact_child'], ['text', 'button', 'tooltip'], ['Auto Child Interact ', 'Auto', 'you must visit your baby first to trigger it.'], 'quick-content');
 generatetext(['', 'pc_pregnancy', 'npc_pregnancy', 'pregnancy_detection'], ['text', 'button', 'button', 'button'], ['pregnancy detection ', 'pc=0', 'NPC=0','Activate'], 'quick-content');
 

@@ -232,7 +232,6 @@ const firstload = {
 		while (selectElement.firstChild) {
 			selectElement.removeChild(selectElement.firstChild);
 		}
-		if (SugarCube.State.variables.container[selectlocation].creatures.length>0)
 			for (var key in SugarCube.State.variables.container[selectlocation].creatures){
 				if (SugarCube.State.variables.container[selectlocation].creatures[key]!=null) {
 					const option = document.createElement("option");
