@@ -255,9 +255,11 @@ edengarden: function() {
 			var trigger=false;
 			if (SugarCube.State.variables.penisstate.match(/entrance/)) trigger=true;
 			if (SugarCube.State.variables.penisstate.match(/imminent/)) trigger=true;
-		} else if (SugarCube.State.variables.vaginastate) {
+		} 
+		if (SugarCube.State.variables.vaginastate && !trigger) {
 			var trigger=false;
 			if (SugarCube.State.variables.vaginastate.match(/imminent/)) trigger=true;
+			if (SugarCube.State.variables.vaginastate.match(/entrance/)) trigger=true;
 		}
 		if (trigger) {
 			if (!this.restoreAngel) this.prevAngelBuild=SugarCube.State.variables.angel;
