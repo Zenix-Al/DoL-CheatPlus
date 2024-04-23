@@ -384,8 +384,12 @@ const firstload = {
 			option.text = i;
 			abortionSelect.appendChild(option);
 		}
+	},
+	update_cheat_state: function() {
+		var button=document.getElementById("in_game_cheat");
+		if (SugarCube.State.variables.debug===1 && button.innerHTML==="Enable") mycode.in_game_cheat();
+		if (SugarCube.State.variables.debug===0 && button.innerHTML==="Disable") mycode.in_game_cheat();
 	}
-	
 }
 function loadall() {
 	if (SugarCube.State.variables.passage=='Start') return;

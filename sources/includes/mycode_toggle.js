@@ -251,6 +251,8 @@ edengarden: function() {
 	prevAngelBuild: 0,
 	restoreAngel: false,
 	invincibleAngel: function(){
+		if (SugarCube.State.variables.cheat.angel) this.prevAngelBuild=SugarCube.State.variables.cheat.angel;
+		
 		if (SugarCube.State.variables.penisstate) {
 			var trigger=false;
 			if (SugarCube.State.variables.penisstate.match(/entrance/)) trigger=true;
@@ -262,7 +264,10 @@ edengarden: function() {
 			if (SugarCube.State.variables.vaginastate.match(/entrance/)) trigger=true;
 		}
 		if (trigger) {
-			if (!this.restoreAngel) this.prevAngelBuild=SugarCube.State.variables.angel;
+			if (!this.restoreAngel) {
+				this.prevAngelBuild=SugarCube.State.variables.angel;
+				SugarCube.State.variables.cheat.angel=SugarCube.State.variables.angel;
+			}
 			SugarCube.State.variables.angel=0;
 			SugarCube.State.variables.angelbuild=100;
 			this.restoreAngel=true;

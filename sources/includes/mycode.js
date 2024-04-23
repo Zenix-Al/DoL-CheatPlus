@@ -247,7 +247,7 @@ mycode = { ...mycode,
 		if (!isNaN(value)) {
 			if (value>3000) value=3000
 			showToast('Activated!');
-			SugarCube.State.semen_volume=value;
+			SugarCube.State.variables.semen_volume=value;
 			firstload.cumcurrent();
 		}
 	},
@@ -256,16 +256,16 @@ mycode = { ...mycode,
 		if (!isNaN(value)) {
 			if (value>3000) value=3000
 			showToast('Activated!');
-			SugarCube.State.milk_volume=value;
+			SugarCube.State.variables.milk_volume=value;
 			firstload.milkcurrent();
 		}
 	},
 	cumfill: function(){
-		SugarCube.State.semen_amount=SugarCube.State.semen_volume;
+		SugarCube.State.variables.semen_amount=SugarCube.State.semen_volume;
 		showToast('Activated!');
 	},
 	milkfill: function(){
-		SugarCube.State.milk_amount=SugarCube.State.milk_volume;
+		SugarCube.State.variables.milk_amount=SugarCube.State.milk_volume;
 		showToast('Activated!');
 	},
 	infect: function(){
@@ -422,6 +422,18 @@ mycode = { ...mycode,
 				SugarCube.State.variables.player.bodyliquid[key][key2]=0;
 			}
 		}
+		showToast('Activated!');
+	},
+	dirty_cum: function(){
+		for (var key in SugarCube.State.variables.player.bodyliquid){
+			for (var key2 in SugarCube.State.variables.player.bodyliquid[key]){
+				SugarCube.State.variables.player.bodyliquid[key][key2]=100;
+			}
+		}
+		showToast('Activated!');
+	},
+	clean_cum_uretus: function(){
+		SugarCube.State.variables.sexStats.vagina.sperm=[];
 		showToast('Activated!');
 	},
 	funny_fruits: ['cabbage', 'wild_carrot', 'turnip', 'potato', 'onion', 'garlic_bulb', 'broccoli'],
@@ -711,9 +723,15 @@ mycode = { ...mycode,
 			  SugarCube.State.variables.sexStats[locations].pregnancy.type=null;
 			  SugarCube.State.variables.sexStats[locations].pregnancy.waterBreaking=false;
 			  SugarCube.State.variables.sexStats[locations].pregnancy.waterBreakingTimer=null;
+			  if (SugarCube.State.variables.sexStats.anus.pregnancy.fetus[0].stats.gender==="Hermaphrodite") {
+				    SugarCube.State.variables.sexStats.anus.pregnancy.motherStatus=1;
+			  }
 			  mycode.abortion_notice();
 		  } else {
-			  SugarCube.State.variables.sexStats[locations].pregnancy.fetus.splice(length, 1);
+			  SugarCube.State.variables.sexStats[locations].pregnancy.fetus.splice(selected, 1);
+			  if (SugarCube.State.variables.sexStats.anus.pregnancy.fetus[0].stats.gender==="Hermaphrodite") {
+				    SugarCube.State.variables.sexStats.anus.pregnancy.motherStatus=1;
+			  }
 			  mycode.abortion_notice();
 		  }
 		  firstload.update_mc_abortion_list();
@@ -792,6 +810,39 @@ mycode = { ...mycode,
 			  mycode.abortion_notice();
 		  }
 		  firstload.update_npc_fetus_abortion_list();
+	  },
+	  in_game_cheat: function() {
+		  var button=document.getElementById("in_game_cheat");
+		  var button2=document.getElementById("alt_cheat");
+		  if (button.innerHTML==="Enable") {
+			  SugarCube.State.variables.debug=1;
+			  button2.innerHTML="Open";
+			  button.innerHTML="Disable"
+			  showToast('Enabled');
+		  } else if (button.innerHTML==="Disable") {
+			  SugarCube.State.variables.debug=0;
+			  button2.innerHTML="";
+			  button.innerHTML="Enable"
+			  showToast('Disabled');
+		  }
+	  },
+	  alt_cheat: function() {
+		 var overlay = document.getElementById("overlayButtons")
+		var overlay2=overlay.querySelectorAll(".link-internal")
+
+		for (var i=0; i<overlay2.length;i++) {
+			if (overlay2[i].innerHTML==="CHEATS") {
+				closeModal();
+				overlay2[i].click();
+				return;
+			}
+		}
+		if (SugarCube.State.variables.debug===1) {
+			showToast('move passage to see the change');
+		} else {
+			showToast('cheat not enabled, please re-enable it again.');
+		}
+		
 	  }
 
 }

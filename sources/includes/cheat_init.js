@@ -31,7 +31,8 @@ generatetext(['', 'hesoyam', 'kill_player'], ['text', 'button', 'button'], ['Pla
 generatetext(['', 'enemycalm', 'kill_enemy'], ['text', 'button', 'button'], ['Enemy state', 'Recover', 'Ruin'],'quick-content');
 generatetext(['', 'crimecurrent', 'sheesh', 'jk-lol'], ['text', 'button', 'button', 'button'], ['Crime : ', '0', '-100','+100'], 'quick-content');
 generatetext(['', 'vow-virgin'], ['text', 'button'], ['chruch vow', 'Virgin'], 'quick-content');
-generatetext(['', 'clean_cum'], ['text', 'button'], ['Clean body', 'Clean'], 'quick-content');
+generatetext(['', 'clean_cum', 'dirty_cum', 'clean_cum_uretus'], ['text', 'button', 'button', 'button'], ['Hygiene', 'Clean', 'dirty', 'clean uretus cum' ], 'quick-content');
+generatetext(['', 'in_game_cheat', 'alt_cheat'], ['text', 'button', 'button'], ['In game cheat', 'Enable', ''], 'quick-content');
 generatetext([''], ['newline'], [''], 'quick-content');
 
 generatetext([''], ['header'], ['Unlimited Toggles'], 'quick-content');
