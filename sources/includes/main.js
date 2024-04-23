@@ -4,6 +4,7 @@ var cheatVer;
 var testedOn;*/
 //variables init
 //main
+if (!SugarCube.State.variables.cheatPlus) SugarCube.State.variables.cheatPlus={};
 var quicklink = document.getElementById("quick-link");
 var statlink = document.getElementById("stats-link");
 var misclink = document.getElementById("misc-link");

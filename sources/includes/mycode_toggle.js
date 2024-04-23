@@ -251,7 +251,7 @@ edengarden: function() {
 	prevAngelBuild: 0,
 	restoreAngel: false,
 	invincibleAngel: function(){
-		if (SugarCube.State.variables.cheat.angel) this.prevAngelBuild=SugarCube.State.variables.cheat.angel;
+		if (SugarCube.State.variables.cheatPlus.angel) this.prevAngelBuild=SugarCube.State.variables.cheatPlus.angel;
 		
 		if (SugarCube.State.variables.penisstate) {
 			var trigger=false;
@@ -266,7 +266,7 @@ edengarden: function() {
 		if (trigger) {
 			if (!this.restoreAngel) {
 				this.prevAngelBuild=SugarCube.State.variables.angel;
-				SugarCube.State.variables.cheat.angel=SugarCube.State.variables.angel;
+				SugarCube.State.variables.cheatPlus.angel=SugarCube.State.variables.angel;
 			}
 			SugarCube.State.variables.angel=0;
 			SugarCube.State.variables.angelbuild=100;
@@ -274,6 +274,7 @@ edengarden: function() {
 		} else if (!trigger && this.restoreAngel){
 			this.restoreAngel=false;
 			SugarCube.State.variables.angel=this.prevAngelBuild;
+			SugarCube.State.variables.cheatPlus.angel=0;
 			SugarCube.State.variables.angelbuild=100;
 		} 
 	}
