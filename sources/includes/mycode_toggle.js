@@ -274,7 +274,6 @@ edengarden: function() {
 		} else if (!trigger && this.restoreAngel){
 			this.restoreAngel=false;
 			SugarCube.State.variables.angel=this.prevAngelBuild;
-			SugarCube.State.variables.cheatPlus.angel=0;
 			SugarCube.State.variables.angelbuild=100;
 		} 
 	}
