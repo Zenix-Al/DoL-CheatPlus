@@ -1,71 +1,95 @@
 let mycode = {
+	runitallRestore: function() {
+		for (var key in functionbundle) {
+			buttonActions[key]();
+		}
+		functionbundle={};
+		showToast('error detected in toggle cheat, toggle affected deactifated.');
+		errorFunctions=0;
+		progressFunctions=0;
+		totalFunctions=0;
+	},
 	runitall: function(){
-		if (runitallIsRunning===1 && clickCounter>0) {
+		var interval=10;
+		if (totalFunctions!==progressFunctions) {
+			errorFunctions++;
+			if (errorFunctions>5) {
+				mycode.runitallRestore();
+			}
+			return;
+		}
+		errorFunctions=0;
+		progressFunctions=0;
+		totalFunctions=0;
+		for (var key in functionbundle) {
+		  if (functionbundle.hasOwnProperty(key) && typeof functionbundle[key] === 'function') {
+			setTimeout(function () {
+				functionbundle[key]();
+				progressFunctions++;
+			}, interval)
+			totalFunctions++;
+			interval+=10;
+		  }
+	    }
+	    clickCounter-=1;
+		if (clickCounter>0) {
 			setTimeout(function() {
 				mycode.runitall();
 			  }, 10);
 		}
-		runitallIsRunning=1;
-		functionsInProcess = 0;
-		functionsCompleted = 0;
-		var itsin=0;
-	  for (var key in functionbundle) {
-		if (functionbundle.hasOwnProperty(key) && typeof functionbundle[key] === 'function') {
-			var itsin=1;
-			let promise = new Promise((resolve, reject) => {
-				functionbundle[key]();
-				resolve(1);
-			});
-			promise.then((value) => {
-				clickCounter-=1;
-				runitallIsRunning=0;
-			});
-	    }
-	  }
-	  if (itsin==0) {
-		  clickCounter-=1;
-		  runitallIsRunning=0;
-	  }
-  },
-   toggleActive: [],
-toggle: function(id, name) {
-    const button = document.getElementById(id);
-    if (this.toggleActive[id]) {
-	  functionbundle[id]=undefined;
-      button.innerHTML = name;
-	  this.toggleActive[id]=undefined;
-	  console.log("Deactive!");
-    } else {
-	  functionbundle[id]=mycode[id].bind(mycode);
-      button.innerHTML = name + "&#10003;";
-	  this.toggleActive[id]=true;
-      console.log("Active!");
-    }
-  },
-     toggleActiveDaily: {},
-   functionbundleDaily: {},
-  	runitallDaily: function(){
-	  for (var key in mycode.functionbundleDaily) {
-		if (mycode.functionbundleDaily.hasOwnProperty(key) && typeof mycode.functionbundleDaily[key] === 'function') {
-			mycode.functionbundleDaily[key]();
-	    }
-	  }
-  },
-toggleDaily: function(id, name) {
-    const button = document.getElementById(id);
-    if (mycode.toggleActive[id]) {
-	  mycode.functionbundleDaily[id]=undefined;
-      button.innerHTML = name;
-	  mycode.toggleActive[id]=undefined;
-	  console.log("Deactive!");
-    } else {
-	  mycode.functionbundleDaily[id]=mycode[id].bind(mycode);
-      button.innerHTML = name + "&#10003;";
-	  mycode.toggleActive[id]=true;
-	  mycode.functionbundleDaily[id]();
-      console.log("Active!");
-    }
-  },
+		//check if daily toggle should run or not.
+		mycode.checkDateDaily();
+    },
+    toggleActive: [],
+	toggle: function(id, name) {
+		const button = document.getElementById(id);
+		if (!SugarCube.State.variables.cheatPlus.toggles) SugarCube.State.variables.cheatPlus.toggles={};
+		if (!SugarCube.State.variables.cheatPlus.togglesActive) SugarCube.State.variables.cheatPlus.togglesActive=[];
+		if (this.toggleActive[id]) {
+		  functionbundle[id]=undefined;
+		  SugarCube.State.variables.cheatPlus.toggles[id]=undefined;
+		  button.innerHTML = name;
+		  this.toggleActive[id]=undefined;
+		  console.log("Deactive!");
+		} else {
+		  functionbundle[id]=mycode[id].bind(mycode);
+		  SugarCube.State.variables.cheatPlus.toggles[id]=id;
+		  button.innerHTML = name + "&#10003;";
+		  this.toggleActive[id]=true;
+		  console.log("Active!");
+		}
+	},
+	checkDateDaily: function(){
+		var date = (SugarCube.State.variables.timeStamp-SugarCube.State.variables.timeStamp%86400)/86400;
+		if (curDate<date || curDate>date){
+			curDate=date;
+			mycode.runitallDaily();
+		}
+	},
+    toggleActiveDaily: {},
+    functionbundleDaily: {},
+	runitallDaily: function(){
+		for (var key in mycode.functionbundleDaily) {
+			if (mycode.functionbundleDaily.hasOwnProperty(key) && typeof mycode.functionbundleDaily[key] === 'function') {
+				mycode.functionbundleDaily[key]();
+			}
+		}
+	},
+	toggleDaily: function(id, name) {
+		const button = document.getElementById(id);
+		if (mycode.toggleActive[id]) {
+		  mycode.functionbundleDaily[id]=undefined;
+		  button.innerHTML = name;
+		  mycode.toggleActive[id]=undefined;
+		  console.log("Deactive!");
+		} else {
+		  mycode.functionbundleDaily[id]=mycode[id].bind(mycode);
+		  button.innerHTML = name + "&#10003;";
+		  mycode.toggleActive[id]=true;
+		  mycode.functionbundleDaily[id]();
+		  console.log("Active!");
+		}
+	},
   
     everyone_horny: function(){
 		for (let i = 0; i < npcnamelist.length; i++) {
@@ -154,27 +178,27 @@ edengarden: function() {
 	}
 	if (SugarCube.State.variables.orgasmdown>0) SugarCube.State.variables.arousal=mycode.tmpArousal;
   },
-  unliarousal: function() {
-    SugarCube.State.variables.arousal=10000;
-  },
-   virginity: function(){
+	unliarousal: function() {
+		SugarCube.State.variables.arousal=10000;
+	},
+	virginity: function(){
 	  SugarCube.State.variables.player.virginity.penile=true;
 	  SugarCube.State.variables.player.virginity.vaginal=true;
-  },
-  maxchruchtask: function() {
-	SugarCube.State.variables.temple_garden=100;
-    SugarCube.State.variables.temple_quarters=100;
-	SugarCube.State.variables.grace=100;
-  },
-  maxanimaltask: function() {
-	SugarCube.State.variables.stray_happiness=100;
-  },
-    purity: function() {
+	},
+	maxchruchtask: function() {
+		SugarCube.State.variables.temple_garden=100;
+		SugarCube.State.variables.temple_quarters=100;
+		SugarCube.State.variables.grace=100;
+	},
+	maxanimaltask: function() {
+		SugarCube.State.variables.stray_happiness=100;
+	},
+	purity: function() {
 	  SugarCube.State.variables.purity=1000;
-  },
-  farm_safe: function(){
-	SugarCube.State.variables.farm.aggro=0;
-  },
+	},
+	farm_safe: function(){
+		SugarCube.State.variables.farm.aggro=0;
+	},
   interact_child: function(){
 	  for (var key in SugarCube.State.variables.children) {
 		if (SugarCube.State.variables.children[key].localVariables.event==true) {

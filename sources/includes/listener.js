@@ -1,4 +1,17 @@
 var buttonId;
+var mainActions = {
+  "quick-link": showContent.bind(null, quicklink, quickcontent),
+  "stats-link": showContent.bind(null, statlink, statscontent),
+  "misc-link": showContent.bind(null, misclink, misccontent),
+  "closeButton": closeModal,
+  "cheat-up": moveButton.bind(null, "up"),
+  "cheat-down": moveButton.bind(null, "down"),
+  "cheat-open": openModal,
+  "cheat-history-backwards": mycode.cheat_backwards,
+  "cheat-history-forwards": mycode.cheat_forwards,
+  "cheat-sidebar": mycode.sidebar_cheat
+}
+
 var buttonActions = {
   //toggles
   "maxchruchtask": mycode.toggleDaily.bind(mycode, 'maxchruchtask', 'Church'),
@@ -47,8 +60,8 @@ var buttonActions = {
   "milkset": mycode.milkmanager,
   "cumrefil": mycode.cumfill,
   "milkrefil": mycode.milkfill,
-  "search123": mycode.executeSearch.bind(null, buttonId),
-  "search456": mycode.executeSearch.bind(null, buttonId),
+  "search123": executeSearch.bind(null, buttonId),
+  "search456": executeSearch.bind(null, buttonId),
   "changetraitbro": mycode.changetraitbro,
    "VrelCoinsUsage": mycode.VrelCoinsUsage,
    "set_fame12": mycode.set_fame12,
@@ -68,9 +81,9 @@ var buttonActions = {
   "mc_tentacle_set":mycode.mc_tentacle_set,
   "mc_baby_set":mycode.mc_baby_set,
   "set_hentai_skill":mycode.set_hentai_skill,
-  "Enable_cheat_history":mycode.Enable_cheat_history,
-  "Enable_sidebar_button":mycode.Enable_sidebar_button,
-  "simple_cheat_button":mycode.simple_cheat_button,
+  "Enable_cheat_history":Enable_cheat_history,
+  "Enable_sidebar_button":Enable_sidebar_button,
+  "simple_cheat_button":simple_cheat_button,
   "mc_abortion_set":mycode.mc_abortion_set,
   "named_npc_abortion_set":mycode.named_npc_abortion_set,
   "npc_abortion_set":mycode.npc_abortion_set,
@@ -81,8 +94,9 @@ var buttonActions = {
 };
 cheat.addEventListener("click", function(Event) {
 	var target = event.target;
+	if (!target.id) return;
+	var buttonId = target.id;
 	if (target.tagName === "A" && target.closest(".modal-content")) {
-		var buttonId = target.id;
 		if (SugarCube.State.variables.passage=='Start' && !(buttonId=='save_data' || buttonId=='load_data')){
 			showToast('Still in the main menu!');
 			return;
@@ -90,107 +104,75 @@ cheat.addEventListener("click", function(Event) {
 		if (buttonId in buttonActions) {
 		  buttonActions[buttonId]();
 		}
-
-	  } else if (target.closest("#floating-button")) {
-		if (target.id === "cheat-up") {
-		  moveButton("up");
-		} else if (target.id === "cheat-down") {
-		  moveButton("down");
-		} else if (target.id === "cheat-open") {
-		  openModal();
-		} else if (target.id === "cheat-history-backwards") {
-		  mycode.cheat_backwards();
-		} else if (target.id === "cheat-history-forwards") {
-		  mycode.cheat_forwards();
-		} else if (target.id === "cheat-sidebar") {
-		  mycode.sidebar_cheat();
-		} 
-	  } else if (target.classList.contains("nav-link")) {
-		  var navId = target.id;
-		  if (navId=="quick-link"){
-			var navTarget=quicklink;
-			var navTargetContent=quickcontent;
-			showContent(navTarget, navTargetContent);
-		  } else if (navId=="stats-link") {
-			  var navTarget=statlink;
-			  var navTargetContent=statscontent;
-			  showContent(navTarget, navTargetContent);
-		  } else if (navId=="misc-link") {
-			  var navTarget=misclink;
-			  var navTargetContent=misccontent;
-			  showContent(navTarget, navTargetContent);
-		  } else if (navId=="closeButton") { 
-			closeModal();
-		  }
+	  } 
+	  if (buttonId in mainActions) {
+		mainActions[buttonId]();
 	  }
 });
-
+//change lookup
+var changeActions = {
+	"statpick":firstload.statpick,
+	"statpicke":firstload.statpicke,
+	"charapick":firstload.characurrent,
+	"fame_name":firstload.famecurrent,
+	"select_exam":firstload.examcurrent,
+	"npcnames":firstload.npccurrent,
+	"npctraits":firstload.npccurrent,
+	"select_talent":firstload.talentcurrent,
+	"select_school_rep":firstload.update_school_rep,
+	"named_npc_pregnancy_manager":firstload.update_pregnancy_day_named_npc,
+	"npc_pregnancy_manager":firstload.update_pregnancy_day_npc,
+	"mc_pregnancy_hole":alt_fetch.update_pregnancy_mc,
+	"mc_pregnancy_manager":firstload.update_pregnancy_day_mc,
+	"mc_tentacle_location":firstload.update_mc_tentacle,
+	"mc_tentacle_select":firstload.update_mc_tentacle_input,
+	"mc_baby_action_select":firstload.update_mc_baby_info,
+	"mc_baby_select":firstload.update_mc_baby_info,
+	"mc_abortion_location":firstload.update_mc_abortion_list,
+	"named_npc_abortion_chara_select":firstload.update_named_npc_abortion_list,
+	"npc_abortion_chara_select":firstload.update_npc_fetus_abortion_list
+}
 cheat.addEventListener("change", function(event) {
-	if (SugarCube.State.variables.passage=='Start') return;
+  if (SugarCube.State.variables.passage=='Start') return;
   var target = event.target;
-  if (target.id === "statpick") {
-	  firstload.statpick();
-  } else if (target.id === "statpicke") {
-	  firstload.statpicke();
-  } else if (target.id === "charapick") {
-	  firstload.characurrent();
-  } else if (target.id === "fame_name") {
-	  firstload.famecurrent();
-  } else if (target.id === "select_exam") {
-	  firstload.examcurrent();
-  } else if (target.id === "npcnames" || target.id === "npctraits") {
-	  firstload.npccurrent();
-  } else if (target.id === "select_talent") {
-	  firstload.talentcurrent();
-  } else if (target.id === "select_school_rep") {
-	  firstload.update_school_rep();
-  } else if (target.id === "named_npc_pregnancy_manager") {
-	  firstload.update_pregnancy_day_named_npc();
-  } else if (target.id === "npc_pregnancy_manager") {
-	  firstload.update_pregnancy_day_npc();
-  } else if (target.id === "mc_pregnancy_hole") {
-	  firstload.update_pregnancy_list_mc();
-	  firstload.update_pregnancy_day_mc();
-  } else if (target.id === "mc_pregnancy_manager") {
-	  firstload.update_pregnancy_day_mc();
-  } else if (target.id === "mc_tentacle_location") {
-	  firstload.update_mc_tentacle();
-  } else if (target.id === "mc_tentacle_select") {
-	  firstload.update_mc_tentacle_input();
-  } else if (target.id === "mc_baby_action_select" || target.id === "mc_baby_select") {
-	  firstload.update_mc_baby_info();
-  } else if (target.id === "mc_abortion_location") {
-	  firstload.update_mc_abortion_list();
-  } else if (target.id === "named_npc_abortion_chara_select") {
-	  firstload.update_named_npc_abortion_list();
-  } else if (target.id === "npc_abortion_chara_select") {
-	  firstload.update_npc_fetus_abortion_list();
-  }
-  
+  if (target in changeActions) {
+	  changeActions[target]();
+	}
 });
 
+//input slider listener
 cheat.addEventListener("input", function(event) {
-  var target = event.target;
-  if (target.id === "arousal_val") {
+	var target = event.target;
+	if (target.id === "arousal_val") {
 	  firstload.arousalpicked();
-  } else if (target.id === "performance_quick" && document.getElementById("active_performance_quick").checked==true) {
-	  mycode.performance_quick_inyohead=10;
-	  mycode.performance_quick();
-  }
+	}
 });
 
 //document listener for toggle cheat
 document.addEventListener("click", function(event) {
-  var target = event.target;
-  setTimeout(function() {
 	clickCounter+=1;
     mycode.runitall();
-	var date = (SugarCube.State.variables.timeStamp-SugarCube.State.variables.timeStamp%86400)/86400;
-	if (curDate<date || curDate>date){
-		curDate=date;
-		mycode.runitallDaily();
+	//to avoid this variable undefined and causing an error
+	var target = event.target;;
+	if (target.classList.contains("macro-button") && target.innerHTML=="SAVES") {
+		isLoad=true;
+	} else if (isLoad) {
+		setTimeout(function() {
+			console.log(functionbundle);
+			if (!SugarCube.State.variables.cheatPlus) SugarCube.State.variables.cheatPlus={};
+			if (SugarCube.State.variables.cheatPlus.toggles)
+				for (var key in SugarCube.State.variables.cheatPlus.toggles) {
+					if (typeof(functionbundle[key])!="function")
+						buttonActions[key]();
+				}
+		}, 1000);
+		isLoad=false;
 	}
-  }, 10);
-	  if (document.getElementById("cheat-history-backwards").hidden==false) mycode.update_history();
-	  if (!SugarCube.State.variables.cheatPlus) SugarCube.State.variables.cheatPlus={};
 });
+
+if (SugarCube.State.variables.cheatPlus.toggles) {
+	if (SugarCube.State.variables.cheatPlus.toggles)
+	for (var key in SugarCube.State.variables.cheatPlus.toggles) {
+		buttonActions[key]();
+	}
+}

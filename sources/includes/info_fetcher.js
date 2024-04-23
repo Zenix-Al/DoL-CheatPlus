@@ -1,4 +1,4 @@
-const firstload = {
+var firstload = {
 	statpick: function(){
 		var selectedValue = document.getElementById("statpick").value;
 		var input = document.getElementById("statinput");
@@ -389,14 +389,40 @@ const firstload = {
 		var button=document.getElementById("in_game_cheat");
 		if (SugarCube.State.variables.debug===1 && button.innerHTML==="Enable") mycode.in_game_cheat();
 		if (SugarCube.State.variables.debug===0 && button.innerHTML==="Disable") mycode.in_game_cheat();
+	},
+	update_farm_assault_day: function() {
+		if (SugarCube.State.variables.farm_attack_timer)
+			document.getElementById("assault_time").value=SugarCube.State.variables.farm_attack_timer;
+	},
+	update_farm_buildtime: function() {
+		if (SugarCube.State.variables.farm)
+			document.getElementById("build_time").value=SugarCube.State.variables.farm.build_timer;
+	},
+	update_farm_buildtime: function() {
+		if (SugarCube.State.variables.farm) {
+			var animal=document.getElementById("animal_choice").value;
+			document.getElementById("animal_input").value=SugarCube.State.variables.farm.beasts[animal];
+		}
 	}
 }
+
+var alt_fetch= {
+	update_pregnancy_mc: function(){
+		firstload.update_pregnancy_list_mc();
+	    firstload.update_pregnancy_day_mc();
+	}
+}
+
 function loadall() {
 	if (SugarCube.State.variables.passage=='Start') return;
 	document.getElementById("moneyinput").value=SugarCube.State.variables.money;
+	var interval=10;
 	for (const functionName in firstload) {
-		if (typeof firstload[functionName] === 'function') setTimeout(function() {
-			firstload[functionName]();
-		  }, 10);
+		if (typeof firstload[functionName] === 'function') 
+			setTimeout(function() {
+				firstload[functionName]();
+			}, interval);
+		interval+=10;
 	}
 }
+

@@ -319,81 +319,7 @@ mycode = { ...mycode,
 		  showToast('Activated!');
 		  SugarCube.State.variables.featsBoosts.pointsUsed=0
 	  },
-	executeSearch: function(action) {
-		console.clear();
-		var search_type = document.getElementById("search_type").value;
-		var searchTerm = document.getElementById("search_value").value;
 
-		if (search_type === "0") {
-			search_type = "startsWith";
-		} else if (search_type === "1") {
-			search_type = "includes";
-		} else if (search_type === "2") {
-			search_type = "endsWith";
-		}
-		if (searchTerm==""){
-			showToast('failed, Search key is blank!');
-			return;
-		}
-		function processValue(value, newPath) {
-			if (Array.isArray(value) && value.length==0) {
-			  var check=Object.keys(value);
-			  if (check.length>0) {
-				logBrokenArrayValues(value, newPath);
-			  }
-			} else if (Array.isArray(value) ) {
-				logArrayValues(value, newPath);
-			} else if (typeof value === 'object') {
-				logObjectValues(value, newPath);
-			} else if (String(value).toLowerCase()[search_type](searchTerm.toLowerCase()) && String(value)!="") {
-				  console.log(newPath + "=" + value);
-			}
-		}
-		
-		function checkObject(key, value, newPath){
-			if (key.toLowerCase()[search_type](searchTerm.toLowerCase()) && value!="") {
-				  console.log(newPath + "=" + value);
-			}
-		}
-		function logObjectValues(obj, curPath) {
-		  for (const key in obj) {
-			const value = obj[key];
-			const newPath = curPath+"."+key;
-			processValue(value, newPath);
-			checkObject(key, value, newPath);
-		  }
-		}
-
-		function logArrayValues(obj, curPath){
-			for (let i = 0; i < obj.length; i++) {
-				const value = obj[i];
-				const newPath = curPath+"["+i+"]";
-				processValue(value, newPath);
-			}
-		}
-
-		function logBrokenArrayValues(obj, curPath){
-			var check=Object.keys(obj);
-			for (const key of check) {
-				const value = obj[key];
-				const newPath = curPath + "[" + key + "]";
-				processValue(value, newPath);
-				checkObject(key, value, newPath);
-			  }
-		}
-		
-		if (action === "search123") {
-			showToast('Searching... might take a while');
-			logObjectValues(SugarCube.State.variables, "SugarCube.State.variables");
-		} else if (action === "search456") {
-			showToast('Searching...');
-			for (var prop in SugarCube.State.variables) {
-				if (prop.toLowerCase()[search_type](searchTerm.toLowerCase())) {
-				  console.log("SugarCube.State.variables." + prop + "=" + SugarCube.State.variables[prop]);
-				}
-			  }
-		}
-	},
 	set_animal_like: function(){
 		const animal=document.getElementById("animal_choice").value;
 		const value=parseInt(document.getElementById("animal_input").value);
@@ -460,57 +386,6 @@ mycode = { ...mycode,
 		var selected = document.getElementById("select_school_rep").value;
 		  var input = parseInt(document.getElementById("input_school_rep").value);
 		  SugarCube.State.variables[selected]=input;
-	},
-	performance_quick_inyohead: 0,
-	performance_quick: function(){
-		var selected = document.getElementById("performance_quick").value;
-		var toggle=document.getElementById("active_performance_quick").checked;
-		var info_performance_quick=document.getElementById("info_performance_quick");
-		if (toggle===true && this.performance_quick_inyohead>0 && !this.toggleActive["performance_quick"]) {
-		  functionbundle["performance_quick"]=mycode["performance_quick"].bind(mycode);
-		  this.toggleActive["performance_quick"]=true;
-		} else if (this.toggleActive["performance_quick"]) {
-			functionbundle["performance_quick"]=undefined;
-			this.toggleActive["performance_quick"]=undefined;
-		}
-		if (this.performance_quick_inyohead>0) this.performance_quick_inyohead--;
-		if (selected==0){
-			info_performance_quick.innerHTML="Beautiful";
-			if (toggle===false) return;
-			SugarCube.State.variables.options.characterLightEnabled=true;
-			SugarCube.State.variables.options.sidebarAnimations=true;
-			SugarCube.State.variables.options.combatAnimations=true;
-			SugarCube.State.variables.options.images=1;
-		} else if (selected==1){
-			info_performance_quick.innerHTML="good";
-			if (toggle===false) return;
-			SugarCube.State.variables.options.characterLightEnabled=false;
-			SugarCube.State.variables.options.sidebarAnimations=true;
-			SugarCube.State.variables.options.combatAnimations=true;
-			SugarCube.State.variables.options.images=1;
-		} else if (selected==2){
-			info_performance_quick.innerHTML="Fast";
-			if (toggle===false) return;
-			SugarCube.State.variables.options.characterLightEnabled=false;
-			SugarCube.State.variables.options.sidebarAnimations=false;
-			SugarCube.State.variables.options.combatAnimations=true;
-			SugarCube.State.variables.options.images=1;
-		} else if (selected==3){
-			info_performance_quick.innerHTML="Lite";
-			if (toggle===false) return;
-			SugarCube.State.variables.options.characterLightEnabled=false;
-			SugarCube.State.variables.options.sidebarAnimations=false;
-			SugarCube.State.variables.options.combatAnimations=false;
-			SugarCube.State.variables.options.images=1;
-		} else if (selected==4){
-			info_performance_quick.innerHTML="No Image";
-			if (toggle===false) return;
-			SugarCube.State.variables.options.characterLightEnabled=false;
-			SugarCube.State.variables.options.sidebarAnimations=false;
-			SugarCube.State.variables.options.combatAnimations=false;
-			SugarCube.State.variables.options.images=0;
-			
-		}
 	},
 	named_npc_pregnancy_locked: [],
 	named_npc_pregnancy_locked_day: [],
@@ -640,39 +515,8 @@ mycode = { ...mycode,
 		  var input = parseInt(document.getElementById("input_hentai_skill").value);
 		  SugarCube.State.variables[selected]=input;
 	  },
-	  Enable_cheat_history: function(){
-		  var button_back=document.getElementById("cheat-history-backwards");
-		  var button_forward=document.getElementById("cheat-history-forwards");
-		  var button_set=document.getElementById("Enable_cheat_history");
-		  if (button_back.hidden==true){
-			  button_back.hidden=false;
-			  button_forward.hidden=false;
-			  button_set.innerHTML="Disable";
-			  mycode.update_history();
-		  } else {
-			  button_back.hidden=true;
-			  button_forward.hidden=true;
-			  button_set.innerHTML="Enable";
-		  }
-		  
-	  },
-	  Enable_sidebar_button: function(){
-		  var button=document.getElementById("cheat-sidebar");
-		  var sidebar_button=document.getElementById("Enable_sidebar_button");
-		  if (button.hidden==true){
-			  button.hidden=false;
-			  sidebar_button.innerHTML="Disable";
-		  } else {
-			  button.hidden=true;
-			  sidebar_button.innerHTML="Enable";
-		  }
-	  },
 	  sidebar_cheat: function() {
 		  document.getElementById("ui-bar-toggle").click();
-	  },
-	  update_history: function() {
-		  document.getElementById("cheat-history-backwards").disabled=document.getElementById("history-backward").disabled;
-		  document.getElementById("cheat-history-forwards").disabled=document.getElementById("history-forward").disabled;
 	  },
 	  cheat_backwards: function(){
 		  document.getElementById("history-backward").click();
@@ -681,19 +525,6 @@ mycode = { ...mycode,
 	  cheat_forwards: function(){
 		  var button=document.getElementById("history-forward").click();
 		  mycode.update_history();
-	  }, 
-	  simple_cheat_button: function() {
-		  var cheat_button=document.getElementById("cheat-open");
-		  var simple_cheat_button=document.getElementById("simple_cheat_button");
-		  if (simple_cheat_button.innerHTML=="Disable") {
-			  simple_cheat_button.innerHTML="Enable";
-			  cheat_button.innerHTML="Cheat";
-			  cheat_button.style="";
-		  } else {
-			  simple_cheat_button.innerHTML="Disable";
-			  cheat_button.innerHTML="⚙";
-			  cheat_button.style="font-size: 89%;";
-		  }
 	  }, 
 	  abortion_notice: function(){
 		  showToast('Aborting...');

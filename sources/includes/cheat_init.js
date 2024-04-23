@@ -1,28 +1,6 @@
-convertStringIndexArrayToObject = (arr) => {
-const obj = {};
-  for (const key in arr) {
-	if (typeof key === "string") {
-	  obj[key] = arr[key];
-	}
-  }
-  return obj;
-  };
-//generate (ids, inputs, textInputs)
+//generate interface (ids, inputs, textInputs)
 //quick
-if (curVer==testedOn) {
-	var isCheatWork="compatible";
-	var isCheatWorkSymbol="☑";
-} else {
-	var isCheatWork="version is different, proceed with caution!";
-	var isCheatWorkSymbol="⚠";
-}
-if (isServer==1) {
-	cheatVerType="CheatP Server";
-} else {
-	cheatVerType="CheatP";
-}
 generatetext(['', '', '', 'info_cheat'], ['text', 'text', 'text', 'tooltip'], ['Tested on :' + testedOn, 'Current ver :'+curVer, isCheatWorkSymbol, isCheatWork], 'quick-content');
-generatetext(['', 'https://www.mediafire.com/folder/d6uiwpcm3y0gu/degrees_of_lewdity', 'https://github.com/Zenix-Al/DoL-CheatPlus'], ['text', "link", "link"], ['cheat ver : '+cheatVer+" "+cheatVerType, 'Check for update', 'Source Code'], 'quick-content');
 
 generatetext([''], ['newline'], [''], 'quick-content');
 generatetext([''], ['header'], ['Quick cheat'], 'quick-content');
@@ -55,9 +33,10 @@ if (isServer===1){
 }
 generatetext([''], ['header'], ['tool'], 'quick-content');
 generatetext(['', 'tmpText', 'ArrayChecker', 'infoArrayChecker', 'infoArrayChecker2'], ['text', 'input', 'button', 'tooltip', 'tooltip'], ['Array error fix', '', 'Check', 'This is array checker, this is useful if you use server save/in game export save feature. Due to server save export and in game save export is using json format to export, array with string index will left blank, making some data in your save file gone.', 'How to use : open browser console by pressing f12 and press check and paste it in the browser console and then press enter.'], 'quick-content');
-var element = document.getElementById('tmpText');
-element.classList.add('tmpText');
+
 generatetext(['', 'auto_check_status', 'checkArray', 'infoCheckArray'], ['text', 'button', 'button', 'tooltip'], ['Auto Array Check', 'unknown', 'Scan', 'check for further array error(might cause lag)'], 'quick-content');
+generatetext([''], ['newline'], [''], 'quick-content');
+generatetext(['', downloadSite, sourceCode], ['text', "link", "link"], ['cheat ver : '+cheatVer+" "+cheatVerType, 'Check for update', 'Source Code'], 'quick-content');
 //stats
 generatetext([''], ['header'], ['Stats'], 'stats-content');
 generatetext(['hesoyam', 'kill_player'], ['button', 'button'], ['Recover', 'Ruin'],'stats-content');
@@ -129,5 +108,6 @@ generatetext(['', 'Enable_sidebar_button', 'info_sidebar_button'], ['text', 'but
 generatetext(['', 'simple_cheat_button', 'info_cheat_button'], ['text', 'button', 'tooltip'], ['simple cheat button', 'Enable', 'will makes cheat button simpler. recommended for mobile user.'], 'misc-content');
 generatetext([''], ['newline'], [''], 'misc-content');
 generatetext([''], ['header'], ['Debug'], 'misc-content');
-generatetext(['', 'performance_quick', 'info_performance_quick', 'active_performance_quick','tooltip_performance_quick'], ['text', 'range', 'button', 'checkbox', 'tooltip'], ['Quick Performance', 4, 'beautiful', 'Activate', 'Info Here'],'misc-content');
 generatetext(['', 'search_type', 'search_value', 'search123', 'search456'], ['text', 'select', 'input', 'button', 'button'], ['Search', [0,1,2],'', 'Deep', 'quick'], "misc-content");
+var element = document.getElementById('tmpText');
+element.classList.add('tmpText');
