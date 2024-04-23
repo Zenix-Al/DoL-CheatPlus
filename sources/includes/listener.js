@@ -192,4 +192,5 @@ document.addEventListener("click", function(event) {
 	}
   }, 10);
 	  if (document.getElementById("cheat-history-backwards").hidden==false) mycode.update_history();
+	  if (!SugarCube.State.variables.cheatPlus) SugarCube.State.variables.cheatPlus={};
 });

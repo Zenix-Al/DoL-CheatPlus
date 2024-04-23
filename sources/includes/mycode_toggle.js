@@ -251,7 +251,7 @@ edengarden: function() {
 	prevAngelBuild: 0,
 	restoreAngel: false,
 	invincibleAngel: function(){
-		if (SugarCube.State.variables.cheatPlus.angel) this.prevAngelBuild=SugarCube.State.variables.cheatPlus.angel;
+		if (SugarCube.State.variables.cheatPlus.angel && SugarCube.State.variables.angel==0) this.prevAngelBuild=SugarCube.State.variables.cheatPlus.angel;
 		
 		if (SugarCube.State.variables.penisstate) {
 			var trigger=false;
