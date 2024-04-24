@@ -97,7 +97,7 @@ cheat.addEventListener("click", function(Event) {
 	if (!target.id) return;
 	var buttonId = target.id;
 	if (target.tagName === "A" && target.closest(".modal-content")) {
-		if (SugarCube.State.variables.passage=='Start' && !(buttonId=='save_data' || buttonId=='load_data')){
+		if (SugarCube.State.variables.passage=='Start' && !(buttonId=='save_data' || buttonId=='load_data' || buttonId=='VrelCoinsUsage')){
 			showToast('Still in the main menu!');
 			return;
 		}
@@ -130,21 +130,26 @@ var changeActions = {
 	"mc_baby_select":firstload.update_mc_baby_info,
 	"mc_abortion_location":firstload.update_mc_abortion_list,
 	"named_npc_abortion_chara_select":firstload.update_named_npc_abortion_list,
-	"npc_abortion_chara_select":firstload.update_npc_fetus_abortion_list
+	"npc_abortion_chara_select":firstload.update_npc_fetus_abortion_list,
+	"animal_choice":firstload.update_farm_animals_like
 }
 cheat.addEventListener("change", function(event) {
   if (SugarCube.State.variables.passage=='Start') return;
   var target = event.target;
-  if (target in changeActions) {
-	  changeActions[target]();
+  if (target.id in changeActions) {
+	  changeActions[target.id]();
 	}
 });
 
 //input slider listener
+var inputActions = {
+	"arousal_val":firstload.arousalpicked
+}
 cheat.addEventListener("input", function(event) {
 	var target = event.target;
-	if (target.id === "arousal_val") {
-	  firstload.arousalpicked();
+	var target = event.target;
+  if (target.id in inputActions) {
+	  inputActions[target.id]();
 	}
 });
 

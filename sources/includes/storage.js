@@ -1,6 +1,5 @@
 //init
 if (!SugarCube.State.variables.cheatPlus.angel) SugarCube.State.variables.cheatPlus.angel="";
-if (!SugarCube.State.variables.cheatPlus.angel) SugarCube.State.variables.cheatPlus.angel="";
 if (!SugarCube.State.variables.cheatPlus.toggles) SugarCube.State.variables.cheatPlus.toggles={};
 
 //functions

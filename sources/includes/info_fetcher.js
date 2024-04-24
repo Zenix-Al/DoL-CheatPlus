@@ -240,7 +240,7 @@ var firstload = {
 					selectElement.appendChild(option);
 				}
 			}
-		this.update_mc_tentacle_input();
+		firstload.update_mc_tentacle_input();
 	},
 	update_mc_tentacle_input: function(){
 		var selectElement = document.getElementById("mc_tentacle_select").value;
@@ -276,9 +276,9 @@ var firstload = {
 			option.text = key;
 			selectElement.appendChild(option);
 		}
-		this.update_mc_baby_info();
-		if (this.update_mc_baby_list_options===0) {
-			this.update_mc_baby_list_options=1;
+		firstload.update_mc_baby_info();
+		if (firstload.update_mc_baby_list_options===0) {
+			firstload.update_mc_baby_list_options=1;
 			document.getElementById("mc_baby_input").style=""
 			selectElement = document.getElementById("mc_baby_action_select");
 			while (selectElement.firstChild) {
@@ -303,9 +303,9 @@ var firstload = {
 			option.text = key;
 			selectElement.appendChild(option);
 		}
-		this.update_mc_baby_info();
-		if (this.update_mc_baby_list_options===0) {
-			this.update_mc_baby_list_options=1;
+		firstload.update_mc_baby_info();
+		if (firstload.update_mc_baby_list_options===0) {
+			firstload.update_mc_baby_list_options=1;
 			document.getElementById("mc_baby_input").style=""
 			selectElement = document.getElementById("mc_baby_action_select");
 			while (selectElement.firstChild) {
@@ -398,7 +398,7 @@ var firstload = {
 		if (SugarCube.State.variables.farm)
 			document.getElementById("build_time").value=SugarCube.State.variables.farm.build_timer;
 	},
-	update_farm_buildtime: function() {
+	update_farm_animals_like: function() {
 		if (SugarCube.State.variables.farm) {
 			var animal=document.getElementById("animal_choice").value;
 			document.getElementById("animal_input").value=SugarCube.State.variables.farm.beasts[animal];
