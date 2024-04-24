@@ -4,7 +4,6 @@ var cheatVer;
 var testedOn;*/
 //variables init
 //main
-if (!SugarCube.State.variables.cheatPlus) SugarCube.State.variables.cheatPlus={};
 var isLoad=false;
 var curVer=document.getElementById("gameVersionDisplay2").innerHTML;
 var quicklink = document.getElementById("quick-link");
@@ -54,7 +53,8 @@ var hentaiSkill = ["seductionskill", "oralskill", "vaginalskill", "analskill", "
 var textBox=document.getElementById("tmpText");
 var babyOptions = ["motherKnown", "fatherKnown", "name", "abandon"];
 var babyOptionsText = ["mother Known", "father Known", "name", "Abandon"];
-
+//storage
+if (!SugarCube.State.variables.cheatPlus) SugarCube.State.variables.cheatPlus={};
 //endof variable init
 if (curVer==testedOn) {
 	var isCheatWork="compatible";

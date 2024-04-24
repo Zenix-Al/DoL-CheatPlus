@@ -157,22 +157,8 @@ document.addEventListener("click", function(event) {
 	if (target.classList.contains("macro-button") && target.innerHTML=="SAVES") {
 		isLoad=true;
 	} else if (isLoad) {
-		setTimeout(function() {
-			console.log(functionbundle);
-			if (!SugarCube.State.variables.cheatPlus) SugarCube.State.variables.cheatPlus={};
-			if (SugarCube.State.variables.cheatPlus.toggles)
-				for (var key in SugarCube.State.variables.cheatPlus.toggles) {
-					if (typeof(functionbundle[key])!="function")
-						buttonActions[key]();
-				}
-		}, 1000);
+		if (!SugarCube.State.variables.cheatPlus) SugarCube.State.variables.cheatPlus={};
+		reactivateToggles();
 		isLoad=false;
 	}
 });
-
-if (SugarCube.State.variables.cheatPlus.toggles) {
-	if (SugarCube.State.variables.cheatPlus.toggles)
-	for (var key in SugarCube.State.variables.cheatPlus.toggles) {
-		buttonActions[key]();
-	}
-}

@@ -11,6 +11,7 @@ let mycode = {
 	},
 	runitall: function(){
 		var interval=10;
+		if (isLoad) return;
 		if (totalFunctions!==progressFunctions) {
 			errorFunctions++;
 			if (errorFunctions>5) {
@@ -21,7 +22,7 @@ let mycode = {
 		errorFunctions=0;
 		progressFunctions=0;
 		totalFunctions=0;
-		for (var key in functionbundle) {
+		for (const key in functionbundle) {
 		  if (functionbundle.hasOwnProperty(key) && typeof functionbundle[key] === 'function') {
 			setTimeout(function () {
 				functionbundle[key]();
@@ -43,8 +44,6 @@ let mycode = {
     toggleActive: [],
 	toggle: function(id, name) {
 		const button = document.getElementById(id);
-		if (!SugarCube.State.variables.cheatPlus.toggles) SugarCube.State.variables.cheatPlus.toggles={};
-		if (!SugarCube.State.variables.cheatPlus.togglesActive) SugarCube.State.variables.cheatPlus.togglesActive=[];
 		if (this.toggleActive[id]) {
 		  functionbundle[id]=undefined;
 		  SugarCube.State.variables.cheatPlus.toggles[id]=undefined;
@@ -67,26 +66,27 @@ let mycode = {
 		}
 	},
     toggleActiveDaily: {},
-    functionbundleDaily: {},
 	runitallDaily: function(){
-		for (var key in mycode.functionbundleDaily) {
-			if (mycode.functionbundleDaily.hasOwnProperty(key) && typeof mycode.functionbundleDaily[key] === 'function') {
-				mycode.functionbundleDaily[key]();
+		for (var key in dailyfunctionbundle) {
+			if (dailyfunctionbundle.hasOwnProperty(key) && typeof dailyfunctionbundle[key] === 'function') {
+				dailyfunctionbundle[key]();
 			}
 		}
 	},
 	toggleDaily: function(id, name) {
 		const button = document.getElementById(id);
 		if (mycode.toggleActive[id]) {
-		  mycode.functionbundleDaily[id]=undefined;
+		  dailyfunctionbundle[id]=undefined;
+		  SugarCube.State.variables.cheatPlus.toggles[id]=undefined;
 		  button.innerHTML = name;
 		  mycode.toggleActive[id]=undefined;
 		  console.log("Deactive!");
 		} else {
-		  mycode.functionbundleDaily[id]=mycode[id].bind(mycode);
+		  dailyfunctionbundle[id]=mycode[id].bind(mycode);
+		  SugarCube.State.variables.cheatPlus.toggles[id]=id;
 		  button.innerHTML = name + "&#10003;";
 		  mycode.toggleActive[id]=true;
-		  mycode.functionbundleDaily[id]();
+		  dailyfunctionbundle[id]();
 		  console.log("Active!");
 		}
 	},
