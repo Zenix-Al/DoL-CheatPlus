@@ -44,6 +44,7 @@ let mycode = {
     toggleActive: [],
 	toggle: function(id, name) {
 		const button = document.getElementById(id);
+		if (!SugarCube.State.variables.cheatPlus.toggles) SugarCube.State.variables.cheatPlus.toggles={};
 		if (this.toggleActive[id]) {
 		  functionbundle[id]=undefined;
 		  SugarCube.State.variables.cheatPlus.toggles[id]=undefined;
