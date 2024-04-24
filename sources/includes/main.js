@@ -106,12 +106,14 @@ function bloodEffect(){
  function openModal() {
   modal.style.display = "block";
   modalOpen = true; 
+  init_interface();
   loadall();
 }
 
 function closeModal() {
   modal.style.display = "none";
   modalOpen = false; 
+  deleteText();
 }
 
 function moveButton(direction) {
@@ -180,6 +182,25 @@ function generatetext(ids, inputs, textInputs, category) {
 	inputcategory.appendChild(modalInputs);
 }
 
+function deleteText(){
+	//delete
+	var content = document.getElementById("quick-content");
+	var childs=content.querySelectorAll("div");
+	childs.forEach( number => {
+	   number.remove();
+	});
+	var content = document.getElementById("stats-content");
+	var childs=content.querySelectorAll("div");
+	childs.forEach( number => {
+	   number.remove();
+	});
+	var content = document.getElementById("misc-content");
+	var childs=content.querySelectorAll("div");
+	childs.forEach( number => {
+	   number.remove();
+	});
+
+}
 function hideAllContent() {
 	quicklink.classList.remove("gold");
 	statlink.classList.remove("gold");

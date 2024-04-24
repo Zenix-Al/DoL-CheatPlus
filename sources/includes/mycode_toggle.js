@@ -48,13 +48,13 @@ let mycode = {
 		if (this.toggleActive[id]) {
 		  functionbundle[id]=undefined;
 		  SugarCube.State.variables.cheatPlus.toggles[id]=undefined;
-		  button.innerHTML = name;
+		  if (button)button.innerHTML = name;
 		  this.toggleActive[id]=undefined;
 		  console.log("Deactive!");
 		} else {
 		  functionbundle[id]=mycode[id].bind(mycode);
 		  SugarCube.State.variables.cheatPlus.toggles[id]=id;
-		  button.innerHTML = name + "&#10003;";
+		  if (button) button.innerHTML = name + "&#10003;";
 		  this.toggleActive[id]=true;
 		  console.log("Active!");
 		}
@@ -79,13 +79,13 @@ let mycode = {
 		if (mycode.toggleActive[id]) {
 		  dailyfunctionbundle[id]=undefined;
 		  SugarCube.State.variables.cheatPlus.toggles[id]=undefined;
-		  button.innerHTML = name;
+		  if (button) button.innerHTML = name;
 		  mycode.toggleActive[id]=undefined;
 		  console.log("Deactive!");
 		} else {
 		  dailyfunctionbundle[id]=mycode[id].bind(mycode);
 		  SugarCube.State.variables.cheatPlus.toggles[id]=id;
-		  button.innerHTML = name + "&#10003;";
+		  if (button) button.innerHTML = name + "&#10003;";
 		  mycode.toggleActive[id]=true;
 		  dailyfunctionbundle[id]();
 		  console.log("Active!");

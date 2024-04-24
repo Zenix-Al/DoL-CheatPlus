@@ -1,4 +1,16 @@
 var firstload = {
+	//main function
+	update_toggle: function(){
+		for (const id in functionbundle) {
+			const button = document.getElementById(id);
+			button.innerHTML +="&#10003;";
+		}
+		for (const id in dailyfunctionbundle) {
+			const button = document.getElementById(id);
+			button.innerHTML +="&#10003;";
+		}
+	},
+	//cheats function
 	statpick: function(){
 		var selectedValue = document.getElementById("statpick").value;
 		var input = document.getElementById("statinput");

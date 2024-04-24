@@ -102,12 +102,11 @@ cheat.addEventListener("click", function(Event) {
 			return;
 		}
 		if (buttonId in buttonActions) {
-		  buttonActions[buttonId]();
+			buttonActions[buttonId]();
 		}
-	  } 
-	  if (buttonId in mainActions) {
+	} else if (buttonId in mainActions) {
 		mainActions[buttonId]();
-	  }
+	}
 });
 //change lookup
 var changeActions = {
