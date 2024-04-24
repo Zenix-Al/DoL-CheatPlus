@@ -133,7 +133,7 @@ function moveButton(direction) {
 
 function showContent(nav, contentElement) {
 	hideAllContent();
-	nav.classList.add("gold");
+	nav.classList.add("gold");                                                                                                 
 	contentElement.classList.add("active");
 }
 
@@ -141,12 +141,13 @@ function showContent(nav, contentElement) {
 function generatetext(ids, inputs, textInputs, category) {
 	var inputcategory = document.getElementById(category);
 	var modalInputs = document.createElement('div');
-	modalInputs.style.paddingBottom = '5px';
+	modalInputs.className = "modal-content-padding";
+	
 	for (var i = 0; i < inputs.length; i++) {
 	  if (inputs[i] === "input") {
-		var input = '<input id="' + ids[i] + '" style="width: 90px;" autocomplete="off">';
+		var input = '<input id="' + ids[i] + '" class="modal-content-width" autocomplete="off">';
 	  } else if (inputs[i] === "textarea") {
-		var input = '<textarea id="' + ids[i] + '" style="width: 90px;"></textarea>';
+		var input = '<textarea id="' + ids[i] + '" class="modal-content-width"></textarea>';
 	  } else if (inputs[i] === "select") {
 		var input = '<select id="' + ids[i] + '">';
 		for (var j = 0; j < textInputs[i].length; j++) {
@@ -158,7 +159,7 @@ function generatetext(ids, inputs, textInputs, category) {
 	  } else if (inputs[i] === "radio") {
 		  var input='';
 		for (var j = 0; j < textInputs[i].length; j++) {
-		   input += '<input type="radio" id="' + ids[i] +j+ '" name="' + ids[i] + '" value="' + textInputs[i][j] + '"/><label for="' + ids[i] +j+ '" style="margin-right: 10px;">' + textInputs[i][j] + '</label>';
+		   input += '<input type="radio" id="' + ids[i] +j+ '" name="' + ids[i] + '" value="' + textInputs[i][j] + '"/><label for="' + ids[i] +j+ '" class="modal-content-right">' + textInputs[i][j] + '</label>';
 		}
 	  } else if (inputs[i] === "header") {
 		  input = '<span class="gold">'+textInputs[i]+'</span>';
@@ -173,7 +174,7 @@ function generatetext(ids, inputs, textInputs, category) {
 	  } else if (inputs[i]==="tooltip") {
 		  input = '<mouse class="tooltip-small linkBlue" id="'+ids[i]+'">(?)<span>' + textInputs[i] + '</span></mouse>';
 	  } else if (inputs[i]==="checkbox") {
-		  input = '<input id="'+ids[i]+'" type="checkbox" style="color: var(--500);">'+ textInputs[i];
+		  input = '<input id="'+ids[i]+'" type="checkbox" class="modal-content-color">'+ textInputs[i];
 	  }
 	  
 	  if (inputs.length > 1 &&  i < inputs.length-1) input += " | ";

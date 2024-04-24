@@ -94,7 +94,19 @@
       border: 1px solid #888;
       width: 90%;
     }
-
+	.modal-content-padding {
+		padding-bottom: 5px;
+	}
+	.modal-content-width {
+		width: 90px;
+	}
+	.modal-content-color {
+		color: var(--500);
+	}
+	.modal-content-right {
+		margin-right: 10px;
+	}
+	right
     .close {
       cursor: pointer;
 	  font-weight: bold;
