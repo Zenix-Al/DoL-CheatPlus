@@ -53,6 +53,7 @@ let mycode = {
 		  if (button)button.innerHTML = name;
 		  this.toggleActive[id]=undefined;
 		  console.log("Deactive!");
+		  extra_notif=false;
 		} else {
 		  functionbundle[id]=mycode[id].bind(mycode);
 		  functionbundle[id]();
@@ -86,6 +87,7 @@ let mycode = {
 		  if (button) button.innerHTML = name;
 		  mycode.toggleActive[id]=undefined;
 		  console.log("Deactive!");
+		  extra_notif=false;
 		} else {
 		  dailyfunctionbundle[id]=mycode[id].bind(mycode);
 		  SugarCube.State.variables.cheatPlus.toggles[id]=id;
@@ -240,6 +242,7 @@ edengarden: function() {
 			this.total_npc_pregnant=tmp_npc;
 		} else if (tmp_npc<this.total_npc_pregnant) {
 			showToast('NPC\'s baby has been born!');
+			this.invinityNPCPregnancy();
 			this.total_npc_pregnant=tmp_npc;
 		}
 		if (tmp_pc>this.pc_pregnant) {
