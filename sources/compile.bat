@@ -14,19 +14,22 @@ rmdir /s /q _compiled\offline >NUL
 rmdir /s /q _compiled\online >NUL
 rmdir /s /q _compiled\server >NUL
 del _compiled\main.min.js >NUL
+del _compiled\main.min.css >NUL
 del _compiled\base.php >NUL
 echo deleted!
 
 echo ----------------------------------------
 echo.
-echo making new js...
+echo making new js and css...
 cd includes
 start cmd /c "combine.bat"
+start cmd /c "minifycss.bat"
 cd ..
 :wait
 timeout /t 1 /nobreak >NUL
 if not exist _compiled\main.min.js goto wait
-echo new js created!
+if not exist _compiled\main.min.css goto wait
+echo new js and css created!
 echo ----------------------------------------
 echo.
 echo compiling...
@@ -43,14 +46,14 @@ for /F "delims=" %%x in (info.ini) do (
 echo compiling base...
 ::base
 echo ^<style^> > _compiled\base.php
-copy _compiled\base.php+includes\main.min.css _compiled\base.php >NUL
+copy _compiled\base.php+_compiled\main.min.css _compiled\base.php >NUL
 echo. >> _compiled\base.php
 echo ^</style^> >> _compiled\base.php
 copy _compiled\base.php + base\index.php _compiled\base.php >NUL
 echo ^<script^> >> _compiled\base.php
 echo var convertStringIndexArrayToObject; >>_compiled\base.php
-echo setTimeout(function() { >>_compiled\base.php
 echo var DEBUG=false; >>_compiled\base.php
+echo setTimeout(function() { >>_compiled\base.php
 echo var cheatVer="!cheatVer!"; >>_compiled\base.php
 echo var testedOn="!testedOn!"; >>_compiled\base.php
 
@@ -75,13 +78,19 @@ echo. >> _compiled\offline\base.html
 echo }, 1000); >>_compiled\offline\base.html
 echo ^</script^> >> _compiled\offline\base.html
 copy base\game.html+_compiled\offline\base.html _compiled\offline\game.html >NUL
+del _compiled\offline\base.html
 
 ::nwjs
 echo compiling NWJS version...
 copy _compiled\main.min.js _compiled\nwjs\cheat.js > NUL
-copy base\index.php _compiled\nwjs\cheat-interface.html > NUL
-copy nwjs\inject-cheat.bat _compiled\nwjs\cheat-interface.html > NUL
-copy nwjs\restore.bat _compiled\nwjs\cheat-interface.html > NUL
+echo ^<style^> > _compiled\nwjs\cheat-interface.html
+copy _compiled\nwjs\cheat-interface.html+_compiled\main.min.css _compiled\nwjs\cheat-interface.html >NUL
+echo. >> _compiled\nwjs\cheat-interface.html
+echo ^</style^> >> _compiled\nwjs\cheat-interface.html
+copy _compiled\nwjs\cheat-interface.html + base\index.php _compiled\nwjs\cheat-interface.html >NUL
+copy nwjs\inject-cheat.bat _compiled\nwjs\ > NUL
+copy nwjs\restore.bat _compiled\nwjs\ > NUL
+copy info.ini _compiled\nwjs\ > NUL
 
 ::online
 echo compiling online version...
@@ -105,7 +114,6 @@ echo compiled!
 echo ----------------------------------------
 echo.
 echo complete!
-pause
 exit
 
 :fail
