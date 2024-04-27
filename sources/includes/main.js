@@ -63,6 +63,7 @@ var totalFetchFunction;
 var currentFetch;
 //storage
 if (!SugarCube.State.variables.cheatPlus) SugarCube.State.variables.cheatPlus={};
+var reactivatingToggles;
 //endof variable init
 if (curVer==testedOn) {
 	var isCheatWork="compatible";

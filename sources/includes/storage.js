@@ -10,12 +10,14 @@ initStorage();
 
 //functions
 function reactivateToggles() {
+	reactivatingToggles=true;
 	var tmp=Object.assign({}, SugarCube.State.variables.cheatPlus.toggles);
 	deactiveAllToggles();
 	for (const key3 in tmp) {
 		if (typeof(tmp[key3]) != "undefined")
 			buttonActions[key3]();
 	}
+	reactivatingToggles=false;
 }
 
 function deactiveAllToggles(){

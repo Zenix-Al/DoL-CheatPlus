@@ -53,8 +53,8 @@ let mycode = {
 		  if (button)button.innerHTML = name;
 		  this.toggleActive[id]=undefined;
 		  console.log("Deactive!");
-		  extra_notif=false;
 		} else {
+		  if (!reactivatingToggles) extra_notif=true;
 		  functionbundle[id]=mycode[id].bind(mycode);
 		  functionbundle[id]();
 		  SugarCube.State.variables.cheatPlus.toggles[id]=id;
@@ -87,8 +87,8 @@ let mycode = {
 		  if (button) button.innerHTML = name;
 		  mycode.toggleActive[id]=undefined;
 		  console.log("Deactive!");
-		  extra_notif=false;
 		} else {
+		  if (!reactivatingToggles) extra_notif=true;
 		  dailyfunctionbundle[id]=mycode[id].bind(mycode);
 		  SugarCube.State.variables.cheatPlus.toggles[id]=id;
 		  if (button) button.innerHTML = name + "&#10003;";

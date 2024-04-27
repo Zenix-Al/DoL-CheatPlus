@@ -103,7 +103,6 @@ cheat.addEventListener("click", function(Event) {
 			return;
 		}
 		if (buttonId in buttonActions) {
-			extra_notif=true;
 			buttonActions[buttonId]();
 		}
 	} else if (buttonId in mainActions) {
