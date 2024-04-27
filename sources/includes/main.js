@@ -5,6 +5,8 @@ var testedOn;*/
 //variables init
 //main
 var isLoad=false;
+var isDelete=false;
+var isCheatPressed=false;
 var curVer=document.getElementById("gameVersionDisplay2").innerHTML;
 var quicklink = document.getElementById("quick-link");
 var statlink = document.getElementById("stats-link");
@@ -28,6 +30,7 @@ var errorFunctions;
 var progressFunctions=0;
 var totalFunctions=0;
 var prevHour=-1;
+var extra_notif=false;
 //sync
 var syncinprogress=0;
 var database="degrees-of-lewdity";
@@ -36,6 +39,7 @@ var whatversion="vanilla";
 var cheat = document.getElementById("cheat");
 var clickCounter=0;
 var curDate=0;
+var buttonId;
 //cheat init
 var npctrait = ['trust', 'love', 'dom', 'lust', 'rage', 'trauma', 'purity', 'corruption'];
 var characteristics=['beauty', 'purity', 'physique', 'willpower', 'awareness', 'promiscuity', 'exhibitionism', 'deviancy', 'grace', 'submissive', 'masochism', 'sadism'];
@@ -53,6 +57,10 @@ var hentaiSkill = ["seductionskill", "oralskill", "vaginalskill", "analskill", "
 var textBox=document.getElementById("tmpText");
 var babyOptions = ["motherKnown", "fatherKnown", "name", "abandon"];
 var babyOptionsText = ["mother Known", "father Known", "name", "Abandon"];
+//fetcher
+var isFetching=false;
+var totalFetchFunction;
+var currentFetch;
 //storage
 if (!SugarCube.State.variables.cheatPlus) SugarCube.State.variables.cheatPlus={};
 //endof variable init
@@ -90,6 +98,11 @@ function showToast(text) {
     }, 3000);
 }
 
+function timedToast(text, time){
+	setTimeout(function(){
+		showToast(text);
+	}, time)
+}
 function bloodEffect(){
 	var effect = document.getElementById('effect-layer');
 	effect.classList.remove('hidden');
@@ -103,17 +116,30 @@ function bloodEffect(){
 	setTimeout(function(){effect.classList.add('hidden');}, 2200);
 }
  
- function openModal() {
-  modal.style.display = "block";
-  modalOpen = true; 
-  init_interface();
-  loadall();
+function openModal() {
+	//check if cheat ui deletion in progress (to avoid error)
+	if (modalOpen) return;
+	if (isDelete) {
+		if (isCheatPressed) return;
+		isCheatPressed=true;
+		showToast('Loading cheat, please slow down.');
+		setTimeout( function() { 
+			isCheatPressed=false;
+			openModal();
+		}, 100)
+		return;
+	} 
+    modal.style.display = "block";
+    modalOpen = true; 
+    init_interface();
+    loadall();
 }
 
 function closeModal() {
+  if (!modalOpen) return;
   modal.style.display = "none";
   modalOpen = false; 
-  deleteText();
+  deleteText(); 
 }
 
 function moveButton(direction) {
@@ -184,6 +210,15 @@ function generatetext(ids, inputs, textInputs, category) {
 }
 
 function deleteText(){
+	isDelete=true;
+	//check if fetching in progress (to avoid error)
+	if (currentFetch==totalFetchFunction) isFetching=false;
+	if (isFetching) {
+		setTimeout( function() { 
+			deleteText(); 
+		}, 100)
+		return;
+	} 
 	//delete
 	var content = document.getElementById("quick-content");
 	var childs=content.querySelectorAll("div");
@@ -200,7 +235,7 @@ function deleteText(){
 	childs.forEach( number => {
 	   number.remove();
 	});
-
+	isDelete=false;
 }
 function hideAllContent() {
 	quicklink.classList.remove("gold");
@@ -256,6 +291,7 @@ function simple_cheat_button() {
 
 function executeSearch(action) {
 	console.clear();
+	if (!action) action=buttonId;
 	var search_type = document.getElementById("search_type").value;
 	var searchTerm = document.getElementById("search_value").value;
 

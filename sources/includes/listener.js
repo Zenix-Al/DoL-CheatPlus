@@ -1,4 +1,3 @@
-var buttonId;
 var mainActions = {
   "quick-link": showContent.bind(null, quicklink, quickcontent),
   "stats-link": showContent.bind(null, statlink, statscontent),
@@ -30,6 +29,8 @@ var buttonActions = {
   "interact_child": mycode.toggle.bind(mycode, 'interact_child', 'Auto'),
   "pregnancy_detection": mycode.toggle.bind(mycode, 'pregnancy_detection', 'Activate'),
   "invincibleAngel": mycode.toggle.bind(mycode, 'invincibleAngel', 'Activate'),
+  "invinityNPCPregnancy": mycode.toggleDaily.bind(mycode, 'invinityNPCPregnancy', 'Activate'),
+  "demonForcedPregnancy": mycode.toggle.bind(mycode, 'demonForcedPregnancy', 'Activate'),
   //togglesend
   "max_harmony": mycode.max_harmony,
   "max_Ferocity": mycode.max_Ferocity,
@@ -95,13 +96,14 @@ var buttonActions = {
 cheat.addEventListener("click", function(Event) {
 	var target = event.target;
 	if (!target.id) return;
-	var buttonId = target.id;
+	buttonId = target.id;
 	if (target.tagName === "A" && target.closest(".modal-content")) {
 		if (SugarCube.State.variables.passage=='Start' && !(buttonId=='save_data' || buttonId=='load_data' || buttonId=='VrelCoinsUsage')){
 			showToast('Still in the main menu!');
 			return;
 		}
 		if (buttonId in buttonActions) {
+			extra_notif=true;
 			buttonActions[buttonId]();
 		}
 	} else if (buttonId in mainActions) {
@@ -161,8 +163,11 @@ document.addEventListener("click", function(event) {
 	if (target.classList.contains("macro-button") && target.innerHTML=="SAVES") {
 		isLoad=true;
 	} else if (isLoad) {
-		if (!SugarCube.State.variables.cheatPlus) SugarCube.State.variables.cheatPlus={};
+		initStorage();
 		reactivateToggles();
+		showToast('Cheat state loaded');
 		isLoad=false;
+	} else if (target.id=="history-backward" || target.id==="history-forward") {
+		initStorage();
 	}
 });

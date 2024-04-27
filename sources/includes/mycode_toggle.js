@@ -4,13 +4,16 @@ let mycode = {
 			buttonActions[key]();
 		}
 		functionbundle={};
-		showToast('error detected in toggle cheat, toggle affected deactifated.');
+		toggleActive=[];
+		showToast('error detected in toggle cheat, reseting cheat.');
 		errorFunctions=0;
 		progressFunctions=0;
 		totalFunctions=0;
+		reactivateToggles();
+		showToast('complete.');
 	},
 	runitall: function(){
-		var interval=10;
+		var interval=1;
 		if (isLoad) return;
 		if (totalFunctions!==progressFunctions) {
 			errorFunctions++;
@@ -29,7 +32,7 @@ let mycode = {
 				progressFunctions++;
 			}, interval)
 			totalFunctions++;
-			interval+=10;
+			interval+=1;
 		  }
 	    }
 	    clickCounter-=1;
@@ -44,7 +47,6 @@ let mycode = {
     toggleActive: [],
 	toggle: function(id, name) {
 		const button = document.getElementById(id);
-		if (!SugarCube.State.variables.cheatPlus.toggles) SugarCube.State.variables.cheatPlus.toggles={};
 		if (this.toggleActive[id]) {
 		  functionbundle[id]=undefined;
 		  SugarCube.State.variables.cheatPlus.toggles[id]=undefined;
@@ -53,10 +55,12 @@ let mycode = {
 		  console.log("Deactive!");
 		} else {
 		  functionbundle[id]=mycode[id].bind(mycode);
+		  functionbundle[id]();
 		  SugarCube.State.variables.cheatPlus.toggles[id]=id;
 		  if (button) button.innerHTML = name + "&#10003;";
 		  this.toggleActive[id]=true;
 		  console.log("Active!");
+		  extra_notif=false;
 		}
 	},
 	checkDateDaily: function(){
@@ -89,6 +93,7 @@ let mycode = {
 		  mycode.toggleActive[id]=true;
 		  dailyfunctionbundle[id]();
 		  console.log("Active!");
+		  extra_notif=false;
 		}
 	},
   
@@ -276,22 +281,26 @@ edengarden: function() {
 	prevAngelBuild: 0,
 	restoreAngel: false,
 	invincibleAngel: function(){
-		if (SugarCube.State.variables.cheatPlus.angel && SugarCube.State.variables.angel==0) this.prevAngelBuild=SugarCube.State.variables.cheatPlus.angel;
-		
-		if (SugarCube.State.variables.penisstate) {
-			var trigger=false;
-			if (SugarCube.State.variables.penisstate.match(/entrance/)) trigger=true;
-			if (SugarCube.State.variables.penisstate.match(/imminent/)) trigger=true;
-		} 
-		if (SugarCube.State.variables.vaginastate && !trigger) {
-			var trigger=false;
-			if (SugarCube.State.variables.vaginastate.match(/imminent/)) trigger=true;
-			if (SugarCube.State.variables.vaginastate.match(/entrance/)) trigger=true;
+		if (extra_notif)
+		if (SugarCube.State.variables.demon>60) {
+			showToast('Youre a demon!');
+			timedToast('but, okay', 3000);
+		} else if (SugarCube.State.variables.fallenangel>0) {
+			showToast('Im sorry, youre already a fallen angel.');
+			timedToast('im turning this off', 3000);
+			buttonActions["invincibleAngel"]();
+			return;
 		}
+		if (SugarCube.State.variables.cheatPlus.angel && SugarCube.State.variables.angel==0) this.prevAngelBuild=SugarCube.State.variables.cheatPlus.angel;
+		if (SugarCube.State.variables.penisstate!=0 || SugarCube.State.variables.vaginastate!=0) var trigger=true;
 		if (trigger) {
 			if (!this.restoreAngel) {
-				this.prevAngelBuild=SugarCube.State.variables.angel;
-				SugarCube.State.variables.cheatPlus.angel=SugarCube.State.variables.angel;
+				if (SugarCube.State.variables.angel!=0) {
+					this.prevAngelBuild=SugarCube.State.variables.angel;
+					SugarCube.State.variables.cheatPlus.angel=SugarCube.State.variables.angel;
+				} else {
+					this.prevAngelBuild=SugarCube.State.variables.cheatPlus.angel;
+				}
 			}
 			SugarCube.State.variables.angel=0;
 			SugarCube.State.variables.angelbuild=100;
@@ -301,5 +310,77 @@ edengarden: function() {
 			SugarCube.State.variables.angel=this.prevAngelBuild;
 			SugarCube.State.variables.angelbuild=100;
 		} 
+	},
+	invinityNPCPregnancy: function(){
+		var priorityQueue=0;
+		var waitQueue=0;
+		var limit=8;
+		var tmp={};
+		var store={};
+		var dateLeft=0;
+		var gameTime=SugarCube.State.variables.timeStamp;
+		var date=((gameTime-gameTime%86400)/86400);
+		if (SugarCube.State.variables.cheatPlus.storedNPCsDate!==0) {
+			dateLeft=(date-SugarCube.State.variables.cheatPlus.storedNPCsDate)*3;
+		}
+		SugarCube.State.variables.cheatPlus.storedNPCsDate=date;
+		for (const key1 in SugarCube.State.variables.storedNPCs) {
+			var left=SugarCube.State.variables.storedNPCs[key1].pregnancy.timerEnd-SugarCube.State.variables.storedNPCs[key1].pregnancy.timer;
+			if (left<=3 && priorityQueue<=limit) {
+				tmp["pregnancy_"+priorityQueue]=SugarCube.State.variables.storedNPCs[key1];
+				if (loop==8) showToast('NPC about to give abirth, you cant bustin nuts in people for today!');
+				priorityQueue++;
+			} else if (left>3 || priorityQueue>limit) {
+				store["pregnancy_"+waitQueue]=SugarCube.State.variables.storedNPCs[key1];
+				waitQueue++;
+			}
+		}
+		for (const key2 in SugarCube.State.variables.cheatPlus.storedNPCs) {
+			var timerEnd=SugarCube.State.variables.cheatPlus.storedNPCs[key2].pregnancy.timerEnd;
+			var timer=SugarCube.State.variables.cheatPlus.storedNPCs[key2].pregnancy.timer;
+			if (dateLeft>0) {
+				SugarCube.State.variables.cheatPlus.storedNPCs[key2].pregnancy.timer+=dateLeft;
+				if (SugarCube.State.variables.cheatPlus.storedNPCs[key2].pregnancy.timer>timerEnd) SugarCube.State.variables.cheatPlus.storedNPCs[key2].pregnancy.timer=timerEnd;
+			}
+			var left=timerEnd-timer;
+			if (left<=3 && priorityQueue<=limit) {
+				tmp["pregnancy_"+priorityQueue]=SugarCube.State.variables.cheatPlus.storedNPCs[key2];
+				if (loop==8) showToast('NPC about to give abirth, you cant bustin nuts in people for today!');
+				priorityQueue++;
+			} else if (left>3 || priorityQueue>limit) {
+				store["pregnancy_"+waitQueue]=SugarCube.State.variables.cheatPlus.storedNPCs[key2];
+				waitQueue++;
+			}
+		}
+		SugarCube.State.variables.storedNPCs=tmp;
+		SugarCube.State.variables.cheatPlus.storedNPCs=store;
+	},
+	demonForcedPregnancy: function(){
+		if (extra_notif)
+		if (SugarCube.State.variables.demon===6 && SugarCube.State.variables.demonbuild>90) {
+			showToast('Youre already a demon!');
+			timedToast('but, okay', 3000);
+		} else if (SugarCube.State.variables.angel>0) {
+			showToast('youre an angel!');
+			timedToast('careful!', 3000);
+		} else if (SugarCube.State.variables.demon>0) {
+			showToast('you know this will not turn you into a complete demon right?');
+		}
+		if (SugarCube.State.variables.penisstate!=0 || SugarCube.State.variables.vaginastate!=0) {
+			SugarCube.State.variables.demon=6;
+			SugarCube.State.variables.demonbuild=100;
+			if (SugarCube.State.variables.demon>0) {
+				SugarCube.State.variables.cheatPlus.demon=SugarCube.State.variables.demon;
+				SugarCube.State.variables.cheatPlus.demonbuild=SugarCube.State.variables.demonbuild;
+			}
+		} else if (SugarCube.State.variables.angel>0) {
+			SugarCube.State.variables.demon=0;
+			SugarCube.State.variables.demonbuild=0;
+		} else if (SugarCube.State.variables.cheatPlus.demon>0) {
+			SugarCube.State.variables.demon=SugarCube.State.variables.cheatPlus.demon;
+			SugarCube.State.variables.demonbuild=SugarCube.State.variables.cheatPlus.demonbuild;
+		}
+			
+		
 	}
 }

@@ -648,13 +648,11 @@ mycode = { ...mycode,
 		  if (button.innerHTML==="Enable") {
 			  SugarCube.State.variables.debug=1;
 			  button2.innerHTML="Open";
-			  button.innerHTML="Disable"
-			  showToast('Enabled');
+			  button.innerHTML="Disable";
 		  } else if (button.innerHTML==="Disable") {
 			  SugarCube.State.variables.debug=0;
 			  button2.innerHTML="";
-			  button.innerHTML="Enable"
-			  showToast('Disabled');
+			  button.innerHTML="Enable";
 		  }
 	  },
 	  alt_cheat: function() {

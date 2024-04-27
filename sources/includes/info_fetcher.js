@@ -2,12 +2,16 @@ var firstload = {
 	//main function
 	update_toggle: function(){
 		for (const id in functionbundle) {
-			const button = document.getElementById(id);
-			button.innerHTML +="&#10003;";
+			if (functionbundle.hasOwnProperty(id) && typeof functionbundle[id] === 'function') {
+				const button = document.getElementById(id);
+				button.innerHTML +="&#10003;";
+			}
 		}
 		for (const id in dailyfunctionbundle) {
-			const button = document.getElementById(id);
-			button.innerHTML +="&#10003;";
+			if (dailyfunctionbundle.hasOwnProperty(id) && typeof dailyfunctionbundle[id] === 'function') {
+				const button = document.getElementById(id);
+				button.innerHTML +="&#10003;";
+			}
 		}
 	},
 	//cheats function
@@ -428,13 +432,19 @@ var alt_fetch= {
 function loadall() {
 	if (SugarCube.State.variables.passage=='Start') return;
 	document.getElementById("moneyinput").value=SugarCube.State.variables.money;
-	var interval=10;
+	var interval=1;
+	isFetching=true;
+	totalFetchFunction=0;
+	currentFetch=0;
 	for (const functionName in firstload) {
-		if (typeof firstload[functionName] === 'function') 
+		if (typeof firstload[functionName] === 'function') {
 			setTimeout(function() {
 				firstload[functionName]();
+				currentFetch++;
 			}, interval);
-		interval+=10;
+			totalFetchFunction++;
+			interval+=1;
+		}
 	}
 }
 

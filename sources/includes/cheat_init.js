@@ -24,6 +24,8 @@ function init_interface(){
 	generatetext(['', 'invincibleAngel', 'invincibleAngelInfo'], ['text', 'button', 'tooltip'], ['Invincible Angel', 'Activate', 'it will prevent angel build progress lower or become fallen.(combine it with pure cheat)'], 'quick-content');
 	generatetext(['', 'interact_child','info_interact_child'], ['text', 'button', 'tooltip'], ['Auto Child Interact ', 'Auto', 'you must visit your baby first to trigger it.'], 'quick-content');
 	generatetext(['', 'pc_pregnancy', 'npc_pregnancy', 'pregnancy_detection'], ['text', 'button', 'button', 'button'], ['pregnancy detection ', 'pc=0', 'NPC=0','Activate'], 'quick-content');
+	generatetext(['', 'invinityNPCPregnancy', 'invinityNPCPregnancyInfo'], ['text', 'button', 'tooltip'], ['Invinite NPC pregnancy ','Activate','It will store pregnancy on the cheat untill it reach 1 day before give birth.'], 'quick-content');
+	generatetext(['', 'demonForcedPregnancy', 'demonForcedPregnancyInof'], ['text', 'button', 'tooltip'], ['Demon sex','Activate','It will make you temporarely demon during sex(demon ability to force pregnancy).'], 'quick-content');
 
 	generatetext([''], ['newline'], [''], 'quick-content');
 	if (isServer===1){
@@ -32,10 +34,7 @@ function init_interface(){
 		generatetext(['', 'save_data', 'load_data', 'serversaveinfo'], ['text', 'button', 'button', 'tooltip'], ['Server Save', 'Export', 'Import', 'this will export all of your save data (1-10) to the local server, allows you to import it anywhere else in the same local network'], 'quick-content');
 		generatetext([''], ['newline'], [''], 'quick-content');
 	}
-	generatetext([''], ['header'], ['tool'], 'quick-content');
-	generatetext(['', 'tmpText', 'ArrayChecker', 'infoArrayChecker', 'infoArrayChecker2'], ['text', 'input', 'button', 'tooltip', 'tooltip'], ['Array error fix', '', 'Check', 'This is array checker, this is useful if you use server save/in game export save feature. Due to server save export and in game save export is using json format to export, array with string index will left blank, making some data in your save file gone.', 'How to use : open browser console by pressing f12 and press check and paste it in the browser console and then press enter.'], 'quick-content');
 
-	generatetext(['', 'auto_check_status', 'checkArray', 'infoCheckArray'], ['text', 'button', 'button', 'tooltip'], ['Auto Array Check', 'unknown', 'Scan', 'check for further array error(might cause lag)'], 'quick-content');
 	generatetext([''], ['newline'], [''], 'quick-content');
 	generatetext(['', downloadSite, sourceCode], ['text', "link", "link"], ['cheat ver : '+cheatVer+" "+cheatVerType, 'Check for update', 'Source Code'], 'quick-content');
 	//stats
@@ -109,6 +108,8 @@ function init_interface(){
 	generatetext(['', 'simple_cheat_button', 'info_cheat_button'], ['text', 'button', 'tooltip'], ['simple cheat button', 'Enable', 'will makes cheat button simpler. recommended for mobile user.'], 'misc-content');
 	generatetext([''], ['newline'], [''], 'misc-content');
 	generatetext([''], ['header'], ['Debug'], 'misc-content');
+	generatetext(['', 'tmpText', 'ArrayChecker', 'infoArrayChecker', 'infoArrayChecker2'], ['text', 'input', 'button', 'tooltip', 'tooltip'], ['Array error fix', '', 'Check', 'This is array checker, this is useful if you use server save/in game export save feature. Due to server save export and in game save export is using json format to export, array with string index will left blank, making some data in your save file gone.', 'How to use : open browser console by pressing f12 and press check and paste it in the browser console and then press enter.'], 'misc-content');
+	generatetext(['', 'auto_check_status', 'checkArray', 'infoCheckArray'], ['text', 'button', 'button', 'tooltip'], ['Auto Array Check', 'unknown', 'Scan', 'check for further array error(might cause lag)'], 'misc-content');
 	generatetext(['', 'search_type', 'search_value', 'search123', 'search456'], ['text', 'select', 'input', 'button', 'button'], ['Search', [0,1,2],'', 'Deep', 'quick'], "misc-content");
 	var element = document.getElementById('tmpText');
 	element.classList.add('tmpText');

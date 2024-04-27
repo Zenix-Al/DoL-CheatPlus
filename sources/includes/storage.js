@@ -1,19 +1,20 @@
 //init
-if (!SugarCube.State.variables.cheatPlus.angel) SugarCube.State.variables.cheatPlus.angel="";
-if (!SugarCube.State.variables.cheatPlus.toggles) SugarCube.State.variables.cheatPlus.toggles={};
+function initStorage(){
+	if (!SugarCube.State.variables.cheatPlus) SugarCube.State.variables.cheatPlus={};
+	if (!SugarCube.State.variables.cheatPlus.angel) SugarCube.State.variables.cheatPlus.angel="";
+	if (!SugarCube.State.variables.cheatPlus.toggles) SugarCube.State.variables.cheatPlus.toggles={};
+	if (!SugarCube.State.variables.cheatPlus.storedNPCs) SugarCube.State.variables.cheatPlus.storedNPCs={};
+	if (!SugarCube.State.variables.cheatPlus.storedNPCsDate) SugarCube.State.variables.cheatPlus.storedNPCsDate=0;
+}
+initStorage();
 
 //functions
 function reactivateToggles() {
-	if (SugarCube.State.variables.cheatPlus.toggles) {
-		var tmp=Object.assign({}, SugarCube.State.variables.cheatPlus.toggles);
-		deactiveAllToggles();
-		for (const key3 in tmp) {
-			if (typeof(tmp[key3]) != "undefined")
-				buttonActions[key3]();
-		}
-	} else {
-		showToast('all toggle deactivated!');
-		deactiveAllToggles();
+	var tmp=Object.assign({}, SugarCube.State.variables.cheatPlus.toggles);
+	deactiveAllToggles();
+	for (const key3 in tmp) {
+		if (typeof(tmp[key3]) != "undefined")
+			buttonActions[key3]();
 	}
 }
 
