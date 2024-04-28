@@ -85,7 +85,7 @@ function init_interface(){
 	generatetext(['', 'mc_pregnancy_hole', 'mc_pregnancy_manager', 'mc_pregnancy_input', 'mc_pregnancy_toggle', 'mc_pregnancy_set'], ['text', 'select', 'select', 'input', 'checkbox','button'], ['Player', ['vagina', 'anus'], ['placeholder'], '','lock preg','Set'], 'misc-content');
 	generatetext([''], ['header'], ['MC Offspring'], 'misc-content');
 	generatetext(['', 'mc_tentacle_location', 'mc_tentacle_select', 'mc_tentacle_input', 'mc_tentacle_set', 'mc_tentacle_tooltip'], ['text', 'select', 'select', 'input', 'button', 'tooltip'], ['Tentacle Speed', ['home', 'lake', 'farm'], ['placeholder'], '','Set', 'The lower the better'], 'misc-content');
-	generatetext(['', 'mc_baby_select', 'mc_baby_tooltip', 'mc_baby_action_select', 'mc_baby_input', 'mc_baby_set'], ['text', 'select', 'tooltip', 'select', 'checkbox', 'button'], ['Baby', ['placeholder'], "placeholder", ['placeholder'], '','Set'], 'misc-content');
+	generatetext(['', 'mc_baby_select', 'mc_baby_tooltip', 'mc_baby_action_select', 'mc_baby_input', 'mc_baby_set'], ['text', 'select', 'tooltip', 'select', 'checkbox', 'button'], ['Baby', ['placeholder'], "placeholder", babyOptions, '','Set'], 'misc-content');
 
 	generatetext([''], ['header'], ['Abortion'], 'misc-content');
 	generatetext(['', 'mc_abortion_location', 'mc_abortion_select', 'mc_abortion_checkbox', 'mc_abortion_set'], ['text', 'select', 'select', 'checkbox', 'button'], ['MC', ['anus', 'vagina'], ['placeholder'], '','Set'], 'misc-content');

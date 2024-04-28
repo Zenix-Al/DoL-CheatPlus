@@ -331,7 +331,7 @@ edengarden: function() {
 			var left=SugarCube.State.variables.storedNPCs[key1].pregnancy.timerEnd-SugarCube.State.variables.storedNPCs[key1].pregnancy.timer;
 			if (left<=3 && priorityQueue<=limit) {
 				tmp["pregnancy_"+priorityQueue]=SugarCube.State.variables.storedNPCs[key1];
-				if (loop==8) showToast('NPC about to give abirth, you cant bustin nuts in people for today!');
+				if (priorityQueue==8) showToast('NPC about to give abirth, you cant bustin nuts in people for today!');
 				priorityQueue++;
 			} else if (left>3 || priorityQueue>limit) {
 				store["pregnancy_"+waitQueue]=SugarCube.State.variables.storedNPCs[key1];
@@ -348,7 +348,7 @@ edengarden: function() {
 			var left=timerEnd-timer;
 			if (left<=3 && priorityQueue<=limit) {
 				tmp["pregnancy_"+priorityQueue]=SugarCube.State.variables.cheatPlus.storedNPCs[key2];
-				if (loop==8) showToast('NPC about to give abirth, you cant bustin nuts in people for today!');
+				if (priorityQueue==8) showToast('NPC about to give abirth, you cant bustin nuts in people for today!');
 				priorityQueue++;
 			} else if (left>3 || priorityQueue>limit) {
 				store["pregnancy_"+waitQueue]=SugarCube.State.variables.cheatPlus.storedNPCs[key2];
