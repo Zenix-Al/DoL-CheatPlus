@@ -16,6 +16,8 @@ rmdir /s /q _compiled\server >NUL
 del _compiled\main.min.js >NUL
 del _compiled\main.min.css >NUL
 del _compiled\base.php >NUL
+del online\tmp.js >NUL
+del online\inttmp.js >NUL
 echo deleted!
 
 echo ----------------------------------------
@@ -37,6 +39,9 @@ mkdir _compiled\nwjs >NUL
 mkdir _compiled\offline >NUL
 mkdir _compiled\online >NUL
 mkdir _compiled\server >NUL 
+for /F "delims=" %%x in (_compiled\main.min.css) do (
+	set css=%%x
+)
 set lap=0
 for /F "delims=" %%x in (info.ini) do (
 	if !lap!==0 set cheatVer=%%x
@@ -94,10 +99,17 @@ copy info.ini _compiled\nwjs\ > NUL
 
 ::online
 echo compiling online version...
-copy online\header.js _compiled\online\main.js > NUL
+copy online\header.js online\tmp.js >NUL
+copy online\interface.js online\inttmp.js > NUL
+echo customcss.textContent = ^"!css!^">>online\inttmp.js
+echo document.head.appendChild(customcss);>>online\inttmp.js
+echo // @version      !cheatVer!>>online\tmp.js
+echo // ==/UserScript==>>online\tmp.js
+echo //only works on vanilla, bees, dolp and firebase, keep in mind its untested.>>online\tmp.js
+copy online\tmp.js _compiled\online\main.js > NUL
 echo. >>_compiled\online\main.js
 echo (function() { >> _compiled\online\main.js
-copy _compiled\online\main.js+online\interface.js _compiled\online\main.js > NUL
+copy _compiled\online\main.js+online\inttmp.js _compiled\online\main.js > NUL
 echo. >>_compiled\online\main.js
 echo var convertStringIndexArrayToObject; >>_compiled\online\main.js
 echo setTimeout(function() { >>_compiled\online\main.js
