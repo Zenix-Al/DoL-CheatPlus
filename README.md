@@ -60,36 +60,35 @@ Cheat version :
 <details>
 <summary>cheat features :</summary>
 <br>
-1. Export/Import save to server. dont need to export in game anymore, easy to transfer save between devices. (Local Server Version only)
-2. Quick cheat, all often use cheat. contain :
-   * Arousal
-   * Player state
-   * Enemy State
-   * Crime
-   * Chruch vow
-   * Tasks clean
-   * Eden Tasks
-   * Everyone is horny
-   * Farm safety
-   * Unlimited curm/arousal
-   * maintain purity
-   * Auto child interaction
-   * pregnancy detection, npc and player
-   * Tools
-4. Stat. freedom to change your stat. contain :
-	* Stats : recover, ruin or manage. (pain, arousal, control, etc)
-	* Enemy stats : recover, ruin or manage. (pain, arousal, control, etc)
-	* Player : money, unlimited spray, body size, feature, balls, virgin, etc
-	* Characteristics : beauty, purity, lactating, milk volume, etc
-	* Fame : freedom to change your fame.
-5. Misc :
-   * NPC manager : manage npc status.
-   * Farm manager : assault day, build time, animals.
-   * Wolfpack.
-   * Pregnancy manager : allows you to manage your childs, also abandon them.
-   * Fvrel coins usage.
-   * Debug.
-5. more that i havent listed.
+<br>1. Export/Import save to server. dont need to export in game anymore, easy to transfer save between devices. (Local Server Version only)
+<br>2. Quick cheat, all often use cheat. containArousal
+<br>   • Player state
+<br>   • Enemy State
+<br>   • Crime
+<br>   • Chruch vow
+<br>   • Tasks clean
+<br>   • Eden Tasks
+<br>   • Everyone is horny
+<br>   • Farm safety
+<br>   • Unlimited curm/arousal
+<br>   • maintain purity
+<br>   • Auto child interaction
+<br>   • pregnancy detection, npc and player
+<br>   • Tools
+<br>4. Stat. freedom to change your stat. contain
+<br>	• Stats : recover, ruin or manage. (pain, arousal, control, etc)
+<br>	• Enemy stats : recover, ruin or manage. (pain, arousal, control, etc)
+<br>	• Player : money, unlimited spray, body size, feature, balls, virgin, etc
+<br>	• Characteristics : beauty, purity, lactating, milk volume, etc
+<br>	• Fame : freedom to change your fame.
+<br>5. Misc
+<br>   • NPC manager : manage npc status.
+<br>   • Farm manager : assault day, build time, animals.
+<br>   • Wolfpack.
+<br>   • Pregnancy manager : allows you to manage your childs, also abandon them.
+<br>   • Fvrel coins usage.
+<br>   • Debug.
+<br>6. more that i havent listed.
 </details>
 
 Of course, I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue.
@@ -119,22 +118,22 @@ Instruction for installation is different for each cheat version!
 <details>
 <summary>Compiling</summary>
 <br>
-1. Open your terminal or command prompt.
-2. Run the following command to install UglifyJS globally (accessible from anywhere on your system):
-```npm install uglify-js -g```
-3. Run the following command to install clean-css globally (accessible from anywhere on your system):
-```npm install clean-css-cli -g```
-4. Due to github size limit, i zip one of the required file in ``\sources\base\game.zip``` (vanilla game html) extract it.
-5. run compile.bat in source/ or release.bat in release/
-6. output in _compiled or release.
-7. for how to use the cheat is shown below.
+<br>1. Open your terminal or command prompt.
+<br>2. Run the following command to install UglifyJS globally (accessible from anywhere on your system):
+<br>```npm install uglify-js -g```
+<br>3. Run the following command to install clean-css globally (accessible from anywhere on your system):
+<br>```npm install clean-css-cli -g```
+<br>4. Due to github size limit, i zip one of the required file in ``\sources\base\game.zip``` (vanilla game html) extract it.
+<br>5. run compile.bat in source/ or release.bat in release/
+<br>6. output in _compiled or release.
+<br>7. for how to use the cheat is shown below.
 </details>
 
 <details>
 <summary>Vanilla</summary>
 <br>
-1. Extract the game
-2. open the html file
+<br>1. Extract the game
+<br>2. open the html file
 </details>
 
 
@@ -142,55 +141,55 @@ Instruction for installation is different for each cheat version!
 <details>
 <summary>Local Server</summary>
 <br>
-IMPORTANT : This version allows you to using any version of DoL, you can download any version of the DoL above, moded or vanilla. This version also allows you to open it in other devices that in the same wifi.
-
-1. extract to the game folder
-2. run start.bat
-3. (Optional) If you want to play with other than vanilla version, you can download from the link above and then replace the image and delete main.html with other version also rename it to main.html.
-4. (Optional) if error "permission denied" occour, you can open start-admin.bat
-5. (Optional) if you wanna run the game from other device, you can open the same link shown in the command prompt window in your favourite browser and then enjoy.
+<br>IMPORTANT : This version allows you to using any version of DoL, you can download any version of the DoL above, moded or vanilla. This version also allows you to open it in other devices that in the same wifi.
+<br>
+<br>1. extract to the game folder
+<br>2. run start.bat
+<br>3. (Optional) If you want to play with other than vanilla version, you can download from the link above and then replace the image and delete main.html with other version also rename it to main.html.
+<br>4. (Optional) if error "permission denied" occour, you can open start-admin.bat
+<br>5. (Optional) if you wanna run the game from other device, you can open the same link shown in the command prompt window in your favourite browser and then enjoy.
 </details>
 
 
 <details>
 <summary>Online</summary>
 <br>
-IMPORTANT : This is dol cheat for online version that rely a browser extension to work and havent fully tested.
-
-It doesnt work if you open the mod directly in DoL mod page since it run using iFrame, so you must open the link directly.
-
-here's the mod links that the mod supported :<br />
-https://beeesss.dolmods.net/ - bees mod<br />
-https://dolp.dolmods.net/ - DoL plus<br />
-https://firemod.dolmods.net/ - Firemod<br />
-https://vanilla.dolmods.net/ - vanilla<br />
-
-How to use :
-1. download tampermonkey based on your browser - https://www.tampermonkey.net/
-2. click the tampermonkey icon
-3. open dashboard
-4. click tab utilities
-5. import from files, choose file
-6. pick the js file from the extracted file
-7. import
-8. open online DoL you want to play
-9. enjoy
+<br>IMPORTANT : This is dol cheat for online version that rely a browser extension to work and havent fully tested.
+<br>
+<br>It doesnt work if you open the mod directly in DoL mod page since it run using iFrame, so you must open the link directly.
+<br>
+<br>here's the mod links that the mod supported :<br />
+<br>https://beeesss.dolmods.net/ - bees mod<br />
+<br>https://dolp.dolmods.net/ - DoL plus<br />
+<br>https://firemod.dolmods.net/ - Firemod<br />
+<br>https://vanilla.dolmods.net/ - vanilla<br />
+<br>
+<br>How to use :
+<br>1. download tampermonkey based on your browser - https://www.tampermonkey.net/
+<br>2. click the tampermonkey icon
+<br>3. open dashboard
+<br>4. click tab utilities
+<br>5. import from files, choose file
+<br>6. pick the js file from the extracted file
+<br>7. import
+<br>8. open online DoL you want to play
+<br>9. enjoy
 </details>
 
 <details>
 <summary>Firebase NWJS version</summary>
 <br>
-IMPORTANT : This is dol cheat for Firebase NWJS and havent fully tested, possibly works with the other mod that using NWJS? i've no idea.
-
-you can download DoL firebase nwjs version here : https://mega.nz/folder/5iZwATZQ#h0y3xB3Buu8xNLkI-qWcxA
-
-How to use :
-1. extract the file in the game folder
-2. open www/cheat
-3. run inject-cheat.bat
-4. run the game normally
-5. enjoy
-6. (optional) run restore.bat to restore the game.
+<br>IMPORTANT : This is dol cheat for Firebase NWJS and havent fully tested, possibly works with the other mod that using NWJS? i've no idea.
+<br>
+<br>you can download DoL firebase nwjs version here : https://mega.nz/folder/5iZwATZQ#h0y3xB3Buu8xNLkI-qWcxA
+<br>
+<br>How to use :
+<br>1. extract the file in the game folder
+<br>2. open www/cheat
+<br>3. run inject-cheat.bat
+<br>4. run the game normally
+<br>5. enjoy
+<br>6. (optional) run restore.bat to restore the game.
 </details>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
