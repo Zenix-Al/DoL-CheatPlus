@@ -56,8 +56,10 @@ Cheat version :
 4. Firebase NWJS version.
 
 
-cheat features :
 
+<details>
+<summary>cheat features :</summary>
+<br>
 1. Export/Import save to server. dont need to export in game anymore, easy to transfer save between devices. (Local Server Version only)
 2. Quick cheat, all often use cheat. contain :
    * Arousal
@@ -87,6 +89,8 @@ cheat features :
    * Pregnancy manager : allows you to manage your childs, also abandon them.
    * Fvrel coins usage.
    * Debug.
+5. more that i havent listed.
+</details>
 
 Of course, I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -112,7 +116,9 @@ Cheat download link :
 ### Installation
 
 Instruction for installation is different for each cheat version!
-* Compiling
+<details>
+<summary>Compiling</summary>
+<br>
 1. Open your terminal or command prompt.
 2. Run the following command to install UglifyJS globally (accessible from anywhere on your system):
 ```npm install uglify-js -g```
@@ -122,13 +128,20 @@ Instruction for installation is different for each cheat version!
 5. run compile.bat in source/ or release.bat in release/
 6. output in _compiled or release.
 7. for how to use the cheat is shown below.
+</details>
 
-* Vanilla
+<details>
+<summary>Vanilla</summary>
+<br>
 1. Extract the game
 2. open the html file
+</details>
 
-* Local Server
 
+
+<details>
+<summary>Local Server</summary>
+<br>
 IMPORTANT : This version allows you to using any version of DoL, you can download any version of the DoL above, moded or vanilla. This version also allows you to open it in other devices that in the same wifi.
 
 1. extract to the game folder
@@ -136,9 +149,12 @@ IMPORTANT : This version allows you to using any version of DoL, you can downloa
 3. (Optional) If you want to play with other than vanilla version, you can download from the link above and then replace the image and delete main.html with other version also rename it to main.html.
 4. (Optional) if error "permission denied" occour, you can open start-admin.bat
 5. (Optional) if you wanna run the game from other device, you can open the same link shown in the command prompt window in your favourite browser and then enjoy.
+</details>
 
-* Online
 
+<details>
+<summary>Online</summary>
+<br>
 IMPORTANT : This is dol cheat for online version that rely a browser extension to work and havent fully tested.
 
 It doesnt work if you open the mod directly in DoL mod page since it run using iFrame, so you must open the link directly.
@@ -159,9 +175,11 @@ How to use :
 7. import
 8. open online DoL you want to play
 9. enjoy
+</details>
 
-* Firebase NWJS version
-
+<details>
+<summary>Firebase NWJS version</summary>
+<br>
 IMPORTANT : This is dol cheat for Firebase NWJS and havent fully tested, possibly works with the other mod that using NWJS? i've no idea.
 
 you can download DoL firebase nwjs version here : https://mega.nz/folder/5iZwATZQ#h0y3xB3Buu8xNLkI-qWcxA
@@ -173,6 +191,7 @@ How to use :
 4. run the game normally
 5. enjoy
 6. (optional) run restore.bat to restore the game.
+</details>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
