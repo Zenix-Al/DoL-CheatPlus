@@ -125,14 +125,12 @@ edengarden: function() {
 		   return;
 	   }
 	   this.checkArrayTreshold=0;
-	   const button = document.getElementById("auto_check_status");
-	   button.innerHTML="not found";
+	   SugarCube.State.variables.cheatPlus.arrayCheck=false;
 	   	function processValue(value) {
 		  if (Array.isArray(value) && value.length==0) {
 			  var check=Object.keys(value);
 			  if (check.length>0) {
-				const button = document.getElementById("auto_check_status");
-				  button.innerHTML="found";
+				SugarCube.State.variables.cheatPlus.arrayCheck=true;
 				  showToast('Broken array has been found!');
 				  return;
 				logBrokenArrayValues(value);

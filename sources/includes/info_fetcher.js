@@ -411,13 +411,21 @@ var firstload = {
 			document.getElementById("assault_time").value=SugarCube.State.variables.farm_attack_timer;
 	},
 	update_farm_buildtime: function() {
-		if (SugarCube.State.variables.farm)
+		if (SugarCube.State.variables.farm.build_timer)
 			document.getElementById("build_time").value=SugarCube.State.variables.farm.build_timer;
 	},
 	update_farm_animals_like: function() {
 		if (SugarCube.State.variables.farm) {
 			var animal=document.getElementById("animal_choice").value;
 			document.getElementById("animal_input").value=SugarCube.State.variables.farm.beasts[animal];
+		}
+	},
+	update_array_checker: function(){
+		const button = document.getElementById("auto_check_status");
+		if (SugarCube.State.variables.cheatPlus.arrayCheck) {
+			button.innerHTML="found";
+		} else {
+			button.innerHTML="not found";
 		}
 	}
 }
