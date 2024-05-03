@@ -384,13 +384,22 @@ var firstload = {
 			abortionCharaSelect.appendChild(option);
 			number++;
 		}
+		for (var key in SugarCube.State.variables.cheatPlus.storedNPCs) {
+			const option = document.createElement("option");
+			option.value = key;
+			option.text = number+". "+SugarCube.State.variables.cheatPlus.storedNPCs[key].pregnancy.fetus[0].mother;
+			abortionCharaSelect.appendChild(option);
+			number++;
+		}
 	},
 	update_npc_fetus_abortion_list: function(){
-		if (typeof(SugarCube.State.variables.storedNPCs.pregnancy_0)!=='object') return false;
 		var abortionSelect = document.getElementById("npc_abortion_select");
 		var abortionCharaSelect = document.getElementById("npc_abortion_chara_select").value;
-		var totalFetus=0;
-		if (typeof(SugarCube.State.variables.storedNPCs[abortionCharaSelect].pregnancy.fetus)==='object') totalFetus = SugarCube.State.variables.storedNPCs[abortionCharaSelect].pregnancy.fetus.length;
+		if (abortionCharaSelect.match(/pregnancy/)) {
+			var totalFetus = SugarCube.State.variables.storedNPCs[abortionCharaSelect].pregnancy.fetus.length;
+		} else if (abortionCharaSelect.match(/stored/)) {
+			var totalFetus = SugarCube.State.variables.cheatPlus.storedNPCs[abortionCharaSelect].pregnancy.fetus.length;
+		}
 		while (abortionSelect.firstChild) {
 			abortionSelect.removeChild(abortionSelect.firstChild);
 		}

@@ -27,6 +27,9 @@ mycode = { ...mycode,
 	for (var key in SugarCube.State.variables.crime) {
 		if (!isNaN(parseInt(SugarCube.State.variables.crime[key].current))) {
 			SugarCube.State.variables.crime[key].current=total;
+			SugarCube.State.variables.crime[key].count=total;
+			SugarCube.State.variables.crime[key].countHistory=total;
+			SugarCube.State.variables.crime[key].history=total;
 		}
 	}
 	firstload.crimecurrent();
@@ -243,9 +246,8 @@ mycode = { ...mycode,
 		showToast('Activated!');
 	},
 	cummanager: function(){
-		const value=parseInt(document.getElementById("cuminput").value);
+		var value=parseInt(document.getElementById("cuminput").value);
 		if (!isNaN(value)) {
-			if (value>3000) value=3000
 			showToast('Activated!');
 			SugarCube.State.variables.semen_volume=value;
 			firstload.cumcurrent();
@@ -254,18 +256,17 @@ mycode = { ...mycode,
 	milkmanager: function(){
 		const value=parseInt(document.getElementById("milkinput").value);
 		if (!isNaN(value)) {
-			if (value>3000) value=3000
 			showToast('Activated!');
 			SugarCube.State.variables.milk_volume=value;
 			firstload.milkcurrent();
 		}
 	},
 	cumfill: function(){
-		SugarCube.State.variables.semen_amount=SugarCube.State.semen_volume;
+		SugarCube.State.variables.semen_amount=SugarCube.State.variables.semen_volume;
 		showToast('Activated!');
 	},
 	milkfill: function(){
-		SugarCube.State.variables.milk_amount=SugarCube.State.milk_volume;
+		SugarCube.State.variables.milk_amount=SugarCube.State.variables.milk_volume;
 		showToast('Activated!');
 	},
 	infect: function(){
@@ -609,35 +610,44 @@ mycode = { ...mycode,
 		  var selected=document.getElementById("npc_abortion_chara_select").value;
 		  if (!selected) return false;
 		  var fetus=document.getElementById("npc_abortion_select").value;
-		  var totalFetus=SugarCube.State.variables.storedNPCs[selected].pregnancy.fetus.length;
+		  if (selected.match(/pregnancy/)) {
+			  var totalFetus=SugarCube.State.variables.storedNPCs[selected].pregnancy.fetus.length;
+			  var inGame=true;
+		  } else if (selected.match(/stored/)) {
+			  var totalFetus=SugarCube.State.variables.cheatPlus.storedNPCs[selected].pregnancy.fetus.length;
+			  var inGame=false;
+		  }
 		  if (totalFetus==0) {
 			  showToast('No baby!');
 			  return false;
 		  } else if (totalFetus==1) {
-			  SugarCube.State.variables.storedNPCs[selected].pregnancy.fetus=[];
-			  SugarCube.State.variables.storedNPCs[selected].pregnancy.potentialFathers=[];
-			  SugarCube.State.variables.storedNPCs[selected].pregnancy.timer=0;
-			  SugarCube.State.variables.storedNPCs[selected].pregnancy.timerEnd=null;
-			  SugarCube.State.variables.storedNPCs[selected].pregnancy.type=null;
-			  SugarCube.State.variables.storedNPCs[selected].pregnancy.waterBreaking=false;
-			  SugarCube.State.variables.storedNPCs[selected].pregnancy.waterBreakingTimer=null;
-			  var execute=false;
-			  var prev;
-			  for (var key in SugarCube.State.variables.storedNPCs) {
-				  if (key === selected) {
-					prev=key;					  
-					execute=true;
-				  }
-				  if (execute) {
-					  SugarCube.State.variables.storedNPCs[prev]=SugarCube.State.variables.storedNPCs[key];
-					  prev=key;
-				  }
+			  if (inGame) {
+				  SugarCube.State.variables.storedNPCs[selected].pregnancy.fetus=[];
+				  SugarCube.State.variables.storedNPCs[selected].pregnancy.potentialFathers=[];
+				  SugarCube.State.variables.storedNPCs[selected].pregnancy.timer=0;
+				  SugarCube.State.variables.storedNPCs[selected].pregnancy.timerEnd=null;
+				  SugarCube.State.variables.storedNPCs[selected].pregnancy.type=null;
+				  SugarCube.State.variables.storedNPCs[selected].pregnancy.waterBreaking=false;
+				  SugarCube.State.variables.storedNPCs[selected].pregnancy.waterBreakingTimer=null;
+				  delete  SugarCube.State.variables.storedNPCs[selected];
+			  } else if (!inGame) {
+				  SugarCube.State.variables.cheatPlus.storedNPCs[selected].pregnancy.fetus=[];
+				  SugarCube.State.variables.cheatPlus.storedNPCs[selected].pregnancy.potentialFathers=[];
+				  SugarCube.State.variables.cheatPlus.storedNPCs[selected].pregnancy.timer=0;
+				  SugarCube.State.variables.cheatPlus.storedNPCs[selected].pregnancy.timerEnd=null;
+				  SugarCube.State.variables.cheatPlus.storedNPCs[selected].pregnancy.type=null;
+				  SugarCube.State.variables.cheatPlus.storedNPCs[selected].pregnancy.waterBreaking=false;
+				  SugarCube.State.variables.cheatPlus.storedNPCs[selected].pregnancy.waterBreakingTimer=null;
+				  delete  SugarCube.State.variables.cheatPlus.storedNPCs[selected];
 			  }
-			  delete  SugarCube.State.variables.storedNPCs[prev];
 			  mycode.abortion_notice();
 			  firstload.update_npc_abortion_list();
 		  } else {
-			  SugarCube.State.variables.storedNPCs[selected].pregnancy.fetus.splice(fetus, 1);
+			  if (inGame) {
+				  SugarCube.State.variables.storedNPCs[selected].pregnancy.fetus.splice(fetus, 1);
+			  } else if (!inGame) {
+				  SugarCube.State.variables.cheatPlus.storedNPCs[selected].pregnancy.fetus.splice(fetus, 1);
+			  }
 			  mycode.abortion_notice();
 		  }
 		  firstload.update_npc_fetus_abortion_list();

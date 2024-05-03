@@ -89,7 +89,7 @@ function init_interface(){
 
 	generatetext([''], ['header'], ['Abortion'], 'misc-content');
 	generatetext(['', 'mc_abortion_location', 'mc_abortion_select', 'mc_abortion_checkbox', 'mc_abortion_set'], ['text', 'select', 'select', 'checkbox', 'button'], ['MC', ['anus', 'vagina'], ['placeholder'], '','Set'], 'misc-content');
-	generatetext(['', 'named_npc_abortion_chara_select','named_npc_abortion_select', 'named_npc_abortion_checkbox', 'named_npc_abortion_set'], ['text', 'select', 'select', 'checkbox', 'button'], ['Named NPC', npcnamelist, ['placeholder'], '','Set'], 'misc-content');
+	generatetext(['', 'named_npc_abortion_chara_select','named_npc_abortion_select', 'named_npc_abortion_checkbox', 'named_npc_abortion_set'], ['text', 'select', 'select', 'checkbox', 'button'], ['Named NPC', npcnamelist, babyOptions, '','Set'], 'misc-content');
 	generatetext(['', 'npc_abortion_chara_select', 'npc_abortion_select', 'npc_abortion_checkbox', 'npc_abortion_set'], ['text', 'select', 'select', 'checkbox', 'button'], ['NPC', ['placeholder'], ['placeholder'], '','Set'], 'misc-content');
 
 	generatetext([''], ['newline'], [''], 'misc-content');
@@ -111,6 +111,7 @@ function init_interface(){
 	generatetext(['', 'tmpText', 'ArrayChecker', 'infoArrayChecker', 'infoArrayChecker2'], ['text', 'input', 'button', 'tooltip', 'tooltip'], ['Array error fix', '', 'Check', 'This is array checker, this is useful if you use server save/in game export save feature. Due to server save export and in game save export is using json format to export, array with string index will left blank, making some data in your save file gone.', 'How to use : open browser console by pressing f12 and press check and paste it in the browser console and then press enter.'], 'misc-content');
 	generatetext(['', 'auto_check_status', 'checkArray', 'infoCheckArray'], ['text', 'button', 'button', 'tooltip'], ['Auto Array Check', 'unknown', 'Scan', 'check for further array error(might cause lag)'], 'misc-content');
 	generatetext(['', 'search_type', 'search_value', 'search123', 'search456'], ['text', 'select', 'input', 'button', 'button'], ['Search', [0,1,2],'', 'Deep', 'quick'], "misc-content");
+	generatetext(['search_result'], ['textarea'], ['placeholder'], "misc-content");
 	var element = document.getElementById('tmpText');
 	element.classList.add('tmpText');
 }

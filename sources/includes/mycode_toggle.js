@@ -167,9 +167,8 @@ edengarden: function() {
   orgasm_toggle:0,
   tmpArousal:0,
   unlicum: function() {
-	if (SugarCube.State.variables.semen_amount<3000) {
-		SugarCube.State.variables.semen_volume=3000;
-		SugarCube.State.variables.semen_amount=3000;
+	if (SugarCube.State.variables.semen_amount<SugarCube.State.variables.semen_volume) {
+		SugarCube.State.variables.semen_amount=SugarCube.State.variables.semen_volume;
 	}
 	if (SugarCube.State.variables.orgasmcurrent !=1){
 		mycode.orgasm_toggle=0;
@@ -217,26 +216,34 @@ edengarden: function() {
 	total_npc_pregnant: 0,
 	pc_pregnant: 0,
 	pregnancy_detection: function(){
+		function count_npc(){
+			var total=Object.keys(SugarCube.State.variables.storedNPCs).length;
+			total+=Object.keys(SugarCube.State.variables.cheatPlus.storedNPCs).length;
+			for (var i=0;i<SugarCube.State.variables.NPCName.length;i++){
+				if (SugarCube.State.variables.NPCName[i]?.pregnancy?.fetus?.length>0) {
+					total++;
+				}
+			}
+			return total;
+		}
+		
+		function count_pc(){
+			return SugarCube.State.variables.sexStats.vagina.pregnancy.fetus.length+SugarCube.State.variables.sexStats.anus.pregnancy.fetus.length;
+		}
+		
 		if (this.total_npc_pregnant==0){
-			this.total_npc_pregnant=Object.keys(SugarCube.State.variables.storedNPCs).length;
-			for (var i=0;i<SugarCube.State.variables.NPCName.length;i++){
-				if (Object.keys(SugarCube.State.variables.NPCName[i].pregnancy).length!=0) {
-					this.total_npc_pregnant++;
-				}
-			}
-			this.pc_pregnant= SugarCube.State.variables.sexStats.vagina.pregnancy.fetus.length+SugarCube.State.variables.sexStats.anus.pregnancy.fetus.length;
+			this.total_npc_pregnant=count_npc();
+			var tmp_npc=this.total_npc_pregnant;
+			this.pc_pregnant= count_pc();
+			var tmp_pc=count_pc();
 		} else {
-			var tmp_npc=Object.keys(SugarCube.State.variables.storedNPCs).length;
-			for (var i=0;i<SugarCube.State.variables.NPCName.length;i++){
-				if (Object.keys(SugarCube.State.variables.NPCName[i].pregnancy).length!=0) {
-					tmp_npc++;
-				}
-			}
-			var tmp_pc=SugarCube.State.variables.sexStats.vagina.pregnancy.fetus.length+SugarCube.State.variables.sexStats.anus.pregnancy.fetus.length;
+			var tmp_npc=count_npc();
+			var tmp_pc=count_pc();
 		}
 		
 		if (tmp_npc>this.total_npc_pregnant){
 			showToast('NPC is impregnated!');
+			this.invinityNPCPregnancy();
 			this.total_npc_pregnant=tmp_npc;
 		} else if (tmp_npc<this.total_npc_pregnant) {
 			showToast('NPC\'s baby has been born!');
@@ -328,11 +335,11 @@ edengarden: function() {
 		for (const key1 in SugarCube.State.variables.storedNPCs) {
 			var left=SugarCube.State.variables.storedNPCs[key1].pregnancy.timerEnd-SugarCube.State.variables.storedNPCs[key1].pregnancy.timer;
 			if (left<=3 && priorityQueue<=limit) {
-				tmp["pregnancy_"+priorityQueue]=SugarCube.State.variables.storedNPCs[key1];
+				tmp["stored_"+priorityQueue]=SugarCube.State.variables.storedNPCs[key1];
 				if (priorityQueue==8) showToast('NPC about to give abirth, you cant bustin nuts in people for today!');
 				priorityQueue++;
 			} else if (left>3 || priorityQueue>limit) {
-				store["pregnancy_"+waitQueue]=SugarCube.State.variables.storedNPCs[key1];
+				store["stored_"+waitQueue]=SugarCube.State.variables.storedNPCs[key1];
 				waitQueue++;
 			}
 		}
@@ -345,11 +352,11 @@ edengarden: function() {
 			}
 			var left=timerEnd-timer;
 			if (left<=3 && priorityQueue<=limit) {
-				tmp["pregnancy_"+priorityQueue]=SugarCube.State.variables.cheatPlus.storedNPCs[key2];
+				tmp["stored_"+priorityQueue]=SugarCube.State.variables.cheatPlus.storedNPCs[key2];
 				if (priorityQueue==8) showToast('NPC about to give abirth, you cant bustin nuts in people for today!');
 				priorityQueue++;
 			} else if (left>3 || priorityQueue>limit) {
-				store["pregnancy_"+waitQueue]=SugarCube.State.variables.cheatPlus.storedNPCs[key2];
+				store["stored_"+waitQueue]=SugarCube.State.variables.cheatPlus.storedNPCs[key2];
 				waitQueue++;
 			}
 		}

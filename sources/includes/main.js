@@ -174,7 +174,7 @@ function generatetext(ids, inputs, textInputs, category) {
 	  if (inputs[i] === "input") {
 		var input = '<input id="' + ids[i] + '" class="modal-content-width" autocomplete="off">';
 	  } else if (inputs[i] === "textarea") {
-		var input = '<textarea id="' + ids[i] + '" class="modal-content-width"></textarea>';
+		var input = '<textarea id="' + ids[i] + '" class="modal-content-width" style="height: 100px; width:100%; line-height: 1.5;" autocomplete="off" spellcheck="false"></textarea>';
 	  } else if (inputs[i] === "select") {
 		var input = '<select id="' + ids[i] + '">';
 		for (var j = 0; j < textInputs[i].length; j++) {
@@ -291,10 +291,11 @@ function simple_cheat_button() {
 }
 
 function executeSearch(action) {
-	console.clear();
 	if (!action) action=buttonId;
 	var search_type = document.getElementById("search_type").value;
 	var searchTerm = document.getElementById("search_value").value;
+	var search_container = document.getElementById("search_result");
+	document.getElementById("search_result").value="Result :\n"
 
 	if (search_type === "0") {
 		search_type = "startsWith";
@@ -318,13 +319,13 @@ function executeSearch(action) {
 		} else if (typeof value === 'object') {
 			logObjectValues(value, newPath);
 		} else if (String(value).toLowerCase()[search_type](searchTerm.toLowerCase()) && String(value)!="") {
-			  console.log(newPath + "=" + value);
+			document.getElementById("search_result").value+=newPath + "=" + value + "\n";
 		}
 	}
 	
 	function checkObject(key, value, newPath){
 		if (key.toLowerCase()[search_type](searchTerm.toLowerCase()) && value!="") {
-			  console.log(newPath + "=" + value);
+			  document.getElementById("search_result").value+=newPath + "=" + value + "\n";
 		}
 	}
 	function logObjectValues(obj, curPath) {
@@ -361,7 +362,7 @@ function executeSearch(action) {
 		showToast('Searching...');
 		for (var prop in SugarCube.State.variables) {
 			if (prop.toLowerCase()[search_type](searchTerm.toLowerCase())) {
-			  console.log("SugarCube.State.variables." + prop + "=" + SugarCube.State.variables[prop]);
+				document.getElementById("search_result").value+="SugarCube.State.variables." + prop + "=" + SugarCube.State.variables[prop] + "\n";
 			}
 		  }
 	}
