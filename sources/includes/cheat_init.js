@@ -12,6 +12,7 @@ function init_interface(){
 	generatetext(['', 'vow-virgin'], ['text', 'button'], ['chruch vow', 'Virgin'], 'quick-content');
 	generatetext(['', 'clean_cum', 'dirty_cum', 'clean_cum_uretus'], ['text', 'button', 'button', 'button'], ['Hygiene', 'Clean', 'dirty', 'clean uretus cum' ], 'quick-content');
 	generatetext(['', 'in_game_cheat', 'alt_cheat'], ['text', 'button', 'button'], ['In game cheat', 'Enable', ''], 'quick-content');
+	generatetext(['', 'randomEncounterSet'], ['text', 'button'], ['Random encounter', 'Enabled'], 'quick-content');
 	generatetext([''], ['newline'], [''], 'quick-content');
 
 	generatetext([''], ['header'], ['Unlimited Toggles'], 'quick-content');
@@ -112,6 +113,7 @@ function init_interface(){
 	generatetext(['', 'auto_check_status', 'checkArray', 'infoCheckArray'], ['text', 'button', 'button', 'tooltip'], ['Auto Array Check', 'unknown', 'Scan', 'check for further array error(might cause lag)'], 'misc-content');
 	generatetext(['', 'search_type', 'search_value', 'search123', 'search456'], ['text', 'select', 'input', 'button', 'button'], ['Search', [0,1,2],'', 'Deep', 'quick'], "misc-content");
 	generatetext(['search_result'], ['textarea'], ['placeholder'], "misc-content");
+	generatetext(['', 'stringJS', 'stringValue', 'stingJSSet', 'stingJSHelp'], ['text', 'input', 'input', 'button', 'tooltip'], ['String to JS', '','', 'Set', '1st input is the js path example "SugarCube.State.variables", the 2nd one is variable. Be cautious you might edit wrong variable that might cause the game broken.'], "misc-content");
 	var element = document.getElementById('tmpText');
 	element.classList.add('tmpText');
 }

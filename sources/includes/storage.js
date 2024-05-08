@@ -5,6 +5,13 @@ function initStorage(){
 	if (!SugarCube.State.variables.cheatPlus.toggles) SugarCube.State.variables.cheatPlus.toggles={};
 	if (!SugarCube.State.variables.cheatPlus.storedNPCs) SugarCube.State.variables.cheatPlus.storedNPCs={};
 	if (!SugarCube.State.variables.cheatPlus.storedNPCsDate) SugarCube.State.variables.cheatPlus.storedNPCsDate=0;
+	if (!SugarCube.State.variables.cheatPlus.orgasmCount) SugarCube.State.variables.cheatPlus.orgasmCount=0;
+	if (SugarCube.State.variables.penisstate!=0 || SugarCube.State.variables.vaginastate!=0) return;
+		if (SugarCube.State.variables.demon>0) {
+			SugarCube.State.variables.cheatPlus.trueDivine="demon";
+		} else if (SugarCube.State.variables.angel>0) {
+			SugarCube.State.variables.cheatPlus.trueDivine="angel";
+		}
 }
 initStorage();
 

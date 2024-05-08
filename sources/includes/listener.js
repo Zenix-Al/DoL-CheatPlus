@@ -91,7 +91,9 @@ var buttonActions = {
   "dirty_cum":mycode.dirty_cum,
   "clean_cum_uretus":mycode.clean_cum_uretus,
   "in_game_cheat":mycode.in_game_cheat,
-  "alt_cheat":mycode.alt_cheat
+  "alt_cheat":mycode.alt_cheat,
+  "stingJSSet":mycode.stingJSSet,
+  "randomEncounterSet":mycode.randomEncounterSet
 };
 cheat.addEventListener("click", function(Event) {
 	var target = event.target;
@@ -158,7 +160,7 @@ document.addEventListener("click", function(event) {
 	clickCounter+=1;
     mycode.runitall();
 	//to avoid this variable undefined and causing an error
-	var target = event.target;;
+	var target = event.target;
 	if (target.classList.contains("macro-button") && target.innerHTML=="SAVES") {
 		isLoad=true;
 	} else if (isLoad) {

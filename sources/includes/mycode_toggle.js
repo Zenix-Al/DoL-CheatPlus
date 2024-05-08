@@ -164,24 +164,30 @@ edengarden: function() {
 		}
 	   logObjectValues(SugarCube.State.variables);
   },
-  orgasm_toggle:0,
   tmpArousal:0,
+  orgasmdown:0,
   unlicum: function() {
 	if (SugarCube.State.variables.semen_amount<SugarCube.State.variables.semen_volume) {
 		SugarCube.State.variables.semen_amount=SugarCube.State.variables.semen_volume;
 	}
-	if (SugarCube.State.variables.orgasmcurrent !=1){
-		mycode.orgasm_toggle=0;
-		SugarCube.State.variables.orgasmcount = 0;
-	} else if (mycode.orgasm_toggle==0) {
-		mycode.orgasm_toggle=1;
+	if (SugarCube.State.variables.orgasmcurrent !=0 && !SugarCube.State.variables.cheatPlus.unlicumMode){
+		SugarCube.State.variables.cheatPlus.orgasmcount = 0;
 		mycode.tmpArousal=SugarCube.State.variables.arousal;
-		SugarCube.State.variables.arousal;
-		SugarCube.State.variables.orgasmdown=5;
-		var orgasmdown= database.toLowerCase().includes(whatversion.toLowerCase()) ? (SugarCube.State.variables.npcArousalMult-100)/25*5 : 5;
-		SugarCube.State.variables.orgasmdown= orgasmdown>=5 ? orgasmdown : 5;
+		SugarCube.State.variables.orgasmdown=1000;
+		mycode.orgasmdown=1000;
+		SugarCube.State.variables.cheatPlus.unlicumMode=true;
+	} else if (SugarCube.State.variables.orgasmdown<mycode.orgasmdown && SugarCube.State.variables.cheatPlus.unlicumMode) { 
+		mycode.orgasmdown=SugarCube.State.variables.orgasmdown;
+		SugarCube.State.variables.arousal=mycode.tmpArousal;
+		SugarCube.State.variables.cheatPlus.orgasmCount++;
+		if (SugarCube.State.variables.cheatPlus.orgasmCount>2) {
+			SugarCube.State.variables.cheatPlus.unlicumMode=false
+			SugarCube.State.variables.orgasmdown=-1;
+			mycode.orgasmdown=-1;
+			SugarCube.State.variables.cheatPlus.orgasmCount=0;
+			SugarCube.State.variables.orgasmcurrent=0;
+		}
 	}
-	if (SugarCube.State.variables.orgasmdown>0) SugarCube.State.variables.arousal=mycode.tmpArousal;
   },
 	unliarousal: function() {
 		SugarCube.State.variables.arousal=10000;
@@ -286,11 +292,9 @@ edengarden: function() {
 			}
 		}
 	},
-	prevAngelBuild: 0,
-	restoreAngel: false,
 	invincibleAngel: function(){
 		if (extra_notif)
-		if (SugarCube.State.variables.demon>60) {
+		if (SugarCube.State.variables.demon>0) {
 			showToast('Youre a demon!');
 			timedToast('but, okay', 3000);
 		} else if (SugarCube.State.variables.fallenangel>0) {
@@ -299,25 +303,16 @@ edengarden: function() {
 			buttonActions["invincibleAngel"]();
 			return;
 		}
-		if (SugarCube.State.variables.cheatPlus.angel && SugarCube.State.variables.angel==0) this.prevAngelBuild=SugarCube.State.variables.cheatPlus.angel;
-		if (SugarCube.State.variables.penisstate!=0 || SugarCube.State.variables.vaginastate!=0) var trigger=true;
-		if (trigger) {
-			if (!this.restoreAngel) {
-				if (SugarCube.State.variables.angel!=0) {
-					this.prevAngelBuild=SugarCube.State.variables.angel;
-					SugarCube.State.variables.cheatPlus.angel=SugarCube.State.variables.angel;
-				} else {
-					this.prevAngelBuild=SugarCube.State.variables.cheatPlus.angel;
-				}
-			}
+		if (SugarCube.State.variables.penisstate!=0 || SugarCube.State.variables.vaginastate!=0) {
+			if (SugarCube.State.variables.cheatPlus.angelMode) return;
+			SugarCube.State.variables.cheatPlus.angel=SugarCube.State.variables.angel;
 			SugarCube.State.variables.angel=0;
 			SugarCube.State.variables.angelbuild=100;
-			this.restoreAngel=true;
-		} else if (!trigger && this.restoreAngel){
-			this.restoreAngel=false;
-			SugarCube.State.variables.angel=this.prevAngelBuild;
-			SugarCube.State.variables.angelbuild=100;
-		} 
+			SugarCube.State.variables.cheatPlus.angelMode=true;
+		} else if (SugarCube.State.variables.cheatPlus.angelMode) {
+			SugarCube.State.variables.cheatPlus.angelMode=false;
+			SugarCube.State.variables.angel=SugarCube.State.variables.cheatPlus.angel;
+		}
 	},
 	invinityNPCPregnancy: function(){
 		var priorityQueue=0;
@@ -375,20 +370,34 @@ edengarden: function() {
 			showToast('you know this will not turn you into a complete demon right?');
 		}
 		if (SugarCube.State.variables.penisstate!=0 || SugarCube.State.variables.vaginastate!=0) {
-			SugarCube.State.variables.demon=6;
-			SugarCube.State.variables.demonbuild=100;
-			if (SugarCube.State.variables.demon>0) {
+			if (SugarCube.State.variables.cheatPlus.demonMode) return;
+			if (SugarCube.State.variables.cheatPlus.trueDivine=="demon") {
 				SugarCube.State.variables.cheatPlus.demon=SugarCube.State.variables.demon;
 				SugarCube.State.variables.cheatPlus.demonbuild=SugarCube.State.variables.demonbuild;
 			}
-		} else if (SugarCube.State.variables.angel>0) {
+			SugarCube.State.variables.demon=6;
+			SugarCube.State.variables.demonbuild=100;
+			SugarCube.State.variables.cheatPlus.demonMode=true;
+		} else if (SugarCube.State.variables.cheatPlus.trueDivine=="angel" && SugarCube.State.variables.cheatPlus.demonMode) {
 			SugarCube.State.variables.demon=0;
 			SugarCube.State.variables.demonbuild=0;
-		} else if (SugarCube.State.variables.cheatPlus.demon>0) {
+			SugarCube.State.variables.cheatPlus.demonMode=false;
+		} else if (SugarCube.State.variables.cheatPlus.trueDivine=="demon" && SugarCube.State.variables.cheatPlus.demonMode) {
 			SugarCube.State.variables.demon=SugarCube.State.variables.cheatPlus.demon;
 			SugarCube.State.variables.demonbuild=SugarCube.State.variables.cheatPlus.demonbuild;
+			SugarCube.State.variables.cheatPlus.demonMode=false;
 		}
-			
-		
+		if (SugarCube.State.variables.penisstate==0 || SugarCube.State.variables.vaginastate==0)
+		if (!SugarCube.State.variables.cheatPlus.demonMode) {
+			mycode.updateUserDivine();
+		}
+	},
+	updateUserDivine: function(){
+		if (SugarCube.State.variables.penisstate!=0 || SugarCube.State.variables.vaginastate!=0) return;
+		if (SugarCube.State.variables.demon>0) {
+			SugarCube.State.variables.cheatPlus.trueDivine="demon";
+		} else if (SugarCube.State.variables.angel>0) {
+			SugarCube.State.variables.cheatPlus.trueDivine="angel";
+		}
 	}
 }

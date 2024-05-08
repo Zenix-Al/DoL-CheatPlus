@@ -682,6 +682,51 @@ mycode = { ...mycode,
 			showToast('cheat not enabled, please re-enable it again.');
 		}
 		
+	  },
+	  stingJSSet: function(){
+		function textToJS(str, value) {
+			var text=str.split(".");
+			var length=text.length;
+			if (length===1) {
+			  window[text[0]]=value;
+			} else if (length===2) {
+			  window[text[0]][text[1]]=value;
+			} else if (length===3) {
+			  window[text[0]][text[1]][text[2]]=value;
+			} else if (length===4) {
+			  window[text[0]][text[1]][text[2]][text[3]]=value;
+			} else if (length===5) {
+			  window[text[0]][text[1]][text[2]][text[3]][text[4]]=value;
+			} else if (length===6) {
+			  window[text[0]][text[1]][text[2]][text[3]][text[4]][text[5]]=value;
+			} else if (length===7) {
+			  window[text[0]][text[1]][text[2]][text[3]][text[4]][text[5]][text[6]]=value;
+			} else if (length===8) {
+			  window[text[0]][text[1]][text[2]][text[3]][text[4]][text[5]][text[6]][text[7]]=value;
+			} else {
+				showToast('error');
+				return;
+			}
+			showToast('Activated.');
+		}
+		var string=document.getElementById("stringJS").value;
+		var value=document.getElementById("stringValue").value;
+		if (isNaN(parseFloat(value))) {
+			textToJS(string, value);
+		} else {
+			textToJS(string, parseFloat(value));
+		}
+	  },
+	  randomEncounterSet: function(){
+		  if (SugarCube.State.variables.alluremod===0) {
+			  SugarCube.State.variables.alluremod=1;
+			  document.getElementById("randomEncounterSet").innerHTML="Enabled";
+			  showToast('Enabled.');
+		  } else {
+			  SugarCube.State.variables.alluremod=0;
+			  document.getElementById("randomEncounterSet").innerHTML="Disabled";
+			  showToast('Disabled.');
+		  }
 	  }
 
 }

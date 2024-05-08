@@ -436,6 +436,13 @@ var firstload = {
 		} else {
 			button.innerHTML="not found";
 		}
+	},
+	randomEncounterUpdate: function(){
+		if (SugarCube.State.variables.alluremod===0) {
+		  document.getElementById("randomEncounterSet").innerHTML="Disabled";
+		} else {
+		  document.getElementById("randomEncounterSet").innerHTML="Enabled";
+		}
 	}
 }
 
