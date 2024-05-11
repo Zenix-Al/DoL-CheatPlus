@@ -170,8 +170,13 @@ cheat.addEventListener("input", function(event) {
 
 //document listener for toggle cheat
 document.addEventListener("click", function(event) {
-	clickCounter++;
-    mycode.runitall();
+	if (SugarCube.State.variables.passage==="Settings") {
+		//restore variables in certain passage to avoid error.
+		restoreVariables();
+	} else {
+		clickCounter++;
+		mycode.runitall();
+	}
 	//to avoid this variable undefined and causing an error
 	var target = event.target;
 	if (target.classList.contains("macro-button") && target.innerHTML=="SAVES") {
@@ -184,11 +189,15 @@ document.addEventListener("click", function(event) {
 	} else if (target.id=="history-backward" || target.id==="history-forward") {
 		initStorage();
 	}
+	
+	
 });
 
 document.addEventListener("keyup", function(event) {
-	clickCounter++;
-    mycode.runitall();
+	if (SugarCube.State.variables.passage!="Settings") {
+		clickCounter++;
+		mycode.runitall();
+	}
 });
 cheat.addEventListener("keyup", function(event) {
 	event.stopPropagation();

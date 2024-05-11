@@ -367,3 +367,21 @@ function executeSearch(action) {
 		  }
 	}
 }
+
+//restore any variable that might causing problem
+function restoreVariables(){
+	var triggered=false;
+	if (SugarCube.State.variables.alluremod===0) {
+	  SugarCube.State.variables.alluremod=1;
+	  showToast('Encounter rate enabled!');
+	}
+	if (typeof functionbundle["allNPCInstaPregnant"] === 'function') {
+		buttonActions["allNPCInstaPregnant"]();
+		showToast('NPC instant pregnant is disabled!');
+		triggered=true;
+	}
+	if (triggered) {
+		showToast('This ensure the game settings isnt break.');
+		showToast('You can re-enable it after youre done.');
+	}
+	}
