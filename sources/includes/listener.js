@@ -30,7 +30,10 @@ var buttonActions = {
   "pregnancy_detection": mycode.toggle.bind(mycode, 'pregnancy_detection', 'Activate'),
   "invincibleAngel": mycode.toggle.bind(mycode, 'invincibleAngel', 'Activate'),
   "invinityNPCPregnancy": mycode.toggleDaily.bind(mycode, 'invinityNPCPregnancy', 'Activate'),
-  "demonForcedPregnancy": mycode.toggle.bind(mycode, 'demonForcedPregnancy', 'Activate'),
+  //"demonForcedPregnancy": mycode.toggle.bind(mycode, 'demonForcedPregnancy', 'Activate'),
+  "intenseCum": mycode.toggle.bind(mycode, 'intenseCum', 'intense cum'),
+  "allNPCInstaPregnant": mycode.toggle.bind(mycode, 'allNPCInstaPregnant', 'Activate'),
+  "allNPCMultiplePregnancy": mycode.toggle.bind(mycode, 'allNPCMultiplePregnancy', 'Activate'),
   //togglesend
   "max_harmony": mycode.max_harmony,
   "max_Ferocity": mycode.max_Ferocity,
@@ -93,9 +96,10 @@ var buttonActions = {
   "in_game_cheat":mycode.in_game_cheat,
   "alt_cheat":mycode.alt_cheat,
   "stingJSSet":mycode.stingJSSet,
-  "randomEncounterSet":mycode.randomEncounterSet
+  "randomEncounterSet":mycode.randomEncounterSet,
+  "npc_abortion_purge":mycode.purgeNPCPregnancy
 };
-cheat.addEventListener("click", function(Event) {
+cheat.addEventListener("click", function(event) {
 	var target = event.target;
 	if (!target.id) return;
 	buttonId = target.id;
@@ -109,7 +113,13 @@ cheat.addEventListener("click", function(Event) {
 		}
 	} else if (buttonId in mainActions) {
 		mainActions[buttonId]();
+	} else if (isLoad) {
+		initStorage();
+		reactivateToggles();
+		showToast('Cheat state loaded');
+		isLoad=false;
 	}
+	event.stopPropagation();
 });
 //change lookup
 var changeActions = {
@@ -141,6 +151,7 @@ cheat.addEventListener("change", function(event) {
   if (target.id in changeActions) {
 	  changeActions[target.id]();
 	}
+	event.stopPropagation();
 });
 
 //input slider listener
@@ -153,11 +164,12 @@ cheat.addEventListener("input", function(event) {
   if (target.id in inputActions) {
 	  inputActions[target.id]();
 	}
+	event.stopPropagation();
 });
 
 //document listener for toggle cheat
 document.addEventListener("click", function(event) {
-	clickCounter+=1;
+	clickCounter++;
     mycode.runitall();
 	//to avoid this variable undefined and causing an error
 	var target = event.target;
@@ -171,4 +183,12 @@ document.addEventListener("click", function(event) {
 	} else if (target.id=="history-backward" || target.id==="history-forward") {
 		initStorage();
 	}
+});
+
+document.addEventListener("keyup", function(event) {
+	clickCounter++;
+    mycode.runitall();
+});
+cheat.addEventListener("keyup", function(event) {
+	event.stopPropagation();
 });

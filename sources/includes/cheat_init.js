@@ -20,14 +20,16 @@ function init_interface(){
 	generatetext(['', 'edenshrooms', 'edengarden', 'edenspring', 'edentimer'], ['text', 'button', 'button', 'button', 'button'], ['Eden Tasks', 'Shroom', 'Garden', 'Spring', 'Timer'], 'quick-content');
 	generatetext(['', 'everyone_horny'], ['text', 'button'], ['Everyone is horny', 'Horny'], 'quick-content');
 	generatetext(['', 'farm_safe'], ['text', 'button'], ['Farm safety', 'Safe'], 'quick-content');
-	generatetext(['', 'unlicum', 'unliarousal'], ['text', 'button', 'button'], ['Unlimited', 'cum', 'arousal'], 'quick-content');
+	generatetext(['', 'unlicum', 'unliarousal', 'intenseCum'], ['text', 'button', 'button', 'button'], ['Unlimited', 'cum', 'arousal', 'intense cum'], 'quick-content');
 	generatetext(['', 'virginity', 'purity'], ['text', 'button', 'button'], ['Maintain pure', 'virgin', 'pure'], 'quick-content');
 	generatetext(['', 'invincibleAngel', 'invincibleAngelInfo'], ['text', 'button', 'tooltip'], ['Invincible Angel', 'Activate', 'it will prevent angel build progress lower or become fallen.(combine it with pure cheat)'], 'quick-content');
 	generatetext(['', 'interact_child','info_interact_child'], ['text', 'button', 'tooltip'], ['Auto Child Interact ', 'Auto', 'you must visit your baby first to trigger it.'], 'quick-content');
 	generatetext(['', 'pc_pregnancy', 'npc_pregnancy', 'pregnancy_detection'], ['text', 'button', 'button', 'button'], ['pregnancy detection ', 'pc=0', 'NPC=0','Activate'], 'quick-content');
-	generatetext(['', 'invinityNPCPregnancy', 'invinityNPCPregnancyInfo'], ['text', 'button', 'tooltip'], ['Invinite NPC pregnancy ','Activate','It will store pregnancy on the cheat untill it reach 1 day before give birth.'], 'quick-content');
-	generatetext(['', 'demonForcedPregnancy', 'demonForcedPregnancyInof'], ['text', 'button', 'tooltip'], ['Demon sex','Activate','It will make you temporarely demon during sex(demon ability to force pregnancy).'], 'quick-content');
-
+	generatetext(['', 'invinityNPCPregnancy', 'invinityNPCPregnancyInfo'], ['text', 'button', 'tooltip'], ['Infinite NPC pregnancy ','Activate','It will store pregnancy on the cheat untill it reach 1 day before give birth.'], 'quick-content');
+	generatetext(['', 'allNPCInstaPregnant', 'allNPCInstaPregnantInfo'], ['text', 'button', 'tooltip'], ['NPC max pregnancy rate','Activate','NPC has 100% pregnancy rate. some npc might cannot impregnated at all. Multiple pregnancy allows you to impregnated everyone multiple times.'], 'quick-content');
+	generatetext(['', 'allNPCMultiplePregnancy', 'allNPCMultiplePregnancyInfo'], ['text', 'button', 'tooltip'], ['NPC multiple pregnancys','Activate','Allows you to impregnated NPCs multiple times.'], 'quick-content');
+	//generatetext(['', 'demonForcedPregnancy', 'demonForcedPregnancyInof'], ['text', 'button', 'tooltip'], ['Demon sex','Activate','It will make you temporarely demon during sex(demon ability to force pregnancy).'], 'quick-content');
+	
 	generatetext([''], ['newline'], [''], 'quick-content');
 	if (isServer===1){
 		generatetext([''], ['header'], ['Server'], 'quick-content');
@@ -91,7 +93,7 @@ function init_interface(){
 	generatetext([''], ['header'], ['Abortion'], 'misc-content');
 	generatetext(['', 'mc_abortion_location', 'mc_abortion_select', 'mc_abortion_checkbox', 'mc_abortion_set'], ['text', 'select', 'select', 'checkbox', 'button'], ['MC', ['anus', 'vagina'], ['placeholder'], '','Set'], 'misc-content');
 	generatetext(['', 'named_npc_abortion_chara_select','named_npc_abortion_select', 'named_npc_abortion_checkbox', 'named_npc_abortion_set'], ['text', 'select', 'select', 'checkbox', 'button'], ['Named NPC', npcnamelist, babyOptions, '','Set'], 'misc-content');
-	generatetext(['', 'npc_abortion_chara_select', 'npc_abortion_select', 'npc_abortion_checkbox', 'npc_abortion_set'], ['text', 'select', 'select', 'checkbox', 'button'], ['NPC', ['placeholder'], ['placeholder'], '','Set'], 'misc-content');
+	generatetext(['', 'npc_abortion_chara_select', 'npc_abortion_select', 'npc_abortion_checkbox', 'npc_abortion_set', 'npc_abortion_purge'], ['text', 'select', 'select', 'checkbox', 'button', 'button'], ['NPC', ['placeholder'], ['placeholder'], '','Set','Purge'], 'misc-content');
 
 	generatetext([''], ['newline'], [''], 'misc-content');
 	generatetext([''], ['header'], ['Farm'], 'misc-content');
@@ -113,7 +115,7 @@ function init_interface(){
 	generatetext(['', 'auto_check_status', 'checkArray', 'infoCheckArray'], ['text', 'button', 'button', 'tooltip'], ['Auto Array Check', 'unknown', 'Scan', 'check for further array error(might cause lag)'], 'misc-content');
 	generatetext(['', 'search_type', 'search_value', 'search123', 'search456'], ['text', 'select', 'input', 'button', 'button'], ['Search', [0,1,2],'', 'Deep', 'quick'], "misc-content");
 	generatetext(['search_result'], ['textarea'], ['placeholder'], "misc-content");
-	generatetext(['', 'stringJS', 'stringValue', 'stingJSSet', 'stingJSHelp'], ['text', 'input', 'input', 'button', 'tooltip'], ['String to JS', '','', 'Set', '1st input is the js path example "SugarCube.State.variables", the 2nd one is variable. Be cautious you might edit wrong variable that might cause the game broken.'], "misc-content");
+	generatetext(['', 'stringJS', 'stringValue', 'stingJSSet', 'stingJSHelp'], ['text', 'input', 'input', 'button', 'tooltip'], ['String to JS', '','', 'Set', '1st input is the js path example "SugarCube.State.variables", the 2nd one is value. Be cautious you might edit wrong variable that might cause the game broken.'], "misc-content");
 	var element = document.getElementById('tmpText');
 	element.classList.add('tmpText');
 }

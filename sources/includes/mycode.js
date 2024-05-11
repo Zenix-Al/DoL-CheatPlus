@@ -727,6 +727,13 @@ mycode = { ...mycode,
 			  document.getElementById("randomEncounterSet").innerHTML="Disabled";
 			  showToast('Disabled.');
 		  }
+	  },
+	  purgeNPCPregnancy: function(){
+		SugarCube.State.variables.storedNPCs={};
+		SugarCube.State.variables.cheatPlus.storedNPCs={};
+		mycode.abortion_notice();
+		firstload.update_npc_abortion_list();
+		firstload.update_npc_fetus_abortion_list();
 	  }
 
 }

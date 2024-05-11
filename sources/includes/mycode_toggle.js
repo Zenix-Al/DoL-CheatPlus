@@ -1,8 +1,5 @@
 let mycode = {
 	runitallRestore: function() {
-		for (var key in functionbundle) {
-			buttonActions[key]();
-		}
 		functionbundle={};
 		toggleActive=[];
 		showToast('error detected in toggle cheat, reseting cheat.');
@@ -26,7 +23,7 @@ let mycode = {
 		progressFunctions=0;
 		totalFunctions=0;
 		for (const key in functionbundle) {
-		  if (functionbundle.hasOwnProperty(key) && typeof functionbundle[key] === 'function') {
+		  if (typeof functionbundle[key] === 'function') {
 			setTimeout(function () {
 				functionbundle[key]();
 				progressFunctions++;
@@ -35,7 +32,7 @@ let mycode = {
 			interval+=1;
 		  }
 	    }
-	    clickCounter-=1;
+	    clickCounter--;
 		if (clickCounter>0) {
 			setTimeout(function() {
 				mycode.runitall();
@@ -45,14 +42,18 @@ let mycode = {
 		mycode.checkDateDaily();
     },
     toggleActive: [],
+	toggleDeactifated: false,
 	toggle: function(id, name) {
 		const button = document.getElementById(id);
 		if (this.toggleActive[id]) {
+		  this.toggleDeactivated=true;
+		  functionbundle[id]();
 		  functionbundle[id]=undefined;
 		  SugarCube.State.variables.cheatPlus.toggles[id]=undefined;
 		  if (button)button.innerHTML = name;
-		  this.toggleActive[id]=undefined;
+		  mycode.toggleActive[id]=undefined;
 		  console.log("Deactive!");
+		  this.toggleDeactivated=false;
 		} else {
 		  if (!reactivatingToggles) extra_notif=true;
 		  functionbundle[id]=mycode[id].bind(mycode);
@@ -169,8 +170,11 @@ edengarden: function() {
   unlicum: function() {
 	if (SugarCube.State.variables.semen_amount<SugarCube.State.variables.semen_volume) {
 		SugarCube.State.variables.semen_amount=SugarCube.State.variables.semen_volume;
+		SugarCube.State.variables.orgasmcount=0;
 	}
-	if (SugarCube.State.variables.orgasmcurrent !=0 && !SugarCube.State.variables.cheatPlus.unlicumMode){
+  },
+  intenseCum: function(){
+	  if (SugarCube.State.variables.orgasmcurrent !=0 && !SugarCube.State.variables.cheatPlus.unlicumMode){
 		SugarCube.State.variables.cheatPlus.orgasmcount = 0;
 		mycode.tmpArousal=SugarCube.State.variables.arousal;
 		SugarCube.State.variables.orgasmdown=1000;
@@ -358,7 +362,7 @@ edengarden: function() {
 		SugarCube.State.variables.storedNPCs=tmp;
 		SugarCube.State.variables.cheatPlus.storedNPCs=store;
 	},
-	demonForcedPregnancy: function(){
+	/*demonForcedPregnancy: function(){
 		if (extra_notif)
 		if (SugarCube.State.variables.demon===6 && SugarCube.State.variables.demonbuild>90) {
 			showToast('Youre already a demon!');
@@ -391,13 +395,38 @@ edengarden: function() {
 		if (!SugarCube.State.variables.cheatPlus.demonMode) {
 			mycode.updateUserDivine();
 		}
-	},
+	},*/
 	updateUserDivine: function(){
 		if (SugarCube.State.variables.penisstate!=0 || SugarCube.State.variables.vaginastate!=0) return;
 		if (SugarCube.State.variables.demon>0) {
 			SugarCube.State.variables.cheatPlus.trueDivine="demon";
 		} else if (SugarCube.State.variables.angel>0) {
 			SugarCube.State.variables.cheatPlus.trueDivine="angel";
+		}
+	},
+	initNPCinstapreg: false,
+	allNPCInstaPregnant: function(){
+		if (mycode.toggleDeactivated) {
+			SugarCube.State.variables.baseNpcPregnancyChance=SugarCube.State.variables.cheatPlus.baseNpcPregnancyChance;
+			mycode.initNPCinstapreg=false;
+			return;
+		}
+		if (!mycode.initNPCinstapreg) {
+			mycode.initNPCinstapreg=true;
+			SugarCube.State.variables.cheatPlus.baseNpcPregnancyChance=SugarCube.State.variables.baseNpcPregnancyChance;
+			SugarCube.State.variables.baseNpcPregnancyChance=19;
+		}
+		for (var i=0; i<SugarCube.State.variables.NPCList.length; i++) {
+			if (SugarCube.State.variables.NPCList[i].pregnancyAvoidance>0){
+				SugarCube.State.variables.NPCList[i].pregnancyAvoidance=0;
+			}
+		}
+	},
+	allNPCMultiplePregnancy: function(){
+		for (var i=0; i<SugarCube.State.variables.NPCList.length; i++) {
+			if (SugarCube.State.variables.NPCList[i].pregnancy===1){
+				SugarCube.State.variables.NPCList[i].pregnancy=0;
+			}
 		}
 	}
 }
