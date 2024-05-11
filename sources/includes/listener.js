@@ -97,7 +97,8 @@ var buttonActions = {
   "alt_cheat":mycode.alt_cheat,
   "stingJSSet":mycode.stingJSSet,
   "randomEncounterSet":mycode.randomEncounterSet,
-  "npc_abortion_purge":mycode.purgeNPCPregnancy
+  "npc_abortion_purge":mycode.purgeNPCPregnancy,
+  "purgeNPCBaby":mycode.purgeNPCBaby
 };
 cheat.addEventListener("click", function(event) {
 	var target = event.target;

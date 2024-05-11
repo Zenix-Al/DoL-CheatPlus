@@ -602,7 +602,7 @@ mycode = { ...mycode,
 		  firstload.update_named_npc_abortion_list();
 	  },
 	  npc_abortion_set: function() {
-		  var checkboxes=document.getElementById("npc_abortion_set").checked;
+		  var checkboxes=document.getElementById("npc_abortion_checkbox").checked;
 		  if (checkboxes==false) {
 			showToast('check the checkbox to confirm');
 			return false;
@@ -729,11 +729,32 @@ mycode = { ...mycode,
 		  }
 	  },
 	  purgeNPCPregnancy: function(){
+		  var checkboxes=document.getElementById("npc_abortion_checkbox").checked;
+		  if (checkboxes==false) {
+			showToast('check the checkbox to confirm');
+			return;
+		  }
 		SugarCube.State.variables.storedNPCs={};
 		SugarCube.State.variables.cheatPlus.storedNPCs={};
 		mycode.abortion_notice();
 		firstload.update_npc_abortion_list();
 		firstload.update_npc_fetus_abortion_list();
+	  },
+	  purgeNPCBaby: function(){
+		var selectElement = document.getElementById("mc_baby_select").value;
+		var selectAction = document.getElementById("mc_baby_action_select").value;
+		if (selectAction!="abandon") {
+			showToast('Pick abandon to purge.');
+			return;
+		}
+		var input = document.getElementById("mc_baby_input").type=="checkbox" ? document.getElementById("mc_baby_input").checked : document.getElementById("mc_baby_input").value;
+		if (input==true) {
+			SugarCube.State.variables.children={};
+			firstload.update_mc_baby_list();
+			showToast('All of your baby has been abandoned!');
+		} else {
+			showToast('check the checkbox to confirm');
+		}
 	  }
 
 }
