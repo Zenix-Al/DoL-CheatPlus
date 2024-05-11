@@ -408,6 +408,7 @@ edengarden: function() {
 	allNPCInstaPregnant: function(){
 		if (mycode.toggleDeactivated) {
 			SugarCube.State.variables.baseNpcPregnancyChance=SugarCube.State.variables.cheatPlus.baseNpcPregnancyChance;
+			if (SugarCube.State.variables.baseNpcPregnancyChance>16) SugarCube.State.variables.baseNpcPregnancyChance=16;
 			mycode.initNPCinstapreg=false;
 			return;
 		}
