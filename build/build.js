@@ -125,3 +125,12 @@ fs.appendFileSync("_compiled/online/main.js", "\n}, 1000);\n");
 fs.appendFileSync("_compiled/online/main.js", "})();\n");
 
 console.log("Online version compiled!");
+
+// Step 10: Create offline version using dolp
+console.log("Injecting html modded version...");
+let html = fs.readFileSync("_compiled/base.html", "utf-8");
+const modGameHTML = fs.readFileSync("src/game/game_mod.html", "utf-8");
+const finalModOfflineHTML = gameHTML + offlineHTML;
+
+fs.writeFileSync("_compiled/offline/game-DoLP.html", finalModOfflineHTML);
+console.log("Final html modded injection compiled.");
