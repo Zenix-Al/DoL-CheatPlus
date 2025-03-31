@@ -117,16 +117,26 @@ Cheat download link :
 
 <details>
 <summary>How to build the project</summary>
-<br>
-<br>1. Clone the Repository
-<br> ```git clone https://github.com/Zenix-Al/DoL-CheatPlus.git
-    cd DoL-CheatPlus```
-<br>2. Install Dependencies
-<br>```npm install```
-<br>3. Run the Build Command
-<br>```npm run build```
-<br>4. Find the Build Output
-<br> it located in _compiled.
+
+1. Clone the Repository  
+   ```sh  
+   git clone https://github.com/Zenix-Al/DoL-CheatPlus.git  
+   cd DoL-CheatPlus  
+   ```  
+
+2. Install Dependencies  
+   ```sh  
+   npm install  
+   ```  
+
+3. Run the Build Command  
+   ```sh  
+   npm run build  
+   ```  
+
+4. Find the Build Output  
+   It will be located in the `_compiled` folder.  
+
 </details>
 
 <details>
