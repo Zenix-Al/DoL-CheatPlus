@@ -21,8 +21,8 @@ var cheatVerType;
 var modalOpen;
 var functionsInProcess;
 var functionsCompleted;
-var downloadSite = "update needed";
-var sourceCode = "update needed";
+var downloadSite = "https://www.mediafire.com/folder/d6uiwpcm3y0gu/degrees_of_lewdity";
+var sourceCode = "https://github.com/Zenix-Al/DoL-CheatPlus.git";
 //mycode
 var functionbundle = {};
 var dailyfunctionbundle = {};
@@ -143,6 +143,7 @@ var currentFetch;
 //storage
 if (!SugarCube.State.variables.cheatPlus) SugarCube.State.variables.cheatPlus = {};
 var reactivatingToggles;
+if (curVer.startsWith(".")) curVer = "0" + curVer;
 //endof variable init
 if (curVer == testedOn) {
   var isCheatWork = "compatible";

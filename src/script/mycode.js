@@ -570,6 +570,12 @@ mycode = {
     document.getElementById("history-forward").click();
     mycode.update_history();
   },
+  update_history: function () {
+    var backwards = document.getElementById("cheat-history-backwards");
+    var forwards = document.getElementById("cheat-history-forwards");
+    backwards.disabled = document.getElementById("history-forward").disabled;
+    forwards.disabled = document.getElementById("history-backward").disabled;
+  },
   abortion_notice: function () {
     showToast("Aborting...");
     setTimeout(function () {

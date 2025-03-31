@@ -14,7 +14,14 @@ for (const file of requiredFiles) {
   }
 }
 // Ensure _compiled and its subfolders exist
-const folders = ["_compiled", "_compiled/nwjs", "_compiled/offline", "_compiled/online"];
+const folders = [
+  "_compiled",
+  "_compiled/nwjs/www/cheat",
+  "_compiled/dolp",
+  "_compiled/vanilla",
+  "_compiled/online",
+  "_compiled/publish",
+];
 folders.forEach((folder) => {
   if (!fs.existsSync(folder)) {
     fs.mkdirSync(folder, { recursive: true });
@@ -79,16 +86,16 @@ let offlineHTML = fs.readFileSync("_compiled/base.html", "utf-8");
 const gameHTML = fs.readFileSync("src/game/game.html", "utf-8");
 const finalOfflineHTML = gameHTML + offlineHTML;
 
-fs.writeFileSync("_compiled/offline/game.html", finalOfflineHTML);
+fs.writeFileSync("_compiled/vanilla/DoL Vanilla - Cheat Plus.html", finalOfflineHTML);
 console.log("Final html injection compiled.");
 
 // Step 8: Prepare NW.js Cheat
 console.log("Preparing NW.js cheat...");
 
-fs.copyFileSync("_compiled/base.html", "_compiled/nwjs/cheat.html");
+fs.copyFileSync("_compiled/base.html", "_compiled/nwjs/www/cheat/cheat.html");
 
-fs.copyFileSync("src/script/nwjs/restore.bat", "_compiled/nwjs/restore.bat");
-fs.copyFileSync("src/script/nwjs/inject-cheat.bat", "_compiled/nwjs/inject-cheat.bat");
+fs.copyFileSync("src/script/nwjs/restore.bat", "_compiled/nwjs/www/cheat/restore.bat");
+fs.copyFileSync("src/script/nwjs/inject-cheat.bat", "_compiled/nwjs/www/cheat/inject-cheat.bat");
 
 console.log("NW.js cheat setup completed.");
 
@@ -132,5 +139,28 @@ let html = fs.readFileSync("_compiled/base.html", "utf-8");
 const modGameHTML = fs.readFileSync("src/game/game_mod.html", "utf-8");
 const finalModOfflineHTML = gameHTML + offlineHTML;
 
-fs.writeFileSync("_compiled/offline/game-DoLP.html", finalModOfflineHTML);
+fs.writeFileSync("_compiled/dolp/DoLP - Cheat Plus.html", finalModOfflineHTML);
 console.log("Final html modded injection compiled.");
+
+// Delete any existing changelog in _compiled
+fs.readdirSync("_compiled").forEach((file) => {
+  if (file.startsWith("changelog -") && file.endsWith(".md")) {
+    fs.unlinkSync(`_compiled/${file}`);
+    console.log(`Deleted: ${file}`);
+  }
+});
+
+// Make new changelog
+fs.copyFileSync("changelog.md", `_compiled/changelog - ${cheatVer}.md`);
+console.log("New changelog copied!");
+
+// Delete any existing current game version in _compiled
+fs.readdirSync("_compiled/publish").forEach((file) => {
+  if (file.startsWith("modded game version -")) {
+    fs.unlinkSync(`_compiled/publish/${file}`);
+    console.log(`Deleted: ${file}`);
+  }
+});
+//current game version
+fs.writeFileSync(`_compiled/publish/modded game version - ${testedOn}`, "");
+console.log("Current game version copied!");
