@@ -1,12 +1,19 @@
 // Initialize CheatPlus storage with default values
 function initStorage() {
-  const cheatPlus = (SugarCube.State.variables.cheatPlus ??= {
-    angel: "",
-    toggles: {},
-    storedNPCs: {},
-    storedNPCsDate: 0,
-    orgasmCount: 0,
-  });
+  const vars = SugarCube.State.variables;
+
+  // Step 1: Make sure cheatPlus exists
+  vars.cheatPlus ??= {};
+
+  // Step 2: Now safely initialize the inner properties
+  vars.cheatPlus.angel ??= 0;
+  vars.cheatPlus.angelMode ??= true;
+  vars.cheatPlus.toggles ??= {};
+  vars.cheatPlus.storedNPCs ??= {};
+  vars.cheatPlus.storedNPCsDate ??= 0;
+  vars.cheatPlus.trueDivine ??= "";
+  vars.cheatPlus.orgasmCount ??= 0;
+  const cheatPlus = SugarCube.State.variables.cheatPlus;
 
   if (SugarCube.State.variables.penisstate !== 0 || SugarCube.State.variables.vaginastate !== 0)
     return;

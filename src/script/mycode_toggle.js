@@ -1,15 +1,11 @@
 let mycode = {
   runitallRestore: function () {
     functionbundle = {};
-    this.toggleActive = [];
+    toggleActive = [];
     showToast("Error detected in toggle cheat, resetting.");
-
-    Object.assign(this, {
-      errorFunctions: 0,
-      progressFunctions: 0,
-      totalFunctions: 0,
-    });
-
+    errorFunctions = 0;
+    progressFunctions = 0;
+    totalFunctions = 0;
     reactivateToggles();
     showToast("Complete.");
   },
