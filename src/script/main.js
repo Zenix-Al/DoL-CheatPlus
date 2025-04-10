@@ -6,6 +6,7 @@ var testedOn;*/
 //main
 var isLoad = false;
 var isDelete = false;
+var vars = SugarCube.State.variables;
 var isCheatPressed = false;
 var curVer = document.getElementById("gameVersionDisplay2").innerHTML;
 var quicklink = document.getElementById("quick-link");
@@ -362,14 +363,13 @@ function generatetext(ids, inputs, textInputs, category) {
 }
 
 function deleteText() {
-  isDelete = true;
-
   // Check if fetching is in progress
   if (currentFetch === totalFetchFunction) isFetching = false;
   if (isFetching) {
     requestAnimationFrame(deleteText);
     return;
   }
+  isDelete = true;
 
   // Target all cheat UI sections and clear them efficiently
   ["quick-content", "stats-content", "misc-content"].forEach((id) => {

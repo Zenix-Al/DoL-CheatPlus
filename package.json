@@ -4,6 +4,7 @@
     "uglify-js": "^3.19.3"
   },
   "scripts": {
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "publish": "cmd /c \"cd _compiled && publish.bat\""
   }
 }

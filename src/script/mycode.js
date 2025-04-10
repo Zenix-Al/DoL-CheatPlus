@@ -9,7 +9,7 @@ mycode = {
   arousal_enemy: function () {
     showToast("Activated!");
     var value = document.getElementById("arousal_val").value;
-    const arousal = SugarCube.State.variables.enemyarousalmax;
+    const arousal = SugarCube.State.variables.enemyarousalmax || 0;
     SugarCube.State.variables.enemyarousal = parseInt((arousal * value) / 100);
   },
   aezakmi: function () {
@@ -72,6 +72,10 @@ mycode = {
   },
 
   imvirgintemple: function () {
+    if (SugarCube.State.variables?.player?.virginity === undefined) {
+      showToast("Failed!");
+      return;
+    }
     showToast("Activated!");
     if (SugarCube.State.variables.player.virginity.temple == true) {
       SugarCube.State.variables.player.virginity.temple = false;
@@ -150,6 +154,8 @@ mycode = {
     if (!isNaN(value)) {
       showToast("Activated!");
       SugarCube.State.variables[statpick] = value;
+    } else {
+      showToast("Value is not a number!");
     }
   },
   kill_player: function () {
@@ -173,7 +179,7 @@ mycode = {
   },
   enemycalm: function () {
     showToast("Activated!");
-    SugarCube.State.variables.enemyhealth = SugarCube.State.variables.enemyhealthmax;
+    SugarCube.State.variables.enemyhealth = SugarCube.State.variables.enemyhealthmax > 0 ? 100 : 0;
     SugarCube.State.variables.enemytrust = 100;
     SugarCube.State.variables.enemyanger = 0;
   },
@@ -181,7 +187,10 @@ mycode = {
     const statpicke = document.getElementById("statpicke")?.value;
     const value = Number(document.getElementById("statinpute")?.value);
 
-    if (!statpicke || isNaN(value)) return;
+    if (!statpicke || isNaN(value)) {
+      showToast("Failed!");
+      return;
+    }
 
     showToast("Activated!");
     SugarCube.State.variables[statpicke] = value;
@@ -190,7 +199,10 @@ mycode = {
   //player
   moneymanager: function () {
     const input = parseInt(document.getElementById("moneyinput").value);
-    if (isNaN(input)) return;
+    if (isNaN(input)) {
+      showToast("failed : input is not a number!");
+      return;
+    }
     showToast("Activated!");
     SugarCube.State.variables.money = input;
   },
@@ -207,6 +219,8 @@ mycode = {
       SugarCube.State.variables.bodysize = bodySizes[bodypick];
       showToast("Activated!");
       firstload.bodycurrent();
+    } else {
+      showToast("Failed!");
     }
   },
 
@@ -222,6 +236,8 @@ mycode = {
       SugarCube.State.variables.player.gender_body = bodyTypes[bodytypepick];
       showToast("Activated!");
       firstload.bodytypecurrent();
+    } else {
+      showToast("Failed!");
     }
   },
 

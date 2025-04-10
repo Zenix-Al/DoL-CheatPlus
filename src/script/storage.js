@@ -13,6 +13,8 @@ function initStorage() {
   vars.cheatPlus.storedNPCsDate ??= 0;
   vars.cheatPlus.trueDivine ??= "";
   vars.cheatPlus.orgasmCount ??= 0;
+  vars.cheatPlus.baseNpcPregnancyChance ??= SugarCube.State.variables.baseNpcPregnancyChance;
+  vars.cheatPlus.unlicumMode ??= false;
   const cheatPlus = SugarCube.State.variables.cheatPlus;
 
   if (SugarCube.State.variables.penisstate !== 0 || SugarCube.State.variables.vaginastate !== 0)

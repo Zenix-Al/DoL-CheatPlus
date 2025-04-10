@@ -64,27 +64,29 @@ const infoLines = fs.readFileSync("src/info.ini", "utf-8").split(/\r?\n/);
 const cheatVer = infoLines[0].trim();
 const testedOn = infoLines[1].trim();
 
-// Step 6: Create `base.html`
-let baseHTML = `<style>\n${minifiedCSS}\n</style>\n`;
-baseHTML += fs.readFileSync("src/interface/index.html", "utf-8");
-baseHTML += `<script>\n`;
-baseHTML += `var convertStringIndexArrayToObject;\n`;
-baseHTML += `var DEBUG=false;\n`;
-baseHTML += `setTimeout(function() {\n`;
-baseHTML += `var cheatVer="${cheatVer}";\n`;
-baseHTML += `var testedOn="${testedOn}";\n`;
-baseHTML += `var isServer=0;\n`;
-baseHTML += fs.readFileSync("_compiled/main.min.js", "utf-8");
-baseHTML += `\n}, 2000);\n</script>\n`;
+// Step 6: Create `base.js`
+let baseJS = `var convertStringIndexArrayToObject;\n`;
+baseJS += `var DEBUG=false;\n`;
 
-fs.writeFileSync("_compiled/base.html", baseHTML);
+baseJS += `setTimeout(async function() {\n`;
+baseJS += `var cheatVer="${cheatVer}";\n`;
+baseJS += `var testedOn="${testedOn}";\n`;
+baseJS += `var isServer=0;\n`;
+
+baseJS += fs.readFileSync("src/interface/interface.js", "utf-8"); // inject renderUI and injectCSS
+baseJS += `\n`;
+baseJS += `injectCSS(\`${minifiedCSS}\`);\n`;
+
+baseJS += fs.readFileSync("_compiled/main.min.js", "utf-8"); // load the core logic
+baseJS += `\n}, 2000)`;
+baseScript = `<script>${baseJS}</script>`;
+fs.writeFileSync("_compiled/base.js", baseJS);
 console.log("Base HTML created.");
 
 // Step 7: Create offline version
 console.log("Injecting html version...");
-let offlineHTML = fs.readFileSync("_compiled/base.html", "utf-8");
 const gameHTML = fs.readFileSync("src/game/game.html", "utf-8");
-const finalOfflineHTML = gameHTML + offlineHTML;
+const finalOfflineHTML = gameHTML + baseScript;
 
 fs.writeFileSync("_compiled/vanilla/DoL Vanilla - Cheat Plus.html", finalOfflineHTML);
 console.log("Final html injection compiled.");
@@ -92,7 +94,7 @@ console.log("Final html injection compiled.");
 // Step 8: Prepare NW.js Cheat
 console.log("Preparing NW.js cheat...");
 
-fs.copyFileSync("_compiled/base.html", "_compiled/nwjs/www/cheat/cheat.html");
+fs.writeFileSync("_compiled/nwjs/www/cheat/cheat.html", baseScript);
 
 fs.copyFileSync("src/script/nwjs/restore.bat", "_compiled/nwjs/www/cheat/restore.bat");
 fs.copyFileSync("src/script/nwjs/inject-cheat.bat", "_compiled/nwjs/www/cheat/inject-cheat.bat");
@@ -104,40 +106,16 @@ console.log("NW.js cheat setup completed.");
 console.log("Compiling online version...");
 
 fs.copyFileSync("src/script/online/header.js", "_compiled/online/main.js");
-
-let css = fs
-  .readFileSync("_compiled/main.min.css", "utf-8")
-  .replace(/\\/g, "\\\\") // Escape backslashes
-  .replace(/"/g, '\\"') // Escape double quotes
-  .replace(/\n/g, "\\n"); // Escape new lines
-
-let interfaceScript = fs.readFileSync("src/script/online/interface.js", "utf-8");
-interfaceScript += `\nvar customcss = document.createElement("style");\n`;
-interfaceScript += `customcss.textContent = "${css}";\n`;
-interfaceScript += `document.head.appendChild(customcss);\n`;
-
 fs.appendFileSync("_compiled/online/main.js", "\n(function() {\n");
-fs.appendFileSync("_compiled/online/main.js", interfaceScript + "\n");
-
-fs.appendFileSync("_compiled/online/main.js", `var convertStringIndexArrayToObject;\n`);
-fs.appendFileSync("_compiled/online/main.js", `setTimeout(function() {\n`);
-fs.appendFileSync("_compiled/online/main.js", `var DEBUG=false;\n`);
-fs.appendFileSync("_compiled/online/main.js", `var isServer=0;\n`);
-fs.appendFileSync("_compiled/online/main.js", `var cheatVer="${cheatVer}";\n`);
-fs.appendFileSync("_compiled/online/main.js", `var testedOn="${testedOn}";\n`);
-
-fs.appendFileSync("_compiled/online/main.js", fs.readFileSync("_compiled/main.min.js", "utf-8"));
-
-fs.appendFileSync("_compiled/online/main.js", "\n}, 1000);\n");
+fs.appendFileSync("_compiled/online/main.js", baseJS);
 fs.appendFileSync("_compiled/online/main.js", "})();\n");
 
 console.log("Online version compiled!");
 
 // Step 10: Create offline version using dolp
 console.log("Injecting html modded version...");
-let html = fs.readFileSync("_compiled/base.html", "utf-8");
 const modGameHTML = fs.readFileSync("src/game/game_mod.html", "utf-8");
-const finalModOfflineHTML = gameHTML + offlineHTML;
+const finalModOfflineHTML = modGameHTML + baseScript;
 
 fs.writeFileSync("_compiled/dolp/DoLP - Cheat Plus.html", finalModOfflineHTML);
 console.log("Final html modded injection compiled.");
