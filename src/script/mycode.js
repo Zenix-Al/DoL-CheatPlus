@@ -2,18 +2,20 @@ mycode = {
   ...mycode,
   //quick cheat
   arousal_player: function () {
-    showToast("Activated!");
     var value = document.getElementById("arousal_val").value;
+    if (isNaN(value)) return;
+    showToast("Activated!");
     SugarCube.State.variables.arousal = parseInt((10000 * value) / 100);
   },
   arousal_enemy: function () {
-    showToast("Activated!");
     var value = document.getElementById("arousal_val").value;
+    if (isNaN(value)) return;
     const arousal = SugarCube.State.variables.enemyarousalmax || 0;
     SugarCube.State.variables.enemyarousal = parseInt((arousal * value) / 100);
+    showToast("Activated!");
   },
   aezakmi: function () {
-    showToast("Activated!");
+    if (!SugarCube.State.variables.crime) return;
     let total = 0,
       totalKeys = 0;
 
@@ -41,10 +43,11 @@ mycode = {
     }
 
     firstload.crimecurrent();
+    showToast("Activated!");
   },
 
   imdonefor: function () {
-    showToast("Activated!");
+    if (!SugarCube.State.variables.crime) return;
     let total = 0,
       totalKeys = 0;
 
@@ -69,6 +72,7 @@ mycode = {
     }
 
     firstload.crimecurrent();
+    showToast("Activated!");
   },
 
   imvirgintemple: function () {
@@ -249,17 +253,20 @@ mycode = {
   },
 
   ballsmanager: function () {
+    if (SugarCube.State.variables.player.ballsExist === undefined) return;
     SugarCube.State.variables.player.ballsExist = !SugarCube.State.variables.player.ballsExist;
     showToast("Activated!");
     firstload.ballscurrent();
   },
   virginitymanager: function () {
     const virginitypick = document.getElementById("virginitypick").value;
+    if (SugarCube.State.variables.player.virginity === undefined) return;
     SugarCube.State.variables.player.virginity[virginitypick] = true;
     firstload.virginitycurrent();
     showToast("Activated!");
   },
   virginitypure: function () {
+    if (SugarCube.State.variables.player.virginity === undefined) return;
     const virginitypick = document.getElementById("virginitypick");
     var options = virginitypick.getElementsByTagName("option");
     for (var i = 0; i < options.length; i++) {
@@ -310,6 +317,7 @@ mycode = {
     showToast("Activated!");
   },
   infect: function () {
+    if (SugarCube.State.variables.parasite === undefined) return;
     showToast("Activated!");
     const parasite = document.getElementById("parasitename").value;
     const body = document.getElementById("bodyparts").value;
@@ -317,6 +325,7 @@ mycode = {
     SugarCube.State.variables.parasite[body]["name"] = parasite;
   },
   desinfect: function () {
+    if (SugarCube.State.variables.parasite === undefined) return;
     showToast("Activated!");
     const parasite = document.getElementById("parasitename").value;
     const body = document.getElementById("bodyparts").value;
@@ -326,6 +335,7 @@ mycode = {
     ].filter((item) => item !== body);
   },
   changetraitbro: function () {
+    if (SugarCube.State.variables.NPCName === undefined) return;
     const cmbBox = document.getElementById("npcnames").value;
     const cmbBox2 = document.getElementById("npctraits").value;
     const value = parseInt(document.getElementById("npcchangeinput").value);
@@ -340,43 +350,69 @@ mycode = {
     }
   },
   set_fame12: function () {
-    showToast("Activated!");
     var selected = document.getElementById("fame_name").value;
     var input = parseInt(document.getElementById("input_fame12").value);
+    if (isNaN(input)) {
+      showToast("failed : input is not a number!");
+      return;
+    } else if (SugarCube.State.variables.fame[selected] === undefined) {
+      showToast("failed!");
+      return;
+    }
     SugarCube.State.variables.fame[selected] = input;
+    showToast("Activated!");
   },
   exammanager: function () {
-    showToast("Activated!");
     var selected = document.getElementById("select_exam").value;
     var input = parseInt(document.getElementById("input_exam").value);
+    if (isNaN(input)) {
+      showToast("failed : input is not a number!");
+      return;
+    }
     SugarCube.State.variables[selected] = input;
+    showToast("Activated!");
   },
   talentmanager: function () {
-    showToast("Activated!");
     var selected = document.getElementById("select_talent").value;
     var input = parseInt(document.getElementById("input_talent").value);
+    if (isNaN(input)) {
+      showToast("failed : input is not a number!");
+      return;
+    }
     SugarCube.State.variables[selected] = input;
+    showToast("Activated!");
   },
   //misc
   VrelCoinsUsage: function () {
-    showToast("Activated!");
+    if (SugarCube.State.variables?.featsBoosts?.pointsUsed === undefined) return;
     SugarCube.State.variables.featsBoosts.pointsUsed = 0;
+    showToast("Activated!");
   },
 
   set_animal_like: function () {
     const animal = document.getElementById("animal_choice").value;
     const value = parseInt(document.getElementById("animal_input").value);
-    if (!isNaN(value)) {
-      showToast("Activated!");
-      SugarCube.State.variables.farm.beasts[animal] = value;
+    if (isNaN(value)) {
+      showToast("failed : input is not a number!");
+      return;
+    } else if (SugarCube.State.variables?.farm?.beasts === undefined) {
+      showToast("failed!");
+      return;
     }
+    showToast("Activated!");
+    SugarCube.State.variables.farm.beasts[animal] = value;
   },
   set_build_time: function () {
     const value = parseInt(document.getElementById("build_time").value);
-    if (!isNaN(value)) {
-      showToast("Activated!");
-      SugarCube.State.variables.farm.build_timer = value;
+    if (isNaN(value)) {
+      showToast("failed : input is not a number!");
+      return;
+    } else if (SugarCube.State.variables?.farm?.build_timer === undefined) {
+      showToast("failed!");
+      return;
     }
+    showToast("Activated!");
+    SugarCube.State.variables.farm.build_timer = value;
   },
   set_assault_time: function () {
     const value = parseInt(document.getElementById("assault_time").value);
@@ -386,6 +422,7 @@ mycode = {
     }
   },
   clean_cum: function () {
+    if (SugarCube.State.variables?.player?.bodyliquid === undefined) return;
     for (var key in SugarCube.State.variables.player.bodyliquid) {
       for (var key2 in SugarCube.State.variables.player.bodyliquid[key]) {
         SugarCube.State.variables.player.bodyliquid[key][key2] = 0;
@@ -394,6 +431,7 @@ mycode = {
     showToast("Activated!");
   },
   dirty_cum: function () {
+    if (SugarCube.State.variables?.player?.bodyliquid === undefined) return;
     for (var key in SugarCube.State.variables.player.bodyliquid) {
       for (var key2 in SugarCube.State.variables.player.bodyliquid[key]) {
         SugarCube.State.variables.player.bodyliquid[key][key2] = 100;
@@ -402,11 +440,13 @@ mycode = {
     showToast("Activated!");
   },
   clean_cum_uretus: function () {
+    if (SugarCube.State.variables?.sexStats?.vagina?.sperm === undefined) return;
     SugarCube.State.variables.sexStats.vagina.sperm = [];
     showToast("Activated!");
   },
   funny_fruits: ["cabbage", "wild_carrot", "turnip", "potato", "onion", "garlic_bulb", "broccoli"],
   check_fruit_selling: function () {
+    if (SugarCube.State.variables?.farmersProduce?.selling === undefined) return;
     const they_selling = SugarCube.State.variables.farmersProduce.selling;
 
     // Create an object mapping fruit names to their selling amounts, defaulting to 0 if not found
@@ -430,6 +470,10 @@ mycode = {
     showToast("Activated!");
     var selected = document.getElementById("select_school_rep").value;
     var input = parseInt(document.getElementById("input_school_rep").value);
+    if (isNaN(input)) {
+      showToast("failed : input is not a number!");
+      return;
+    }
     SugarCube.State.variables[selected] = input;
   },
   named_npc_pregnancy_locked: [],
@@ -573,6 +617,7 @@ mycode = {
     showToast("Activated!");
     var selected = document.getElementById("select_hentai_skill").value;
     var input = parseInt(document.getElementById("input_hentai_skill").value);
+    if (!selected || !input || isNaN(input)) return;
     SugarCube.State.variables[selected] = input;
   },
   sidebar_cheat: function () {

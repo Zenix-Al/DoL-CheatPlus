@@ -45,8 +45,8 @@ const jsFiles = [
   "src/script/cheat_init.js",
   "src/script/info_fetcher.js",
   "src/script/listener.js",
-  "src/script/sync.js",
   "src/script/storage.js",
+  "src/script/execute.js",
 ].map((file) => fs.readFileSync(file, "utf-8")); // Read each file properly
 
 const combinedJS = uglifyJS.minify(jsFiles);

@@ -27,7 +27,6 @@ function initStorage() {
       ? "angel"
       : undefined;
 }
-initStorage();
 
 // Reactivate Toggle States
 function reactivateToggles() {
@@ -55,5 +54,3 @@ function deactiveAllToggles() {
     }
   }
 }
-
-reactivateToggles();

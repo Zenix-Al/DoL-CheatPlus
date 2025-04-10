@@ -1,4 +1,4 @@
-var mainActions = {
+let mainActions = {
   "quick-link": showContent.bind(null, quicklink, quickcontent),
   "stats-link": showContent.bind(null, statlink, statscontent),
   "misc-link": showContent.bind(null, misclink, misccontent),
@@ -11,7 +11,7 @@ var mainActions = {
   "cheat-sidebar": mycode.sidebar_cheat,
 };
 
-var buttonActions = {
+let buttonActions = {
   //toggles
   maxchruchtask: mycode.toggleDaily.bind(mycode, "maxchruchtask", "Church"),
   maxanimaltask: mycode.toggleDaily.bind(mycode, "maxanimaltask", "Stray"),
@@ -100,33 +100,8 @@ var buttonActions = {
   npc_abortion_purge: mycode.purgeNPCPregnancy,
   purgeNPCBaby: mycode.purgeNPCBaby,
 };
-cheat.addEventListener("click", function (event) {
-  var target = event.target;
-  if (!target.id) return;
-  buttonId = target.id;
-  if (target.tagName === "A" && target.closest(".modal-content")) {
-    if (
-      SugarCube.State.variables.passage == "Start" &&
-      !(buttonId == "save_data" || buttonId == "load_data" || buttonId == "VrelCoinsUsage")
-    ) {
-      showToast("Still in the main menu!");
-      return;
-    }
-    if (buttonId in buttonActions) {
-      buttonActions[buttonId]();
-    }
-  } else if (buttonId in mainActions) {
-    mainActions[buttonId]();
-  } else if (isLoad) {
-    initStorage();
-    reactivateToggles();
-    showToast("Cheat state loaded");
-    isLoad = false;
-  }
-  event.stopPropagation();
-});
 //change lookup
-var changeActions = {
+let changeActions = {
   statpick: firstload.statpick,
   statpicke: firstload.statpicke,
   charapick: firstload.characurrent,
@@ -149,57 +124,84 @@ var changeActions = {
   npc_abortion_chara_select: firstload.update_npc_fetus_abortion_list,
   animal_choice: firstload.update_farm_animals_like,
 };
-cheat.addEventListener("change", function (event) {
-  if (SugarCube.State.variables.passage == "Start") return;
-  var target = event.target;
-  if (target.id in changeActions) {
-    changeActions[target.id]();
-  }
-  event.stopPropagation();
-});
-
-//input slider listener
-var inputActions = {
+let inputActions = {
   arousal_val: firstload.arousalpicked,
 };
-cheat.addEventListener("input", function (event) {
-  var target = event.target;
-  var target = event.target;
-  if (target.id in inputActions) {
-    inputActions[target.id]();
-  }
-  event.stopPropagation();
-});
+function initListeners() {
+  cheat.addEventListener("click", function (event) {
+    let target = event.target;
+    if (!target.id) return;
+    buttonId = target.id;
+    if (target.tagName === "A" && target.closest(".modal-content")) {
+      if (
+        SugarCube.State.variables.passage == "Start" &&
+        !(buttonId == "save_data" || buttonId == "load_data" || buttonId == "VrelCoinsUsage")
+      ) {
+        showToast("Still in the main menu!");
+        return;
+      }
+      if (buttonId in buttonActions) {
+        buttonActions[buttonId]();
+      }
+    } else if (buttonId in mainActions) {
+      mainActions[buttonId]();
+    } else if (isLoad) {
+      initStorage();
+      reactivateToggles();
+      showToast("Cheat state loaded");
+      isLoad = false;
+    }
+    event.stopPropagation();
+  });
+  cheat.addEventListener("change", function (event) {
+    if (SugarCube.State.variables.passage == "Start") return;
+    let target = event.target;
+    if (target.id in changeActions) {
+      changeActions[target.id]();
+    }
+    event.stopPropagation();
+  });
 
-//document listener for toggle cheat
-document.addEventListener("click", function (event) {
-  if (SugarCube.State.variables.passage === "Settings") {
-    //restore variables in certain passage to avoid error.
-    restoreVariables();
-  } else {
-    clickCounter++;
-    mycode.runitall();
-  }
-  //to avoid this variable undefined and causing an error
-  var target = event.target;
-  if (target.classList.contains("macro-button") && target.innerHTML == "SAVES") {
-    isLoad = true;
-  } else if (isLoad) {
-    initStorage();
-    reactivateToggles();
-    showToast("Cheat state loaded");
-    isLoad = false;
-  } else if (target.id == "history-backward" || target.id === "history-forward") {
-    initStorage();
-  }
-});
+  //input slider listener
 
-document.addEventListener("keyup", function (event) {
-  if (SugarCube.State.variables.passage != "Settings") {
-    clickCounter++;
-    mycode.runitall();
-  }
-});
-cheat.addEventListener("keyup", function (event) {
-  event.stopPropagation();
-});
+  cheat.addEventListener("input", function (event) {
+    let target = event.target;
+    if (target.id in inputActions) {
+      inputActions[target.id]();
+    }
+    event.stopPropagation();
+  });
+
+  //document listener for toggle cheat
+  document.addEventListener("click", function (event) {
+    if (SugarCube.State.variables.passage === "Settings") {
+      //restore variables in certain passage to avoid error.
+      restoreVariables();
+    } else {
+      clickCounter++;
+      mycode.runitall();
+    }
+    //to avoid this variable undefined and causing an error
+    let target = event.target;
+    if (target.classList.contains("macro-button") && target.innerHTML == "SAVES") {
+      isLoad = true;
+    } else if (isLoad) {
+      initStorage();
+      reactivateToggles();
+      showToast("Cheat state loaded");
+      isLoad = false;
+    } else if (target.id == "history-backward" || target.id === "history-forward") {
+      initStorage();
+    }
+  });
+
+  document.addEventListener("keyup", function (event) {
+    if (SugarCube.State.variables.passage != "Settings") {
+      clickCounter++;
+      mycode.runitall();
+    }
+  });
+  cheat.addEventListener("keyup", function (event) {
+    event.stopPropagation();
+  });
+}
