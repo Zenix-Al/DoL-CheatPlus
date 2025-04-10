@@ -145,6 +145,8 @@ var currentFetch;
 if (!SugarCube.State.variables.cheatPlus) SugarCube.State.variables.cheatPlus = {};
 var reactivatingToggles;
 if (curVer.startsWith(".")) curVer = "0" + curVer;
+//debug
+let isTestingAllFunction = false;
 //endof variable init
 if (curVer == testedOn) {
   var isCheatWork = "compatible";
@@ -263,7 +265,7 @@ function generatetext(ids, inputs, textInputs, category) {
         element = document.createElement("textarea");
         element.id = ids[i];
         element.className = "modal-content-width";
-        element.style = "height: 100px; width: 100%; line-height: 1.5;";
+        element.style = "height: 100px; line-height: 1.5; width: 100%; min-width: 0;";
         element.autocomplete = "off";
         element.spellcheck = false;
         break;
@@ -389,38 +391,32 @@ function hideAllContent() {
   );
 }
 
-function toggleElementVisibility(
-  buttonId,
-  toggleButtonId,
-  enableText = "Enable",
-  disableText = "Disable",
-  callback = null
-) {
-  const button = document.getElementById(buttonId);
-  const toggleButton = document.getElementById(toggleButtonId);
-
-  button.hidden = !button.hidden;
-  toggleButton.innerHTML = button.hidden ? enableText : disableText;
-
-  if (callback) callback();
-}
-
 function Enable_cheat_history() {
-  toggleElementVisibility(
-    "cheat-history-backwards",
-    "Enable_cheat_history",
-    "Enable",
-    "Disable",
-    () => {
-      document.getElementById("cheat-history-forwards").hidden =
-        document.getElementById("cheat-history-backwards").hidden;
-      if (!document.getElementById("cheat-history-backwards").hidden) mycode.update_history();
-    }
-  );
+  var button_back = document.getElementById("cheat-history-backwards");
+  var button_forward = document.getElementById("cheat-history-forwards");
+  var button_set = document.getElementById("Enable_cheat_history");
+  if (button_back.hidden == true) {
+    button_back.hidden = false;
+    button_forward.hidden = false;
+    button_set.innerHTML = "Disable";
+    mycode.update_history();
+  } else {
+    button_back.hidden = true;
+    button_forward.hidden = true;
+    button_set.innerHTML = "Enable";
+  }
 }
 
 function Enable_sidebar_button() {
-  toggleElementVisibility("cheat-sidebar", "Enable_sidebar_button");
+  var button = document.getElementById("cheat-sidebar");
+  var sidebar_button = document.getElementById("Enable_sidebar_button");
+  if (button.hidden == true) {
+    button.hidden = false;
+    sidebar_button.innerHTML = "Disable";
+  } else {
+    button.hidden = true;
+    sidebar_button.innerHTML = "Enable";
+  }
 }
 
 function simple_cheat_button() {
@@ -504,4 +500,19 @@ function restoreVariables() {
     showToast("This ensure the game settings isnt break.");
     showToast("You can re-enable it after youre done.");
   }
+}
+function executeFunctionsInObject(obj) {
+  if (isTestingAllFunction) return;
+  isTestingAllFunction = true;
+  let total = 0;
+  for (const key in obj) {
+    if (typeof obj[key] === "function") {
+      console.log(`Executing function at key: ${key}`);
+      obj[key](); // Call the function
+      total++;
+    }
+  }
+  timedToast("testing complete", 5000);
+  timedToast(`Total function tested ${total}`, 5000);
+  isTestingAllFunction = false;
 }

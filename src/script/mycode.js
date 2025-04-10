@@ -1,5 +1,10 @@
 mycode = {
   ...mycode,
+  //debug
+  testAll: function () {
+    showToast("Testing all functions...");
+    executeFunctionsInObject(mycode);
+  },
   //quick cheat
   arousal_player: function () {
     var value = document.getElementById("arousal_val").value;
@@ -624,18 +629,28 @@ mycode = {
     document.getElementById("ui-bar-toggle").click();
   },
   cheat_backwards: function () {
-    document.getElementById("history-backward").click();
+    const button = document.getElementById("history-backward");
+    if (!button) {
+      showToast("Failed, history probably disabled.");
+      return;
+    }
+    button.click();
     mycode.update_history();
   },
   cheat_forwards: function () {
-    document.getElementById("history-forward").click();
+    const button = document.getElementById("history-forward");
+    if (!button) {
+      showToast("Failed, history probably disabled.");
+      return;
+    }
+    button.click();
     mycode.update_history();
   },
   update_history: function () {
     var backwards = document.getElementById("cheat-history-backwards");
     var forwards = document.getElementById("cheat-history-forwards");
-    backwards.disabled = document.getElementById("history-forward").disabled;
-    forwards.disabled = document.getElementById("history-backward").disabled;
+    backwards.disabled = document.getElementById("history-backward").disabled;
+    forwards.disabled = document.getElementById("history-forward").disabled;
   },
   abortion_notice: function () {
     showToast("Aborting...");

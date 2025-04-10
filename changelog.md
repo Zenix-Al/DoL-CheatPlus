@@ -1,3 +1,15 @@
+v1.2.3
+minor changes :
+• Layout fix, layout was making in game layout messed up
+
+Development update :
+• Add function to test all cheat function, can test quicker now.
+
+v1.2.2
+now things are tested properly after major changes, no more alpha version.
+Update :
+• safeguards and checks
+
 v1.2.1 alpha
 Bugfix :
 • initialize failed fixed

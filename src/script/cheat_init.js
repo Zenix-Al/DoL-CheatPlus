@@ -560,6 +560,12 @@ function init_interface() {
     ],
     "misc-content"
   );
+  generatetext(
+    ["", "testAll", "Test every function"],
+    ["text", "button", "tooltip"],
+    ["Test cheats", "Test", "will test all functions"],
+    "misc-content"
+  );
   var element = document.getElementById("tmpText");
   element.classList.add("tmpText");
 }

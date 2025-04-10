@@ -99,6 +99,7 @@ let buttonActions = {
   randomEncounterSet: mycode.randomEncounterSet,
   npc_abortion_purge: mycode.purgeNPCPregnancy,
   purgeNPCBaby: mycode.purgeNPCBaby,
+  testAll: mycode.testAll,
 };
 //change lookup
 let changeActions = {
