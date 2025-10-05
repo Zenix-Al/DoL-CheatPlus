@@ -111,7 +111,7 @@ You need DoL for the cheat.
 <a href="https://f95zone.to/threads/degrees-of-lewdity-v0-4-5-3-vrelnir.20259">DoL in F95Zone</a>
 
 Cheat download link :
-<a href="https://app.mediafire.com/d6uiwpcm3y0gu">Mediafire</a>
+<a href="https://www.mediafire.com/folder/d6uiwpcm3y0gu/degrees_of_lewdity">Mediafire</a>
 
 ### Installation
 
