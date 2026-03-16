@@ -174,16 +174,27 @@ Definition of done:
 
 ## Phase 6 - Event System and Robustness
 
+## Phase 6 - Event System and Robustness (Completed)
+
 ### 6.1 Delegated listener framework
 
-- [ ] Consolidate click/change/input/keyup routing in one event registry.
-- [ ] Normalize event target resolution (`closest('[data-action]')` or mapped IDs).
-- [ ] Ensure listeners survive re-render and are teardown-safe.
+- [x] Consolidate click/change/input/keyup routing in one event registry.
+  - `core/events/registry.js` — `on()`, `off()`, `reset()`, `getCount()` with globalThis store; teardown-safe
+  - `features/listeners/index.js` — all 5 `addEventListener` calls replaced with `on()`; `reset()` called at top of `initListeners()` for idempotent re-injection
+- [x] Normalize event target resolution (`closest('[data-action]')` or mapped IDs).
+  - Fast-path `data-action` check preserved; legacy ID-map fallback preserved for Phase 7 migration
+- [x] Ensure listeners survive re-render and are teardown-safe.
+  - `reset()` removes all tracked listeners before re-attaching; registry store lives on globalThis across re-inject
 
 ### 6.2 Debug and diagnostics
 
-- [ ] Add debug toggle setting and persist to storage.
-- [ ] Add action/event tracing with feature tags and correlation IDs.
+- [x] Add debug toggle setting and persist to storage.
+  - `core/logger.js` — `isDebugEnabled()` reads `localStorage('CheatPlus:debug')` as fallback; `setDebugEnabled()` writes/removes the key
+- [x] Add action/event tracing with feature tags and correlation IDs.
+  - `core/events/tracing.js` — `traceEvent(type, key)` logs `[type] → "key" (#n)` under `'events'` feature tag via debugLog; sequence counter on globalThis survives re-inject
+  - All fast-path dispatcher calls and legacy map calls in `listeners/index.js` now call `traceEvent` before dispatch
+- [x] Export `events` namespace from `core/index.js` barrel.
+- [x] Build passes at v4.10.55.
 
 Definition of done:
 

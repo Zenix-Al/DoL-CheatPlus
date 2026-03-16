@@ -30,6 +30,8 @@ import {
 import { dispatch, isRegistered, setErrorHook } from '../../core/actions/dispatcher.js';
 import { registerAllActions } from '../cheat/register.js';
 import { isAtStart, isAtSettings } from '../../core/sugarcube/quirks.js';
+import { on, reset } from '../../core/events/registry.js';
+import { traceEvent } from '../../core/events/tracing.js';
 
 const mycode = getMycode();
 const firstload = getFirstload();
@@ -66,8 +68,9 @@ setErrorHook((key, _err) => showToast(`Action "${key}" failed.`));
 function initListeners() {
   const cheat = getCheat();
   if (!cheat) return;
+  reset(); // teardown previously-attached listeners — safe for idempotent re-injection
 
-  cheat.addEventListener('click', function (event) {
+  on(cheat, 'click', function (event) {
     let target = event.target;
     if (target && typeof target.closest === 'function') {
       target = target.closest('[id]') || target;
@@ -78,6 +81,7 @@ function initListeners() {
     // Fast path: metadata-rendered controls carry data-action — route through dispatcher.
     const dataAction = (event.target || target).dataset?.action;
     if (dataAction && isRegistered(dataAction)) {
+      traceEvent('click', dataAction);
       dispatch(dataAction);
       event.stopPropagation();
       return;
@@ -95,11 +99,13 @@ function initListeners() {
         return;
       }
       if (target.id in buttonActions) {
+        traceEvent('click', target.id);
         buttonActions[target.id]();
       }
     } else if (target.id in mainActions) {
       // Modal and nav refs are injected lazily, so refresh map before dispatch.
       mainActions = buildMainActions();
+      traceEvent('click', target.id);
       mainActions[target.id]();
     } else if (getIsLoad()) {
       initStorage();
@@ -109,17 +115,19 @@ function initListeners() {
     }
     event.stopPropagation();
   });
-  cheat.addEventListener('change', function (event) {
+  on(cheat, 'change', function (event) {
     if (isAtStart()) return;
     let target = event.target;
     // Fast path: data-action on metadata-rendered selects.
     const dataAction = target.dataset?.action;
+    traceEvent('change', dataAction);
     if (dataAction && isRegistered(dataAction)) {
       dispatch(dataAction);
       event.stopPropagation();
       return;
     }
     if (target.id in changeActions) {
+      traceEvent('change', target.id);
       changeActions[target.id]();
     }
     event.stopPropagation();
@@ -127,22 +135,24 @@ function initListeners() {
 
   //input slider listener
 
-  cheat.addEventListener('input', function (event) {
+  on(cheat, 'input', function (event) {
     let target = event.target;
     // Fast path: data-action on metadata-rendered range/text inputs.
+    traceEvent('input', dataAction);
     const dataAction = target.dataset?.action;
     if (dataAction && isRegistered(dataAction)) {
       dispatch(dataAction);
       return;
     }
     if (target.id in inputActions) {
+      traceEvent('input', target.id);
       inputActions[target.id]();
     }
     event.stopPropagation();
   });
 
   //document listener for toggle cheat
-  document.addEventListener('click', function (event) {
+  on(document, 'click', function (event) {
     if (isAtSettings()) {
       //restore variables in certain passage to avoid error.
       restoreVariables();
@@ -164,13 +174,13 @@ function initListeners() {
     }
   });
 
-  document.addEventListener('keyup', function () {
+  on(document, 'keyup', function () {
     if (!isAtSettings()) {
       incrementClickCounter();
       mycode.runitall();
     }
   });
-  cheat.addEventListener('keyup', function (event) {
+  on(cheat, 'keyup', function (event) {
     event.stopPropagation();
   });
 }
