@@ -1,9 +1,14 @@
 import { layoutTemplate, renderTemplate } from './renderers/layout.js';
-import { injectCSS } from './helpers/css-injector.js';
+import { registerSheet, applyToShadow } from '../core/styleRegistry.js';
 import cssText from './assets/main.css';
+import tokensText from './theme/tokens.css';
 import { byUiId, ensureShadowRoot, refreshUiRefs } from './helpers/dom-refs.js';
 import debugLog from '../core/logger.js';
 import { closeModal, openModal } from './components/modal.js';
+
+// Register stylesheets once at module load time (pure registration, no DOM side effects)
+registerSheet(tokensText, { target: 'shadow' });
+registerSheet(cssText, { target: 'shadow' });
 
 function mountInterface() {
   if (!document.body) {
@@ -18,9 +23,9 @@ function mountInterface() {
   }
   if (byUiId('cheat')) return;
 
-  // inject UI stylesheet (loaded as text by the build)
+  // inject UI stylesheets via registry (tokens first, then component styles)
   try {
-    injectCSS(cssText, root);
+    applyToShadow(root);
   } catch (e) {
     // injection failure should not block mounting
     console.warn('[CheatPlus] CSS injection failed:', e);
@@ -74,4 +79,4 @@ function mountInterface() {
   }
 }
 
-export { mountInterface, renderTemplate, injectCSS, layoutTemplate };
+export { mountInterface, renderTemplate, layoutTemplate };

@@ -66,13 +66,13 @@
   }
 }
 .toast {
-  background-color: #333;
-  color: #fff;
+  background-color: var(--cp-bg-toast, #333);
+  color: var(--cp-text-toast, #fff);
   padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: var(--cp-radius-toast, 5px);
   margin-bottom: 10px; /* Add margin to separate toasts */
   opacity: 1;
-  transition: opacity 0.3s ease-in-out;
+  transition: var(--cp-transition-fade, opacity 0.3s ease-in-out);
 }
 
 /* Modal Styles */
@@ -85,13 +85,13 @@
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--cp-color-overlay, rgba(0, 0, 0, 0.5));
 }
 
 .modal-content {
-  background-color: #fefefe;
+  background-color: var(--cp-bg-modal, #222);
   margin: 10px auto;
-  border: 1px solid #888;
+  border: 1px solid var(--cp-border-modal, #888);
   width: 90%;
 }
 .modal-content-padding {
@@ -101,32 +101,33 @@
   box-sizing: border-box;
 }
 .modal-button {
-  background: #4b4b4b;
-  color: #fff;
-  border: 1px solid #8a8a8a;
-  border-radius: 2px;
+  background: var(--cp-bg-button, #4b4b4b);
+  color: var(--cp-text-primary, #fff);
+  border: 1px solid var(--cp-border-button, #8a8a8a);
+  border-radius: var(--cp-radius-button, 2px);
   padding: 1px 8px;
   line-height: 1.2;
   cursor: pointer;
 }
 .modal-button:hover {
-  background: #5a5a5a;
+  background: var(--cp-bg-button-hover, #5a5a5a);
 }
 .modal-link {
-  color: #66a7ff;
+  color: var(--cp-color-link, #66a7ff);
   text-decoration: underline;
 }
 .modal-content-color {
-  color: var(--500);
+  /* var(--500) was a DoL host-page variable; use shadow-safe token with same fallback */
+  color: var(--cp-text-muted, #c8c3bc);
 }
 .modal-content-right {
   margin-right: 10px;
 }
 .gold {
-  color: #f0d46d;
+  color: var(--cp-color-gold, #f0d46d);
 }
 .linkBlue {
-  color: #66a7ff;
+  color: var(--cp-color-link, #66a7ff);
 }
 .tooltip-small {
   position: relative;
@@ -137,10 +138,10 @@
   visibility: hidden;
   width: 300px;
   max-width: min(70vw, 300px);
-  background: #111;
-  color: #f2f2f2;
-  border: 1px solid #444;
-  border-radius: 4px;
+  background: var(--cp-bg-tooltip, #111);
+  color: var(--cp-text-tooltip, #f2f2f2);
+  border: 1px solid var(--cp-border-tooltip, #444);
+  border-radius: var(--cp-radius-tooltip, 4px);
   padding: 6px 8px;
   position: absolute;
   z-index: 1000;
@@ -180,8 +181,10 @@ right .close {
 .modal-inputs {
   flex: 2;
 }
+/* modal-content bg is already set via the first .modal-content rule above;
+   this duplicate block is kept for specificity parity with the original source. */
 .modal-content {
-  background-color: #222;
+  background-color: var(--cp-bg-modal, #222);
 }
 .modal-content-container {
   max-height: 400px;
@@ -192,8 +195,8 @@ right .close {
   display: flex;
   justify-content: space-between; /* Align items at the ends */
   align-items: center;
-  background-color: #333;
-  color: #fff;
+  background-color: var(--cp-bg-navbar, #333);
+  color: var(--cp-text-primary, #fff);
 }
 
 /* Style for the navigation links */

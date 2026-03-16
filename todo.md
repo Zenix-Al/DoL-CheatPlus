@@ -87,25 +87,31 @@ Definition of done:
 - Controls can be described by metadata only
 - Invalid metadata fails fast with clear logs
 
-## Phase 3 - Renderer and Styling Framework
+## Phase 3 - Renderer and Styling Framework (Completed)
 
 ### 3.1 Metadata render pipeline
 
-- [ ] Implement metadata renderer in `ui/renderers/metadata-renderer.js`.
-- [ ] Build reusable primitive renderers:
+- [x] Implement metadata renderer in `ui/renderers/metadata-renderer.js`.
+- [x] Build reusable primitive renderers:
   - `renderButton`
   - `renderToggle`
   - `renderSelect`
   - `renderRange`
+  - `renderText`
   - `renderTooltip`
   - `renderGroup`
+  - `renderControl` (dispatcher)
+  - `renderRow` (standalone control wrapper)
+  - `renderRegistry` (iterates a registry array with visibility gating)
 
 ### 3.2 Style registry and shadow-safe design
 
-- [ ] Add style registry (`core/styleRegistry.js`) to support `document` and `shadow` targets.
-- [ ] Introduce shadow-safe theme tokens (`ui/theme/tokens.css`).
-- [ ] Move all UI-required visual styles into shadow-targeted stylesheets.
-- [ ] Remove dependency on host page classes/colors.
+- [x] Add style registry (`core/styleRegistry.js`) supporting `shadow`, `document`, and `both` targets.
+- [x] Introduce shadow-safe theme tokens (`ui/theme/tokens.css`) — `--cp-*` custom properties on `:host`.
+- [x] Replace all hardcoded color values in `main.css` with `var(--cp-*)` token references.
+- [x] Remove dependency on host page classes/colors — replaced `var(--500)` (DoL host var) with `var(--cp-text-muted, #c8c3bc)`.
+- [x] Wire `ui/index.js` through the style registry (`registerSheet` at module load, `applyToShadow` at mount).
+- [x] Export `styleRegistry` namespace from `core/index.js` barrel.
 
 Definition of done:
 

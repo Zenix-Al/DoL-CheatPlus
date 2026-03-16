@@ -1,0 +1,66 @@
+/**
+ * CheatPlus Shadow-safe Theme Tokens
+ *
+ * All custom properties are scoped to :host so they are self-contained inside
+ * the Shadow DOM and never leak to or inherit from the host page.
+ *
+ * Naming convention:  --cp-{category}-{variant}
+ *
+ * Categories:
+ *   color-*    – palette tokens
+ *   bg-*       – background colors
+ *   text-*     – foreground / text colors
+ *   border-*   – border colors
+ *   spacing-*  – padding / gap constants
+ *   radius-*   – border-radius
+ *   font-*     – font stacks and sizes
+ *   transition-* – animation durations
+ */
+
+:host {
+  /* --- Palette --- */
+  --cp-color-gold: #f0d46d;
+  --cp-color-link: #66a7ff;
+  --cp-color-danger: #e05a5a;
+  --cp-color-overlay: rgba(0, 0, 0, 0.5);
+
+  /* --- Backgrounds --- */
+  --cp-bg-modal: #222;
+  --cp-bg-navbar: #333;
+  --cp-bg-button: #4b4b4b;
+  --cp-bg-button-hover: #5a5a5a;
+  --cp-bg-tooltip: #111;
+  --cp-bg-toast: #333;
+
+  /* --- Text --- */
+  --cp-text-primary: #fff;
+  --cp-text-muted: #c8c3bc; /* replaces host var(--500) — DoL body text approximation */
+  --cp-text-tooltip: #f2f2f2;
+  --cp-text-toast: #fff;
+
+  /* --- Borders --- */
+  --cp-border-modal: #888;
+  --cp-border-button: #8a8a8a;
+  --cp-border-tooltip: #444;
+
+  /* --- Spacing --- */
+  --cp-spacing-xs: 2px;
+  --cp-spacing-sm: 5px;
+  --cp-spacing-md: 10px;
+  --cp-spacing-lg: 20px;
+  --cp-spacing-content: 1rem;
+
+  /* --- Border radius --- */
+  --cp-radius-button: 2px;
+  --cp-radius-tooltip: 4px;
+  --cp-radius-toast: 5px;
+
+  /* --- Typography --- */
+  --cp-font-ui: system-ui, -apple-system, sans-serif;
+  --cp-font-size-base: 13px;
+
+  /* --- Transitions --- */
+  --cp-transition-fade: opacity 0.3s ease-in-out;
+  --cp-transition-collapse: height 0.35s ease;
+  --cp-transition-float: top 0.5s ease-in-out;
+}
