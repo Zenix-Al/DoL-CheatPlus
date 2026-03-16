@@ -1,144 +1,175 @@
-const fs = require("fs");
-const path = require("path");
-const uglifyJS = require("uglify-js");
-const CleanCSS = require("clean-css");
+const esbuild = require('esbuild');
+const fs = require('fs');
+const path = require('path');
 
-const requiredFiles = fs.readFileSync("src/required.ini", "utf-8").split(/\r?\n/);
+const EXAMPLE_DIR = path.join(__dirname, '..', 'example');
+// Project-local build assets (header + version) live in the build folder
+const BUILD_DIR = path.join(__dirname);
+const VERSION_FILE = path.join(BUILD_DIR, 'version.json');
+const HEADER_TEMPLATE_PATH = path.join(BUILD_DIR, 'header.txt');
 
-// Step 1: Check if all required files exist
-for (const file of requiredFiles) {
-  const filePath = path.join("src", file.trim()); // Ensure correct path
-  if (!fs.existsSync(filePath)) {
-    console.error(`Missing file: ${filePath}`);
-    process.exit(1);
-  }
-}
-// Ensure _compiled and its subfolders exist
-const folders = [
-  "_compiled",
-  "_compiled/nwjs/www/cheat",
-  "_compiled/dolp",
-  "_compiled/vanilla",
-  "_compiled/online",
-  "_compiled/publish",
+const BUILD_TARGETS = [
+  {
+    label: 'Build',
+    scriptName: 'DoL Cheat Plus',
+    minify: false,
+    tmpOutfile: 'dist/userscript.js',
+    finalOutfile: 'dist/DoL-CheatPlus.user.js',
+  },
+  {
+    label: 'Uglify Build',
+    scriptName: 'DoL Cheat Plus (Uglified)',
+    minify: true,
+    tmpOutfile: 'dist/uglified.js',
+    finalOutfile: 'dist/DoL-CheatPlus.uglified.user.js',
+  },
 ];
-folders.forEach((folder) => {
-  if (!fs.existsSync(folder)) {
-    fs.mkdirSync(folder, { recursive: true });
-    console.log(`✅ Created folder: ${folder}`);
+
+function readVersion() {
+  let currentVersion = { major: 0, minor: 0, patch: 0 };
+  if (!fs.existsSync(VERSION_FILE)) return currentVersion;
+
+  try {
+    currentVersion = JSON.parse(fs.readFileSync(VERSION_FILE, 'utf8'));
+  } catch {
+    console.warn('version.json corrupted, resetting...');
   }
-});
-console.log("All required files are present.");
-
-// Step 2: Minify CSS
-const cssInput = fs.readFileSync("src/script/main.css", "utf-8");
-
-const minifiedCSS = new CleanCSS().minify(cssInput).styles;
-fs.writeFileSync("_compiled/main.min.css", minifiedCSS);
-console.log("Minified CSS created.");
-
-// Step 3: Minify & Combine JS
-const jsFiles = [
-  "src/script/main.js",
-  "src/script/mycode_toggle.js",
-  "src/script/mycode.js",
-  "src/script/cheat_init.js",
-  "src/script/info_fetcher.js",
-  "src/script/listener.js",
-  "src/script/storage.js",
-  "src/script/execute.js",
-].map((file) => fs.readFileSync(file, "utf-8")); // Read each file properly
-
-const combinedJS = uglifyJS.minify(jsFiles);
-
-if (combinedJS.error) {
-  console.error("JS Minification Error:", combinedJS.error);
-  process.exit(1);
+  return currentVersion;
 }
 
-fs.writeFileSync("_compiled/main.min.js", combinedJS.code);
-console.log("Minified JS created.");
+function getBumpType(args) {
+  if (args.includes('--major')) return 'major';
+  if (args.includes('--minor')) return 'minor';
+  return 'patch';
+}
 
-// Step 5: Read info.ini values
-const infoLines = fs.readFileSync("src/info.ini", "utf-8").split(/\r?\n/);
-const cheatVer = infoLines[0].trim();
-const testedOn = infoLines[1].trim();
-
-// Step 6: Create `base.js`
-let baseJS = `var convertStringIndexArrayToObject;\n`;
-baseJS += `var DEBUG=false;\n`;
-
-baseJS += `setTimeout(async function() {\n`;
-baseJS += `var cheatVer="${cheatVer}";\n`;
-baseJS += `var testedOn="${testedOn}";\n`;
-baseJS += `var isServer=0;\n`;
-
-baseJS += fs.readFileSync("src/interface/interface.js", "utf-8"); // inject renderUI and injectCSS
-baseJS += `\n`;
-baseJS += `injectCSS(\`${minifiedCSS}\`);\n`;
-
-baseJS += fs.readFileSync("_compiled/main.min.js", "utf-8"); // load the core logic
-baseJS += `\n}, 2000)`;
-baseScript = `<script>${baseJS}</script>`;
-fs.writeFileSync("_compiled/base.js", baseJS);
-console.log("Base HTML created.");
-
-// Step 7: Create offline version
-console.log("Injecting html version...");
-const gameHTML = fs.readFileSync("src/game/game.html", "utf-8");
-const finalOfflineHTML = gameHTML + baseScript;
-
-fs.writeFileSync("_compiled/vanilla/DoL Vanilla - Cheat Plus.html", finalOfflineHTML);
-console.log("Final html injection compiled.");
-
-// Step 8: Prepare NW.js Cheat
-console.log("Preparing NW.js cheat...");
-
-fs.writeFileSync("_compiled/nwjs/www/cheat/cheat.html", baseScript);
-
-fs.copyFileSync("src/script/nwjs/restore.bat", "_compiled/nwjs/www/cheat/restore.bat");
-fs.copyFileSync("src/script/nwjs/inject-cheat.bat", "_compiled/nwjs/www/cheat/inject-cheat.bat");
-
-console.log("NW.js cheat setup completed.");
-
-// Step 9: make online version
-
-console.log("Compiling online version...");
-
-fs.copyFileSync("src/script/online/header.js", "_compiled/online/main.js");
-fs.appendFileSync("_compiled/online/main.js", "\n(function() {\n");
-fs.appendFileSync("_compiled/online/main.js", baseJS);
-fs.appendFileSync("_compiled/online/main.js", "})();\n");
-
-console.log("Online version compiled!");
-
-// Step 10: Create offline version using dolp
-console.log("Injecting html modded version...");
-const modGameHTML = fs.readFileSync("src/game/game_mod.html", "utf-8");
-const finalModOfflineHTML = modGameHTML + baseScript;
-
-fs.writeFileSync("_compiled/dolp/DoLP - Cheat Plus.html", finalModOfflineHTML);
-console.log("Final html modded injection compiled.");
-
-// Delete any existing changelog in _compiled
-fs.readdirSync("_compiled").forEach((file) => {
-  if (file.startsWith("changelog -") && file.endsWith(".md")) {
-    fs.unlinkSync(`_compiled/${file}`);
-    console.log(`Deleted: ${file}`);
+function bumpVersion(currentVersion, bumpType) {
+  if (bumpType === 'major') {
+    return { major: currentVersion.major + 1, minor: 0, patch: 0 };
   }
-});
-
-// Make new changelog
-fs.copyFileSync("changelog.md", `_compiled/changelog - ${cheatVer}.md`);
-console.log("New changelog copied!");
-
-// Delete any existing current game version in _compiled
-fs.readdirSync("_compiled/publish").forEach((file) => {
-  if (file.startsWith("modded game version -")) {
-    fs.unlinkSync(`_compiled/publish/${file}`);
-    console.log(`Deleted: ${file}`);
+  if (bumpType === 'minor') {
+    return { major: currentVersion.major, minor: currentVersion.minor + 1, patch: 0 };
   }
+  return { ...currentVersion, patch: currentVersion.patch + 1 };
+}
+
+function getPlugins(isRelease) {
+  const plugins = [];
+  const stripCssPath = path.join(EXAMPLE_DIR, 'build', 'stripCssComments.js');
+  const stripDebugPath = path.join(EXAMPLE_DIR, 'stripDebugLogs.js');
+  if (fs.existsSync(stripCssPath)) {
+    const { stripCssComments } = require(stripCssPath);
+    plugins.push(stripCssComments);
+  }
+  if (isRelease && fs.existsSync(stripDebugPath)) {
+    const { stripDebugLogs } = require(stripDebugPath);
+    plugins.push(stripDebugLogs);
+  }
+  return plugins;
+}
+
+function getBuildDefines() {
+  return {
+    __DOL_DEBUG__: 'true',
+  };
+}
+
+function readHeaderTemplate() {
+  if (!fs.existsSync(HEADER_TEMPLATE_PATH)) {
+    throw new Error(`Missing header template: ${HEADER_TEMPLATE_PATH}`);
+  }
+  return fs.readFileSync(HEADER_TEMPLATE_PATH, 'utf8');
+}
+
+function getBuildInfo(target, isRelease) {
+  const buildMode = isRelease ? 'release' : 'regular';
+  const artifactType = target.minify ? 'uglified' : 'regular';
+  const logStatus = isRelease
+    ? 'debugLog call sites stripped where possible'
+    : 'debugLog call sites retained';
+
+  return [
+    `// Build mode: ${buildMode}`,
+    `// Artifact: ${artifactType}`,
+    `// Logs: ${logStatus}`,
+  ].join('\n');
+}
+
+function renderHeader(template, { name, version, banner, buildInfo }) {
+  return template
+    .replaceAll('{{NAME}}', name)
+    .replaceAll('{{VERSION}}', version)
+    .replaceAll('{{BANNER}}', banner)
+    .replaceAll('{{BUILD_INFO}}', buildInfo);
+}
+
+async function buildTarget(target, baseOptions, headerTemplate, version, banner, isRelease) {
+  await esbuild.build({
+    ...baseOptions,
+    minify: target.minify,
+    outfile: target.tmpOutfile,
+  });
+
+  const builtCode = fs.readFileSync(target.tmpOutfile, 'utf8');
+  const buildInfo = getBuildInfo(target, isRelease);
+  const header = renderHeader(headerTemplate, {
+    name: target.scriptName,
+    version,
+    banner,
+    buildInfo,
+  });
+
+  fs.writeFileSync(target.finalOutfile, header + builtCode);
+  console.log(`${target.label} complete! Version: ${version}`);
+  console.log(`Output: ${target.finalOutfile}`);
+}
+
+async function main() {
+  const args = process.argv.slice(2);
+  const bumpType = getBumpType(args);
+  const isRelease = args.includes('--release');
+
+  const currentVersion = readVersion();
+  const nextVersion = bumpVersion(currentVersion, bumpType);
+  const versionString = `${nextVersion.major}.${nextVersion.minor}.${nextVersion.patch}`;
+
+  console.log(
+    `Bumping version: ${currentVersion.major}.${currentVersion.minor}.${currentVersion.patch} -> ${versionString} (${bumpType})`
+  );
+  if (isRelease) {
+    console.log('Release mode: stripping debugLog(...) and disabling debug logging.');
+  }
+
+  fs.writeFileSync(VERSION_FILE, JSON.stringify(nextVersion, null, 2));
+
+  const now = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
+  const banner = `// Built on ${now} -- AUTO-GENERATED, edit from /src and rebuild`;
+  const headerTemplate = readHeaderTemplate();
+
+  const baseBuildOptions = {
+    entryPoints: ['src/main.js'],
+    bundle: true,
+    format: 'iife',
+    legalComments: 'none',
+    loader: {
+      '.html': 'text',
+      '.css': 'text',
+    },
+    define: getBuildDefines(),
+    plugins: getPlugins(isRelease),
+  };
+
+  // ensure dist exists
+  if (!fs.existsSync('dist')) fs.mkdirSync('dist');
+
+  await Promise.all(
+    BUILD_TARGETS.map((target) =>
+      buildTarget(target, baseBuildOptions, headerTemplate, versionString, banner, isRelease)
+    )
+  );
+}
+
+main().catch((err) => {
+  console.error('Build failed:', err);
+  process.exit(1);
 });
-//current game version
-fs.writeFileSync(`_compiled/publish/modded game version - ${testedOn}`, "");
-console.log("Current game version copied!");

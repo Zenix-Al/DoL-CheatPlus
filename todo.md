@@ -1,0 +1,223 @@
+# DoL-CheatPlus Framework Migration Plan
+
+Goal: turn the current cheat mod into a reusable framework for multiple HTML game engines, with SugarCube-specific logic isolated under engine adapters.
+
+## Phase 0 - MVP Stabilization (Completed)
+
+- [x] Shadow DOM host and modal render baseline
+- [x] Basic listener routing for modal controls
+- [x] Centralized debug logger + startup traces
+- [x] Build pipeline still produces userscript bundles
+
+Definition of done:
+
+- Modal opens and renders in Shadow DOM
+- Core buttons work in current build
+- Build succeeds end-to-end
+
+## Phase 1 - Foundation and Module Hygiene (Completed)
+
+### 1.1 Package boundaries and ownership
+
+- [x] Define package boundaries and dependency direction in docs:
+  - `core/`: runtime lifecycle, state, registries, shared abstractions
+  - `ui/`: rendering, components, styles, metadata renderer
+  - `features/`: game-agnostic feature orchestration
+  - `games/`: engine adapters (`sugarcube/`, future `renpy-web/`, etc.)
+  - `services/`: integration services and legacy compatibility wrappers
+  - `constants/`: IDs, keys, static labels, config constants
+- [x] Add explicit rule: `ui/` and `features/` cannot import game engine globals directly.
+- [x] Add explicit rule: engine-specific APIs must live under `core/sugarcube` or `games/sugarcube`.
+
+### 1.2 Side-effect-free module barrels
+
+- [x] Create barrel entry files (`index.js`) for `core`, `features`, `services`, `constants`.
+- [x] Ensure barrel files are export-only (no global writes, no initialization side effects).
+- [x] Move auto-run behavior to one startup path (`main.js` -> injection bootstrap only).
+
+### 1.3 Constants extraction by domain
+
+- [x] Extract runtime keys to `constants/runtime.js`.
+- [x] Extract UI IDs/classes to `constants/ui.js`.
+- [x] Extract engine keys to `constants/sugarcube.js`.
+- [x] Replace string literals in core/ui bootstrap with imported constants.
+
+### 1.4 Import/export standardization
+
+- [x] Use named exports for utilities and registries.
+- [x] Restrict default export usage to module factories where justified.
+- [x] Avoid cyclic imports by introducing interfaces/registries where needed.
+
+### 1.5 Validation for phase completion
+
+- [x] Build succeeds with no regression.
+- [x] Startup has one clear entrypoint.
+- [x] No accidental mount/init triggered by import side effects.
+
+## Phase 2 - Core State and Schema Contracts
+
+### 2.1 Central app state
+
+- [ ] Introduce state manager in `core/state/`:
+  - `get(path)`
+  - `set(path, value)`
+  - `subscribe(path, cb)`
+  - serializable snapshots for debug
+- [ ] Move mutable globals (`modalOpen`, counters, flags) into state store.
+
+### 2.2 Metadata schema contract
+
+- [ ] Define metadata contract in `ui/metadata/schema.js`:
+  - control types: `button`, `toggle`, `select`, `range`, `text`, `tooltip`, `group`
+  - properties: `id`, `label`, `tooltip`, `action`, `bindings`, `visibility`, `engineScope`
+- [ ] Add dev-time schema validation and diagnostics.
+
+### 2.3 Registries
+
+- [ ] Create metadata registries per area:
+  - `ui/metadata/quick/`
+  - `ui/metadata/stat/`
+  - `ui/metadata/misc/`
+- [ ] Ensure each registry is pure data, no direct DOM or runtime side effects.
+
+Definition of done:
+
+- Controls can be described by metadata only
+- Invalid metadata fails fast with clear logs
+
+## Phase 3 - Renderer and Styling Framework
+
+### 3.1 Metadata render pipeline
+
+- [ ] Implement metadata renderer in `ui/renderers/metadata-renderer.js`.
+- [ ] Build reusable primitive renderers:
+  - `renderButton`
+  - `renderToggle`
+  - `renderSelect`
+  - `renderRange`
+  - `renderTooltip`
+  - `renderGroup`
+
+### 3.2 Style registry and shadow-safe design
+
+- [ ] Add style registry (`core/styleRegistry.js`) to support `document` and `shadow` targets.
+- [ ] Introduce shadow-safe theme tokens (`ui/theme/tokens.css`).
+- [ ] Move all UI-required visual styles into shadow-targeted stylesheets.
+- [ ] Remove dependency on host page classes/colors.
+
+Definition of done:
+
+- UI rendering and tooltip behavior are fully self-contained in shadow styles.
+
+## Phase 4 - Action Runtime and Command Dispatch
+
+### 4.1 Command dispatcher
+
+- [ ] Build action command bus (`core/actions/dispatcher.js`).
+- [ ] Map metadata `action` keys to registered command handlers.
+- [ ] Add uniform error handling and toast/report hooks.
+
+### 4.2 Feature action modules
+
+- [ ] Split action handlers by domain (`player`, `pregnancy`, `world`, `debug`, etc.).
+- [ ] Register handlers without direct DOM traversal in each command.
+
+Definition of done:
+
+- Button metadata triggers command dispatcher, not ad-hoc listener maps.
+
+## Phase 5 - Engine Adapter Abstraction
+
+### 5.1 Adapter interface
+
+- [ ] Define adapter contract in `core/adapters/types.js`:
+  - state access
+  - setup access
+  - time/passage access
+  - event hooks
+
+### 5.2 SugarCube adapter extraction
+
+- [ ] Create `core/sugarcube/` modules:
+  - `adapter.js`
+  - `state.js`
+  - `selectors.js`
+  - `quirks.js`
+- [ ] Move all SugarCube-only behavior from generic features/services to adapter modules.
+
+Definition of done:
+
+- No direct `SugarCube` usage outside adapter and thin bridge boundaries.
+
+## Phase 6 - Event System and Robustness
+
+### 6.1 Delegated listener framework
+
+- [ ] Consolidate click/change/input/keyup routing in one event registry.
+- [ ] Normalize event target resolution (`closest('[data-action]')` or mapped IDs).
+- [ ] Ensure listeners survive re-render and are teardown-safe.
+
+### 6.2 Debug and diagnostics
+
+- [ ] Add debug toggle setting and persist to storage.
+- [ ] Add action/event tracing with feature tags and correlation IDs.
+
+Definition of done:
+
+- Interaction routing is deterministic and debuggable.
+
+## Phase 7 - Incremental Metadata Migration
+
+### 7.1 Quick tab migration
+
+- [ ] Re-encode quick controls in metadata registry.
+- [ ] Verify behavior parity with legacy implementation.
+
+### 7.2 Stat tab migration
+
+- [ ] Re-encode stat controls in metadata.
+- [ ] Verify parity for value updates and set actions.
+
+### 7.3 Misc tab migration
+
+- [ ] Re-encode misc controls in metadata.
+- [ ] Verify parity for toggles and utility tools.
+
+### 7.4 Legacy path retirement
+
+- [ ] Remove legacy `generatetext`-driven assembly path.
+- [ ] Remove obsolete listener maps no longer needed.
+
+Definition of done:
+
+- All tabs rendered from metadata pipeline.
+
+## Phase 8 - Quality, Tooling, and Lifecycle
+
+### 8.1 Testing and CI
+
+- [ ] Add unit tests for metadata parsing and dispatcher.
+- [ ] Add integration tests for modal actions and tab switching.
+- [ ] Add CI build + test workflow.
+
+### 8.2 Lifecycle and cleanup
+
+- [ ] Add resource manager + teardown hooks for listeners/styles/observers.
+- [ ] Ensure reinjection and route changes do not leak handlers.
+
+### 8.3 Documentation
+
+- [ ] Write architecture guide:
+  - module boundaries
+  - adapter contract
+  - metadata authoring rules
+  - adding a new game adapter
+
+### 8.4 Release prep
+
+- [ ] Update changelog and migration notes.
+- [ ] Version bump and release tag.
+
+Definition of done:
+
+- Repeatable build/test/release with documented extension model.

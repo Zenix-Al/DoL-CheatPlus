@@ -1,2 +1,15 @@
 node_modules/
 _compiled/
+dist/
+build/
+.DS_Store
+.vscode/
+.idea/
+*.log
+*.env
+game/*.html
+publish/_compiled/
+*.bak
+node_modules/
+_compiled/
+example/

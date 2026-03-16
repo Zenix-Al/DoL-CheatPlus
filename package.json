@@ -1,10 +1,25 @@
 {
+  "name": "DoL-CheatPlus",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build/build.cjs",
+    "build:modern": "vite build --outDir _compiled --config ./vite.config.mjs",
+    "dev": "vite --root src/ui",
+    "lint": "eslint --ignore-path .gitignore .",
+    "lint:fix": "eslint --fix --ignore-path .gitignore .",
+    "format": "prettier --write .",
+    "publish": "cmd /c \"cd _compiled && publish.bat\""
+  },
   "dependencies": {
     "clean-css-cli": "^5.6.3",
     "uglify-js": "^3.19.3"
   },
-  "scripts": {
-    "build": "node build/build.js",
-    "publish": "cmd /c \"cd _compiled && publish.bat\""
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "eslint": "^8.50.0",
+    "eslint-plugin-import": "^2.30.0",
+    "prettier": "^2.8.8"
   }
 }
