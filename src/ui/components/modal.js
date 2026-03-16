@@ -1,6 +1,8 @@
 import { byUiId, getUiRoot, refreshUiRefs } from '../helpers/dom-refs.js';
 import { modalTemplate, renderTemplate } from '../renderers/layout.js';
 import { showToast } from './toast.js';
+import { get, set } from '../../core/state/index.js';
+import { deleteText } from '../renderers/cheat-form.js';
 
 function ensureModalInjected() {
   if (byUiId('modal')) return;
@@ -35,10 +37,10 @@ export function bloodEffect() {
 }
 
 export function openModal() {
-  if (window.modalOpen || (window.isDelete && window.isCheatPressed)) return;
+  if (get('modal.open') || (get('modal.isDelete') && get('modal.isCheatPressed'))) return;
 
-  if (window.isDelete) {
-    window.isCheatPressed = true;
+  if (get('modal.isDelete')) {
+    set('modal.isCheatPressed', true);
     showToast('Loading cheat, please slow down.');
     return setTimeout(openModal, 100);
   }
@@ -48,7 +50,7 @@ export function openModal() {
   if (!modal) return;
 
   modal.style.display = 'block';
-  window.modalOpen = true;
+  set('modal.open', true);
   if (typeof window.init_interface === 'function') {
     window.init_interface();
   } else {
@@ -68,10 +70,10 @@ export function openModal() {
 }
 
 export function closeModal() {
-  if (!window.modalOpen) return;
+  if (!get('modal.open')) return;
   const modal = byUiId('modal');
   if (!modal) return;
   modal.style.display = 'none';
-  window.modalOpen = false;
-  if (typeof window.deleteText === 'function') window.deleteText();
+  set('modal.open', false);
+  deleteText();
 }

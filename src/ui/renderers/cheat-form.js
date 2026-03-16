@@ -8,7 +8,14 @@ export const convertStringIndexArrayToObject = (arr) => {
   return obj;
 };
 
-import { byUiId } from '../helpers/dom-refs.js';
+import {
+  byUiId,
+  isFetching,
+  currentFetch,
+  totalFetchFunction,
+  getButtonId,
+} from '../helpers/dom-refs.js';
+import { set as setState } from '../../core/state/index.js';
 
 export function generatetext(ids, inputs, textInputs, category) {
   const inputcategory = byUiId(category);
@@ -133,12 +140,14 @@ export function generatetext(ids, inputs, textInputs, category) {
 }
 
 export function deleteText() {
+  // isFetching is backed by the dom-refs module var (via linkGlobalBindings proxy).
+  // Writing through window keeps the live binding in sync so the guard below resolves.
   if (currentFetch === totalFetchFunction) window.isFetching = false;
-  if (window.isFetching) {
+  if (isFetching) {
     requestAnimationFrame(deleteText);
     return;
   }
-  window.isDelete = true;
+  setState('modal.isDelete', true);
 
   ['quick-content', 'stats-content', 'misc-content'].forEach((id) => {
     const content = byUiId(id);
@@ -148,10 +157,11 @@ export function deleteText() {
     }
   });
 
-  window.isDelete = false;
+  setState('modal.isDelete', false);
 }
 
-export function executeSearch(action = window.buttonId) {
+export function executeSearch(action) {
+  if (action == null) action = getButtonId();
   const searchTypeMap = ['startsWith', 'includes', 'endsWith'];
   const searchTypeEl = byUiId('search_type');
   const searchType = searchTypeMap[(searchTypeEl && searchTypeEl.value) || 0] || 'startsWith';

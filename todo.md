@@ -54,31 +54,33 @@ Definition of done:
 - [x] Startup has one clear entrypoint.
 - [x] No accidental mount/init triggered by import side effects.
 
-## Phase 2 - Core State and Schema Contracts
+## Phase 2 - Core State and Schema Contracts (Completed)
 
 ### 2.1 Central app state
 
-- [ ] Introduce state manager in `core/state/`:
+- [x] Introduce state manager in `core/state/`:
   - `get(path)`
   - `set(path, value)`
   - `subscribe(path, cb)`
   - serializable snapshots for debug
-- [ ] Move mutable globals (`modalOpen`, counters, flags) into state store.
+- [x] Move mutable globals (`modalOpen`, counters, flags) into state store.
+  - `modal.open`, `modal.isDelete`, `modal.isCheatPressed` migrated from `window.*`
+  - `fetcher.isFetching` write-path fixed: dom-refs proxy kept as source of truth; state store ready for future full migration
 
 ### 2.2 Metadata schema contract
 
-- [ ] Define metadata contract in `ui/metadata/schema.js`:
+- [x] Define metadata contract in `ui/metadata/schema.js`:
   - control types: `button`, `toggle`, `select`, `range`, `text`, `tooltip`, `group`
   - properties: `id`, `label`, `tooltip`, `action`, `bindings`, `visibility`, `engineScope`
-- [ ] Add dev-time schema validation and diagnostics.
+- [x] Add dev-time schema validation and diagnostics (`validateControl`, `validateRegistry`).
 
 ### 2.3 Registries
 
-- [ ] Create metadata registries per area:
-  - `ui/metadata/quick/`
-  - `ui/metadata/stat/`
-  - `ui/metadata/misc/`
-- [ ] Ensure each registry is pure data, no direct DOM or runtime side effects.
+- [x] Create metadata registries per area:
+  - `ui/metadata/quick/` — stub (`quickMetadata = []`)
+  - `ui/metadata/stat/` — stub (`statMetadata = []`)
+  - `ui/metadata/misc/` — stub (`miscMetadata = []`)
+- [x] Ensure each registry is pure data, no direct DOM or runtime side effects.
 
 Definition of done:
 
