@@ -27,6 +27,8 @@ import {
   createInputActions,
   createMainActions,
 } from './action-maps.js';
+import { dispatch, isRegistered, setErrorHook } from '../../core/actions/dispatcher.js';
+import { registerAllActions } from '../cheat/register.js';
 
 const mycode = getMycode();
 const firstload = getFirstload();
@@ -55,6 +57,11 @@ let buttonActions = createButtonActions({
 let changeActions = createChangeActions({ altFetch, firstload });
 let inputActions = createInputActions({ firstload });
 
+// Register all action maps into the central dispatcher and install the toast error hook.
+// This runs once at module evaluation; re-registration on re-inject is harmless (handlers overwrite).
+registerAllActions({ buttonActions, mainActions, changeActions, inputActions });
+setErrorHook((key, _err) => showToast(`Action "${key}" failed.`));
+
 function initListeners() {
   const cheat = getCheat();
   if (!cheat) return;
@@ -66,6 +73,15 @@ function initListeners() {
     }
     if (!target.id) return;
     setButtonId(target.id);
+
+    // Fast path: metadata-rendered controls carry data-action — route through dispatcher.
+    const dataAction = (event.target || target).dataset?.action;
+    if (dataAction && isRegistered(dataAction)) {
+      dispatch(dataAction);
+      event.stopPropagation();
+      return;
+    }
+
     if (
       (target.tagName === 'A' || target.tagName === 'BUTTON') &&
       target.closest('.modal-content')
@@ -95,6 +111,13 @@ function initListeners() {
   cheat.addEventListener('change', function (event) {
     if (SugarCube.State.variables.passage == 'Start') return;
     let target = event.target;
+    // Fast path: data-action on metadata-rendered selects.
+    const dataAction = target.dataset?.action;
+    if (dataAction && isRegistered(dataAction)) {
+      dispatch(dataAction);
+      event.stopPropagation();
+      return;
+    }
     if (target.id in changeActions) {
       changeActions[target.id]();
     }
@@ -105,6 +128,12 @@ function initListeners() {
 
   cheat.addEventListener('input', function (event) {
     let target = event.target;
+    // Fast path: data-action on metadata-rendered range/text inputs.
+    const dataAction = target.dataset?.action;
+    if (dataAction && isRegistered(dataAction)) {
+      dispatch(dataAction);
+      return;
+    }
     if (target.id in inputActions) {
       inputActions[target.id]();
     }

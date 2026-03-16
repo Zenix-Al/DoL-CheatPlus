@@ -117,18 +117,29 @@ Definition of done:
 
 - UI rendering and tooltip behavior are fully self-contained in shadow styles.
 
-## Phase 4 - Action Runtime and Command Dispatch
+## Phase 4 - Action Runtime and Command Dispatch (Completed)
 
 ### 4.1 Command dispatcher
 
-- [ ] Build action command bus (`core/actions/dispatcher.js`).
-- [ ] Map metadata `action` keys to registered command handlers.
-- [ ] Add uniform error handling and toast/report hooks.
+- [x] Build action command bus (`core/actions/dispatcher.js`).
+  - `register(key, handler)` — overwrites on re-register; warns on bad input
+  - `dispatch(key, context?)` — calls handler, catches all exceptions, fires error hook
+  - `isRegistered(key)`, `getKeys()`, `unregister(key)` — inspection / teardown
+  - `setErrorHook(fn)` / `clearErrorHook()` — injected from bootstrap, never imported by dispatcher itself
+- [x] Map metadata `action` keys to registered command handlers.
+  - Dispatcher registry key = metadata `action` field = DOM element ID (same namespace)
+  - `data-action` on metadata-rendered controls routes through dispatcher as fast path
+- [x] Add uniform error handling and toast/report hooks.
+  - `setErrorHook((key, err) => showToast(...))` wired in `listeners/index.js`
+  - Dispatcher never re-throws; all exceptions are caught and logged
 
 ### 4.2 Feature action modules
 
-- [ ] Split action handlers by domain (`player`, `pregnancy`, `world`, `debug`, etc.).
-- [ ] Register handlers without direct DOM traversal in each command.
+- [x] Split action handlers by domain (`player`, `pregnancy`, `world`, `debug`, `toggle-runtime`) — already in `features/cheat/` from prior work.
+- [x] Register handlers without direct DOM traversal in each command.
+  - `features/cheat/register.js` — `registerAllActions({buttonActions, mainActions, changeActions, inputActions})` bulk-registers all maps into the dispatcher
+  - Dispatcher is registered at module load time (before listeners attach); safe for re-injection
+  - Legacy ID-map fallback preserved in listeners for backward compatibility during Phase 7 migration
 
 Definition of done:
 
