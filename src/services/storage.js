@@ -1,6 +1,8 @@
+import { getVars } from '../core/sugarcube/state.js';
+
 // Initialize CheatPlus storage with default values
 export function initStorage() {
-  const vars = SugarCube.State.variables;
+  const vars = getVars();
 
   // Step 1: Make sure cheatPlus exists
   vars.cheatPlus ??= {};
@@ -13,19 +15,13 @@ export function initStorage() {
   vars.cheatPlus.storedNPCsDate ??= 0;
   vars.cheatPlus.trueDivine ??= '';
   vars.cheatPlus.orgasmCount ??= 0;
-  vars.cheatPlus.baseNpcPregnancyChance ??= SugarCube.State.variables.baseNpcPregnancyChance;
+  vars.cheatPlus.baseNpcPregnancyChance ??= vars.baseNpcPregnancyChance;
   vars.cheatPlus.unlicumMode ??= false;
-  const cheatPlus = SugarCube.State.variables.cheatPlus;
+  const cheatPlus = vars.cheatPlus;
 
-  if (SugarCube.State.variables.penisstate !== 0 || SugarCube.State.variables.vaginastate !== 0)
-    return;
+  if (vars.penisstate !== 0 || vars.vaginastate !== 0) return;
 
-  cheatPlus.trueDivine =
-    SugarCube.State.variables.demon > 0
-      ? 'demon'
-      : SugarCube.State.variables.angel > 0
-      ? 'angel'
-      : undefined;
+  cheatPlus.trueDivine = vars.demon > 0 ? 'demon' : vars.angel > 0 ? 'angel' : undefined;
 }
 
 // Reactivate Toggle States
@@ -33,11 +29,12 @@ export function reactivateToggles() {
   globalThis.reactivatingToggles = true;
   deactiveAllToggles();
 
-  for (const key in SugarCube.State.variables.cheatPlus.toggles) {
+  const toggles = getVars().cheatPlus.toggles;
+  for (const key in toggles) {
     if (typeof globalThis.buttonActions[key] === 'function') {
       globalThis.buttonActions[key]();
     } else {
-      delete SugarCube.State.variables.cheatPlus.toggles[key]; // Remove invalid entries
+      delete toggles[key]; // Remove invalid entries
     }
   }
 

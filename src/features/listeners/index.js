@@ -29,6 +29,7 @@ import {
 } from './action-maps.js';
 import { dispatch, isRegistered, setErrorHook } from '../../core/actions/dispatcher.js';
 import { registerAllActions } from '../cheat/register.js';
+import { isAtStart, isAtSettings } from '../../core/sugarcube/quirks.js';
 
 const mycode = getMycode();
 const firstload = getFirstload();
@@ -87,7 +88,7 @@ function initListeners() {
       target.closest('.modal-content')
     ) {
       if (
-        SugarCube.State.variables.passage == 'Start' &&
+        isAtStart() &&
         !(target.id == 'save_data' || target.id == 'load_data' || target.id == 'VrelCoinsUsage')
       ) {
         showToast('Still in the main menu!');
@@ -109,7 +110,7 @@ function initListeners() {
     event.stopPropagation();
   });
   cheat.addEventListener('change', function (event) {
-    if (SugarCube.State.variables.passage == 'Start') return;
+    if (isAtStart()) return;
     let target = event.target;
     // Fast path: data-action on metadata-rendered selects.
     const dataAction = target.dataset?.action;
@@ -142,7 +143,7 @@ function initListeners() {
 
   //document listener for toggle cheat
   document.addEventListener('click', function (event) {
-    if (SugarCube.State.variables.passage === 'Settings') {
+    if (isAtSettings()) {
       //restore variables in certain passage to avoid error.
       restoreVariables();
     } else {
@@ -164,7 +165,7 @@ function initListeners() {
   });
 
   document.addEventListener('keyup', function () {
-    if (SugarCube.State.variables.passage != 'Settings') {
+    if (!isAtSettings()) {
       incrementClickCounter();
       mycode.runitall();
     }

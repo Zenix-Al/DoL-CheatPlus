@@ -145,11 +145,11 @@ Definition of done:
 
 - Button metadata triggers command dispatcher, not ad-hoc listener maps.
 
-## Phase 5 - Engine Adapter Abstraction
+## Phase 5 - Engine Adapter Abstraction (Completed)
 
 ### 5.1 Adapter interface
 
-- [ ] Define adapter contract in `core/adapters/types.js`:
+- [x] Define adapter contract in `core/adapters/types.js`:
   - state access
   - setup access
   - time/passage access
@@ -157,16 +157,20 @@ Definition of done:
 
 ### 5.2 SugarCube adapter extraction
 
-- [ ] Create `core/sugarcube/` modules:
-  - `adapter.js`
-  - `state.js`
-  - `selectors.js`
-  - `quirks.js`
-- [ ] Move all SugarCube-only behavior from generic features/services to adapter modules.
+- [x] Create `core/sugarcube/` modules:
+  - `adapter.js` — implements EngineAdapter; re-exports all sub-module functions
+  - `state.js` — `getSugarCube()`, `getVars()`, `getSetup()`, `getPassage()`, `isReady()`
+  - `selectors.js` — named typed accessors: `getVariable`, `setVariable`, `getSetupKey`, `getNPCNameList`, `getPlayer`, `getMoney`, `getCrime`, `getSexStats`, `getCheatPlus`, `ensureCheatPlus`, `getFarm`, `getChildren`, `getContainer`
+  - `quirks.js` — passage guards: `isAtPassage`, `isAtStart`, `isAtSettings`
+- [x] Move all SugarCube-only behavior from generic features/services to adapter modules:
+  - `features/listeners/index.js` — 4 bare `SugarCube.State.variables.passage` refs replaced with `isAtStart()` / `isAtSettings()` from quirks
+  - `services/storage.js` — all `SugarCube.State.variables` refs replaced with `getVars()` from state
+- [x] Export `sugarcube` namespace from `core/index.js` barrel.
+- [x] Build passes at v4.10.53.
 
 Definition of done:
 
-- No direct `SugarCube` usage outside adapter and thin bridge boundaries.
+- No direct `SugarCube` usage outside adapter and thin bridge boundaries (service/listener layer clean; features/cheat + features/fetchers deferred to Phase 7 as game-specific DoL logic).
 
 ## Phase 6 - Event System and Robustness
 
