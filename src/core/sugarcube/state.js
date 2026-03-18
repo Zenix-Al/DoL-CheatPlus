@@ -6,7 +6,7 @@
  * `SugarCube` global directly.
  *
  * Uses `getRuntimeWindow()` to handle both userscript (unsafeWindow) and
- * local-dev (globalThis) contexts.
+ * regular browser window contexts.
  */
 import { getRuntimeWindow } from '../global-bridge.js';
 
@@ -18,7 +18,7 @@ import { getRuntimeWindow } from '../global-bridge.js';
  */
 export function getSugarCube() {
   const rw = getRuntimeWindow();
-  return rw?.SugarCube ?? globalThis.SugarCube ?? null;
+  return rw?.SugarCube ?? null;
 }
 
 /**

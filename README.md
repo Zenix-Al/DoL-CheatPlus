@@ -118,24 +118,76 @@ Cheat download link :
 <details>
 <summary>How to build the project</summary>
 
-1. Clone the Repository  
-   ```sh  
-   git clone https://github.com/Zenix-Al/DoL-CheatPlus.git  
-   cd DoL-CheatPlus  
-   ```  
+1. Clone the Repository
 
-2. Install Dependencies  
-   ```sh  
-   npm install  
-   ```  
+   ```sh
+   git clone https://github.com/Zenix-Al/DoL-CheatPlus.git
+   cd DoL-CheatPlus
+   ```
 
-3. Run the Build Command  
-   ```sh  
-   npm run build  
-   ```  
+2. Install Dependencies
+
+   ```sh
+   npm install
+   ```
+
+3. Run the Build Command
+
+   ```sh
+   npm run build
+   ```
 
 4. Find the Build Output  
-   It will be located in the `_compiled` folder.  
+   It will be located in the `_compiled` folder.
+
+5. Validation (recommended before publish)
+
+```sh
+npm run lint
+npm test
+npm run build
+```
+
+6. Publish packaging (maintainer flow)
+
+```sh
+npm run publish
+```
+
+</details>
+
+<details>
+<summary>Maintainer workflow (userscript-only)</summary>
+
+1. Install dependencies once
+
+```sh
+npm install
+```
+
+2. Run quality checks
+
+```sh
+npm run lint
+npm test
+```
+
+3. Build userscript bundles
+
+```sh
+npm run build
+```
+
+4. Publish packaged output
+
+```sh
+npm run publish
+```
+
+Notes:
+
+- This project does not use standalone web-app tooling.
+- Runtime target is the userscript/game injection flow.
 
 </details>
 
@@ -203,6 +255,12 @@ Cheat download link :
 ## Usage
 
 Just press blue button that says cheat on the top right corner.
+
+## Architecture Notes
+
+- Runtime portability strategy is documented in `src/core/runtime-engine-strategy.md`.
+- Bootstrap now selects a runtime engine profile (adapter + observer policy + readiness checks).
+- A no-op `renpy-web` profile scaffold is registered as a portability reference and does not affect normal SugarCube/DoL runs unless a `RenPyWeb` global exists.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

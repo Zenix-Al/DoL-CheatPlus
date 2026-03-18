@@ -43,7 +43,6 @@ export const scAdapter = {
 // Named re-exports so callers can `import { getVars, isAtStart } from './adapter.js'`
 // without needing to know which sub-module each function lives in.
 export { getSugarCube, getVars, getSetup, getPassage, isReady };
-export { getVariable, setVariable, getSetupKey };
 export { isAtPassage, isAtStart, isAtSettings };
 export * from './selectors.js';
 

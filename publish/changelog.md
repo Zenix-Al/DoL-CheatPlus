@@ -1,3 +1,34 @@
+v2.0.0
+Major release: project revived into a proper cheat framework.
+
+Framework and architecture:
+• Feature lifecycle moved to structured bootstrap/factory flow.
+• Runtime state, persistence config, and adapter boundaries separated.
+• SugarCube-specific access isolated behind adapter/selectors.
+• Runtime-engine strategy introduced with registry/profile model.
+• RenPy-web backend scaffold added as portability reference.
+
+UI and renderer:
+• Metadata-driven UI pipeline completed and normalized.
+• Renderer split into focused modules (primitives, runtime binding, policy, wiring).
+• Modal/floating/toast styling split and modernized.
+• Modal behavior stabilized (search row, fixed-height scroll container, close controls).
+
+Actions and reliability:
+• Dispatcher + action map system refactored with schema validation.
+• Toggle runtime extracted into scheduler/engine with clearer responsibilities.
+• Added test coverage for action policies, renderer lifecycle, and regression checks.
+
+Cleanup:
+• Legacy/deprecated paths removed (old standalone tooling and stale UI wiring).
+• Large modules decomposed by domain for maintainability.
+
+v1.10.174
+Update :
+• Runtime engine strategy introduced (profile-based bootstrap selection for adapter/observer/readiness).
+• Added no-op RenPy-web runtime profile + adapter scaffold as portability reference.
+• Injection/bootstrap now route through runtime engine registry while preserving SugarCube default behavior.
+
 v1.2.1 alpha
 Bugfix :
 • initialize failed fixed

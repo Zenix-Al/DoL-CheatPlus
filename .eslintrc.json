@@ -6,6 +6,8 @@
   },
   "extends": ["eslint:recommended", "plugin:import/recommended"],
   "globals": {
+    "__DOL_CHEAT_VERSION__": "readonly",
+    "__DOL_DEBUG__": "readonly",
     "SugarCube": "readonly",
     "mycode": "writable",
     "firstload": "readonly",
@@ -33,6 +35,62 @@
   },
   "rules": {
     "no-console": "off",
-    "import/no-relative-parent-imports": "off"
-  }
+    "max-depth": ["warn", 4],
+    "import/no-relative-parent-imports": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
+        "newlines-between": "always"
+      }
+    ],
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "ImportExpression",
+        "message": "Use top-level imports where possible; dynamic import() should be explicitly documented with /* allow-dynamic-import */ when intentional."
+      },
+      {
+        "selector": "MemberExpression[object.name='window']",
+        "message": "Avoid direct window.* usage. Use module imports/accessors, or annotate explicit bridge registration lines only."
+      }
+    ],
+    "no-restricted-globals": [
+      "error",
+      {
+        "name": "unsafeWindow",
+        "message": "Use getRuntimeWindow() from core/global-bridge.js; direct unsafeWindow usage is restricted."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["src/ui/**/*.js"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              "../features/*",
+              "../../features/*",
+              "../../../features/*",
+              "src/features/*"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/**/*.js"],
+      "rules": {
+        "no-restricted-globals": [
+          "warn",
+          {
+            "name": "SugarCube",
+            "message": "Use core/sugarcube adapters (adapter.js, state.js, cheat-config.js) instead of direct SugarCube globals."
+          }
+        ]
+      }
+    }
+  ]
 }

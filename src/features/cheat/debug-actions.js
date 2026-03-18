@@ -1,57 +1,33 @@
+import { showToast } from '../../ui/components/toast.js';
+import { byUiId as byId } from '../../ui/helpers/dom-query.js';
 import {
-  byId,
-  convertStringIndexedArray,
-  executeFunctions,
-  getMycode,
-  query,
-  showToast,
-} from '../../services/cheat-runtime.js';
+  convertStringIndexArrayToObject as convertStringIndexedArray,
+  executeFunctionsInObject as executeFunctions,
+} from '../../ui/renderers/cheat-form.js';
+import { getRuntimeWindow } from '../../core/global-bridge.js';
+import { getVars } from '../../core/sugarcube/state.js';
+import { isBrokenStringIndexedArray, walkValueTree } from '../utils/value-tree.js';
+
+const query = (selector) => document.querySelector(selector);
 
 const debugActions = {
-  testAll: function () {
+  testAll: function (actionBag = debugActions) {
     showToast('Testing all functions...');
-    executeFunctions(getMycode());
+    executeFunctions(actionBag);
   },
 
   ArrayChecker: function () {
-    function processValue(value, newPath) {
-      if (Array.isArray(value) && value.length === 0) {
-        const check = Object.keys(value);
-        if (check.length > 0) {
-          textBox.value += `${newPath}=convertStringIndexArrayToObject(${newPath});`;
-          logBrokenArrayValues(value, newPath);
-        }
-      } else if (Array.isArray(value)) {
-        logArrayValues(value, newPath);
-      } else if (typeof value === 'object' && value !== null) {
-        logObjectValues(value, newPath);
-      }
-    }
-
-    function logObjectValues(obj, curPath) {
-      for (const key in obj) {
-        processValue(obj[key], `${curPath}.${key}`);
-      }
-    }
-
-    function logArrayValues(obj, curPath) {
-      for (let index = 0; index < obj.length; index++) {
-        processValue(obj[index], `${curPath}[${index}]`);
-      }
-    }
-
-    function logBrokenArrayValues(obj, curPath) {
-      const check = Object.keys(obj);
-      for (const key of check) {
-        processValue(obj[key], `${curPath}[${key}]`);
-      }
-    }
-
     const textBoxId = byId('tmpText');
+    const vars = getVars();
     textBoxId.value = '';
     const textBox = query('.tmpText');
+    if (!textBox || !vars) return;
 
-    logObjectValues(SugarCube.State.variables, 'SugarCube.State.variables');
+    walkValueTree(vars, 'SugarCube.State.variables', (value, path) => {
+      if (!isBrokenStringIndexedArray(value)) return;
+      textBox.value += `${path}=convertStringIndexArrayToObject(${path});`;
+    });
+
     textBox.focus();
     textBox.select();
 
@@ -63,10 +39,10 @@ const debugActions = {
     }
   },
 
-  stingJSSet: function () {
+  stringJSSet: function () {
     function textToJS(str, value) {
       const path = str.split('.');
-      let current = window;
+      let current = getRuntimeWindow();
 
       for (let index = 0; index < path.length - 1; index++) {
         current = current?.[path[index]];

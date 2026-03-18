@@ -1,184 +1,248 @@
+import { closeModal } from '../../ui/components/modal.js';
+import { showToast } from '../../ui/components/toast.js';
 import {
-  byId,
-  closeModal,
-  getFirstload,
-  getMycode,
-  showToast,
-} from '../../services/cheat-runtime.js';
+  getChildren,
+  getFarm,
+  getSexStats,
+  getVariable,
+  setVariable,
+} from '../../core/sugarcube/adapter.js';
+import { getVars } from '../../core/sugarcube/state.js';
+import { byUiId as byId } from '../../ui/helpers/dom-query.js';
+import { hydrateCheatUi } from '../fetchers/index.js';
+
+const FUNNY_FRUITS = [
+  'cabbage',
+  'wild_carrot',
+  'turnip',
+  'potato',
+  'onion',
+  'garlic_bulb',
+  'broccoli',
+];
+
+export function VrelCoinsUsage() {
+  const vars = getVars();
+  if (vars?.featsBoosts?.pointsUsed === undefined) return;
+  vars.featsBoosts.pointsUsed = 0;
+  showToast('Activated!');
+}
+
+export function set_animal_like() {
+  const animal = byId('animal_choice')?.value;
+  const value = parseInt(byId('animal_input')?.value);
+  if (isNaN(value)) {
+    showToast('failed : input is not a number!');
+    return;
+  }
+  const farm = getFarm();
+  if (farm?.beasts === undefined) {
+    showToast('failed!');
+    return;
+  }
+  showToast('Activated!');
+  farm.beasts[animal] = value;
+}
+
+export function set_build_time() {
+  const value = parseInt(byId('build_time')?.value);
+  if (isNaN(value)) {
+    showToast('failed : input is not a number!');
+    return;
+  }
+  const farm = getFarm();
+  if (farm?.build_timer === undefined) {
+    showToast('failed!');
+    return;
+  }
+  showToast('Activated!');
+  farm.build_timer = value;
+}
+
+export function set_assault_time() {
+  const value = parseInt(byId('assault_time')?.value);
+  if (!isNaN(value)) {
+    showToast('Activated!');
+    setVariable('farm_attack_timer', value);
+  }
+}
+
+export function clean_cum() {
+  const vars = getVars();
+  if (vars?.player?.bodyliquid === undefined) return;
+  for (const key in vars.player.bodyliquid) {
+    for (const innerKey in vars.player.bodyliquid[key]) {
+      vars.player.bodyliquid[key][innerKey] = 0;
+    }
+  }
+  showToast('Activated!');
+}
+
+export function dirty_cum() {
+  const vars = getVars();
+  if (vars?.player?.bodyliquid === undefined) return;
+  for (const key in vars.player.bodyliquid) {
+    for (const innerKey in vars.player.bodyliquid[key]) {
+      vars.player.bodyliquid[key][innerKey] = 100;
+    }
+  }
+  showToast('Activated!');
+}
+
+export function clean_cum_uretus() {
+  const sexStats = getSexStats();
+  if (sexStats?.vagina?.sperm === undefined) return;
+  sexStats.vagina.sperm = [];
+  showToast('Activated!');
+}
+
+export function check_fruit_selling() {
+  const vars = getVars();
+  if (vars?.farmersProduce?.selling === undefined) return;
+  const selling = vars.farmersProduce.selling;
+  const totals = FUNNY_FRUITS.reduce((acc, fruit) => {
+    acc[fruit] = selling[fruit] || 0;
+    return acc;
+  }, {});
+  const placeholder = Object.entries(totals)
+    .sort((left, right) => right[1] - left[1])
+    .map(([fruit, amount], index) => `${index + 1}. ${fruit}: ${amount} | `)
+    .join('');
+  const placeholderEl = byId('placeholder_fruits');
+  if (placeholderEl) placeholderEl.innerHTML = placeholder;
+}
+
+export function set_school_rep() {
+  showToast('Activated!');
+  const selected = byId('select_school_rep')?.value;
+  const input = parseInt(byId('input_school_rep')?.value);
+  if (isNaN(input)) {
+    showToast('failed : input is not a number!');
+    return;
+  }
+  setVariable(selected, input);
+}
+
+export function max_Ferocity() {
+  setVariable('wolfpackferocity', 22);
+  showToast('Activated!');
+}
+
+export function max_harmony() {
+  setVariable('wolfpackharmony', 22);
+  showToast('Activated!');
+}
+
+export function sidebar_cheat() {
+  byId('ui-bar-toggle')?.click();
+}
+
+export function cheat_backwards() {
+  const button = byId('history-backward');
+  if (!button) {
+    showToast('Failed, history probably disabled.');
+    return;
+  }
+  button.click();
+  update_history();
+}
+
+export function cheat_forwards() {
+  const button = byId('history-forward');
+  if (!button) {
+    showToast('Failed, history probably disabled.');
+    return;
+  }
+  button.click();
+  update_history();
+}
+
+export function update_history() {
+  const backwards = byId('cheat-history-backwards');
+  const forwards = byId('cheat-history-forwards');
+  const backwardHistory = byId('history-backward');
+  const forwardHistory = byId('history-forward');
+  if (backwards && backwardHistory) backwards.disabled = backwardHistory.disabled;
+  if (forwards && forwardHistory) forwards.disabled = forwardHistory.disabled;
+}
+
+export function in_game_cheat() {
+  const button = byId('in_game_cheat');
+  if (!button) return;
+  const isEnabled = button.innerHTML === 'Enable';
+  setVariable('debug', isEnabled ? 1 : 0);
+  button.innerHTML = isEnabled ? 'Disable' : 'Enable';
+}
+
+export function alt_cheat() {
+  const overlay = byId('overlayButtons');
+  if (!overlay) return;
+  const cheatButton = [...overlay.getElementsByClassName('link-internal')].find(
+    (button) => button.innerHTML === 'CHEATS'
+  );
+  if (cheatButton) {
+    closeModal();
+    cheatButton.click();
+    return;
+  }
+  showToast(
+    getVariable('debug') === 1
+      ? 'move passage to see the change'
+      : 'cheat not enabled, please re-enable it again.'
+  );
+}
+
+export function randomEncounterSet() {
+  const button = byId('randomEncounterSet');
+  if (!button) return;
+  const isEnabled = getVariable('alluremod') === 0;
+  setVariable('alluremod', isEnabled ? 1 : 0);
+  button.innerHTML = isEnabled ? 'Enabled' : 'Disabled';
+  showToast(isEnabled ? 'Enabled.' : 'Disabled.');
+}
+
+export function purgeNPCBaby() {
+  const selectAction = byId('mc_baby_action_select')?.value;
+  if (selectAction !== 'abandon') {
+    showToast('Pick abandon to purge.');
+    return;
+  }
+  const input =
+    byId('mc_baby_input').type === 'checkbox'
+      ? byId('mc_baby_input').checked
+      : byId('mc_baby_input').value;
+  if (input == true) {
+    const children = getChildren();
+    if (children) {
+      Object.keys(children).forEach((key) => delete children[key]);
+    }
+    hydrateCheatUi.update_mc_baby_list();
+    showToast('All of your baby has been abandoned!');
+    return;
+  }
+  showToast('check the checkbox to confirm');
+}
 
 const worldActions = {
-  VrelCoinsUsage: function () {
-    if (SugarCube.State.variables?.featsBoosts?.pointsUsed === undefined) return;
-    SugarCube.State.variables.featsBoosts.pointsUsed = 0;
-    showToast('Activated!');
-  },
-
-  set_animal_like: function () {
-    const animal = byId('animal_choice').value;
-    const value = parseInt(byId('animal_input').value);
-    if (isNaN(value)) {
-      showToast('failed : input is not a number!');
-      return;
-    }
-    if (SugarCube.State.variables?.farm?.beasts === undefined) {
-      showToast('failed!');
-      return;
-    }
-    showToast('Activated!');
-    SugarCube.State.variables.farm.beasts[animal] = value;
-  },
-  set_build_time: function () {
-    const value = parseInt(byId('build_time').value);
-    if (isNaN(value)) {
-      showToast('failed : input is not a number!');
-      return;
-    }
-    if (SugarCube.State.variables?.farm?.build_timer === undefined) {
-      showToast('failed!');
-      return;
-    }
-    showToast('Activated!');
-    SugarCube.State.variables.farm.build_timer = value;
-  },
-  set_assault_time: function () {
-    const value = parseInt(byId('assault_time').value);
-    if (!isNaN(value)) {
-      showToast('Activated!');
-      SugarCube.State.variables.farm_attack_timer = value;
-    }
-  },
-  clean_cum: function () {
-    if (SugarCube.State.variables?.player?.bodyliquid === undefined) return;
-    for (const key in SugarCube.State.variables.player.bodyliquid) {
-      for (const innerKey in SugarCube.State.variables.player.bodyliquid[key]) {
-        SugarCube.State.variables.player.bodyliquid[key][innerKey] = 0;
-      }
-    }
-    showToast('Activated!');
-  },
-  dirty_cum: function () {
-    if (SugarCube.State.variables?.player?.bodyliquid === undefined) return;
-    for (const key in SugarCube.State.variables.player.bodyliquid) {
-      for (const innerKey in SugarCube.State.variables.player.bodyliquid[key]) {
-        SugarCube.State.variables.player.bodyliquid[key][innerKey] = 100;
-      }
-    }
-    showToast('Activated!');
-  },
-  clean_cum_uretus: function () {
-    if (SugarCube.State.variables?.sexStats?.vagina?.sperm === undefined) return;
-    SugarCube.State.variables.sexStats.vagina.sperm = [];
-    showToast('Activated!');
-  },
-  funny_fruits: ['cabbage', 'wild_carrot', 'turnip', 'potato', 'onion', 'garlic_bulb', 'broccoli'],
-  check_fruit_selling: function () {
-    if (SugarCube.State.variables?.farmersProduce?.selling === undefined) return;
-    const selling = SugarCube.State.variables.farmersProduce.selling;
-    const mycode = getMycode();
-    const totals = mycode.funny_fruits.reduce((acc, fruit) => {
-      acc[fruit] = selling[fruit] || 0;
-      return acc;
-    }, {});
-    const placeholder = Object.entries(totals)
-      .sort((left, right) => right[1] - left[1])
-      .map(([fruit, amount], index) => `${index + 1}. ${fruit}: ${amount} | `)
-      .join('');
-    byId('placeholder_fruits').innerHTML = placeholder;
-  },
-  set_school_rep: function () {
-    showToast('Activated!');
-    const selected = byId('select_school_rep').value;
-    const input = parseInt(byId('input_school_rep').value);
-    if (isNaN(input)) {
-      showToast('failed : input is not a number!');
-      return;
-    }
-    SugarCube.State.variables[selected] = input;
-  },
-  max_Ferocity: function () {
-    SugarCube.State.variables.wolfpackferocity = 22;
-    showToast('Activated!');
-  },
-  max_harmony: function () {
-    SugarCube.State.variables.wolfpackharmony = 22;
-    showToast('Activated!');
-  },
-  sidebar_cheat: function () {
-    byId('ui-bar-toggle').click();
-  },
-  cheat_backwards: function () {
-    const button = byId('history-backward');
-    if (!button) {
-      showToast('Failed, history probably disabled.');
-      return;
-    }
-    button.click();
-    getMycode().update_history();
-  },
-  cheat_forwards: function () {
-    const button = byId('history-forward');
-    if (!button) {
-      showToast('Failed, history probably disabled.');
-      return;
-    }
-    button.click();
-    getMycode().update_history();
-  },
-  update_history: function () {
-    const backwards = byId('cheat-history-backwards');
-    const forwards = byId('cheat-history-forwards');
-    backwards.disabled = byId('history-backward').disabled;
-    forwards.disabled = byId('history-forward').disabled;
-  },
-  in_game_cheat: function () {
-    const button = byId('in_game_cheat');
-    const altButton = byId('alt_cheat');
-    const isEnabled = button.innerHTML === 'Enable';
-    SugarCube.State.variables.debug = isEnabled ? 1 : 0;
-    button.innerHTML = isEnabled ? 'Disable' : 'Enable';
-    altButton.innerHTML = isEnabled ? 'Open' : '';
-  },
-  alt_cheat: function () {
-    const overlay = byId('overlayButtons');
-    const cheatButton = [...overlay.getElementsByClassName('link-internal')].find(
-      (button) => button.innerHTML === 'CHEATS'
-    );
-    if (cheatButton) {
-      closeModal();
-      cheatButton.click();
-      return;
-    }
-    showToast(
-      SugarCube.State.variables.debug === 1
-        ? 'move passage to see the change'
-        : 'cheat not enabled, please re-enable it again.'
-    );
-  },
-  randomEncounterSet: function () {
-    const button = byId('randomEncounterSet');
-    const isEnabled = SugarCube.State.variables.alluremod === 0;
-    SugarCube.State.variables.alluremod = isEnabled ? 1 : 0;
-    button.innerHTML = isEnabled ? 'Enabled' : 'Disabled';
-    showToast(isEnabled ? 'Enabled.' : 'Disabled.');
-  },
-  purgeNPCBaby: function () {
-    const selectAction = byId('mc_baby_action_select').value;
-    if (selectAction !== 'abandon') {
-      showToast('Pick abandon to purge.');
-      return;
-    }
-    const input =
-      byId('mc_baby_input').type === 'checkbox'
-        ? byId('mc_baby_input').checked
-        : byId('mc_baby_input').value;
-    if (input == true) {
-      SugarCube.State.variables.children = {};
-      getFirstload().update_mc_baby_list();
-      showToast('All of your baby has been abandoned!');
-      return;
-    }
-    showToast('check the checkbox to confirm');
-  },
+  VrelCoinsUsage,
+  set_animal_like,
+  set_build_time,
+  set_assault_time,
+  clean_cum,
+  dirty_cum,
+  clean_cum_uretus,
+  check_fruit_selling,
+  set_school_rep,
+  max_Ferocity,
+  max_harmony,
+  sidebar_cheat,
+  cheat_backwards,
+  cheat_forwards,
+  update_history,
+  in_game_cheat,
+  alt_cheat,
+  randomEncounterSet,
+  purgeNPCBaby,
 };
 
 export default worldActions;

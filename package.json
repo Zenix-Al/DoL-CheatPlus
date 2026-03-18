@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "build": "node build/build.cjs",
-    "build:modern": "vite build --outDir _compiled --config ./vite.config.mjs",
-    "dev": "vite --root src/ui",
+    "lint:actions": "node build/validate-action-ids.cjs",
+    "lint:actions:strict": "node build/validate-action-ids.cjs --strict-parity --strict-metadata-unique",
+    "test": "node --test test/unit test/integration test/regression",
     "lint": "eslint --ignore-path .gitignore .",
     "lint:fix": "eslint --fix --ignore-path .gitignore .",
     "format": "prettier --write .",
@@ -17,9 +18,10 @@
     "uglify-js": "^3.19.3"
   },
   "devDependencies": {
-    "vite": "^5.0.0",
+    "esbuild": "^0.27.4",
     "eslint": "^8.50.0",
     "eslint-plugin-import": "^2.30.0",
+    "jsdom": "^22.1.0",
     "prettier": "^2.8.8"
   }
 }

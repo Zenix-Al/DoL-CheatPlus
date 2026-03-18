@@ -1,61 +1,41 @@
-import { getVars } from '../core/sugarcube/state.js';
+import { setReactivatingToggles } from '../core/runtime-state.js';
+import { initCheatConfig, getToggles } from '../core/sugarcube/cheat-config.js';
+import { dispatch, isRegistered } from '../core/actions/dispatcher.js';
+
+import { ToggleScheduler } from './toggle-scheduler.js';
 
 // Initialize CheatPlus storage with default values
 export function initStorage() {
-  const vars = getVars();
-
-  // Step 1: Make sure cheatPlus exists
-  vars.cheatPlus ??= {};
-
-  // Step 2: Now safely initialize the inner properties
-  vars.cheatPlus.angel ??= 0;
-  vars.cheatPlus.angelMode ??= true;
-  vars.cheatPlus.toggles ??= {};
-  vars.cheatPlus.storedNPCs ??= {};
-  vars.cheatPlus.storedNPCsDate ??= 0;
-  vars.cheatPlus.trueDivine ??= '';
-  vars.cheatPlus.orgasmCount ??= 0;
-  vars.cheatPlus.baseNpcPregnancyChance ??= vars.baseNpcPregnancyChance;
-  vars.cheatPlus.unlicumMode ??= false;
-  const cheatPlus = vars.cheatPlus;
-
-  if (vars.penisstate !== 0 || vars.vaginastate !== 0) return;
-
-  cheatPlus.trueDivine = vars.demon > 0 ? 'demon' : vars.angel > 0 ? 'angel' : undefined;
+  initCheatConfig();
 }
 
 // Reactivate Toggle States
 export function reactivateToggles() {
-  globalThis.reactivatingToggles = true;
+  setReactivatingToggles(true);
   deactiveAllToggles();
 
-  const toggles = getVars().cheatPlus.toggles;
+  const toggles = getToggles();
   for (const key in toggles) {
-    if (typeof globalThis.buttonActions[key] === 'function') {
-      globalThis.buttonActions[key]();
+    if (isRegistered(key)) {
+      dispatch(key);
     } else {
       delete toggles[key]; // Remove invalid entries
     }
   }
 
-  globalThis.reactivatingToggles = false;
-  console.clear();
+  setReactivatingToggles(false);
 }
 
 // Deactivate all toggles from both function bundles
 function deactiveAllToggles() {
+  const bundles = ToggleScheduler.getBundles();
   const allFunctions = {
-    ...(globalThis.functionbundle ?? {}),
-    ...(globalThis.dailyfunctionbundle ?? {}),
+    ...bundles.functionbundle,
+    ...bundles.dailyfunctionbundle,
   };
   for (const key in allFunctions) {
-    if (typeof allFunctions[key] === 'function') {
-      globalThis.buttonActions[key]();
+    if (typeof allFunctions[key] === 'function' && isRegistered(key)) {
+      dispatch(key);
     }
   }
-}
-
-export function registerGlobals() {
-  window.initStorage = initStorage;
-  window.reactivateToggles = reactivateToggles;
 }

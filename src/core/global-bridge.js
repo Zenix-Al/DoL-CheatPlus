@@ -1,30 +1,12 @@
+/* global unsafeWindow */
+
 export function getRuntimeWindow() {
   try {
+    // Userscript environments can expose page globals via unsafeWindow; keep usage isolated here.
+    // eslint-disable-next-line no-restricted-globals
     if (typeof unsafeWindow !== 'undefined' && unsafeWindow) return unsafeWindow;
-  } catch (e) {}
-  return globalThis;
-}
-
-function defineBinding(target, name, access) {
-  try {
-    Object.defineProperty(target, name, {
-      configurable: true,
-      enumerable: false,
-      get: access.get,
-      set: access.set,
-    });
   } catch (e) {
-    // Some page globals may be locked/non-configurable; ignore safely.
+    // ignore and fall back to window
   }
-}
-
-export function linkGlobalBindings(bindings) {
-  const runtimeWindow = getRuntimeWindow();
-
-  Object.entries(bindings).forEach(([name, access]) => {
-    defineBinding(globalThis, name, access);
-    if (runtimeWindow && runtimeWindow !== globalThis) {
-      defineBinding(runtimeWindow, name, access);
-    }
-  });
+  return typeof window !== 'undefined' ? window : undefined;
 }

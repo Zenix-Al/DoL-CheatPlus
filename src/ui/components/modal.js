@@ -1,8 +1,54 @@
-import { byUiId, getUiRoot, refreshUiRefs } from '../helpers/dom-refs.js';
+import { byUiId, getUiRoot, refreshUiRefs } from '../helpers/dom-query.js';
 import { modalTemplate, renderTemplate } from '../renderers/layout.js';
-import { showToast } from './toast.js';
 import { get, set } from '../../core/state/index.js';
-import { deleteText } from '../renderers/cheat-form.js';
+import { dispatch } from '../../core/actions/dispatcher.js';
+import { ensureModalHotkey } from '../helpers/modal-hotkey.js';
+
+function toggleModalByHotkey() {
+  if (get('modal.open')) closeModal();
+  else openModal();
+}
+
+function filterSectionRows(sectionEl, query) {
+  if (!sectionEl) return;
+  const norm = String(query ?? '')
+    .trim()
+    .toLowerCase();
+  const rows = sectionEl.querySelectorAll('.modal-content-padding');
+  rows.forEach((row) => {
+    if (row.classList.contains('cp-search-row')) return;
+    if (!norm) {
+      row.style.display = '';
+      return;
+    }
+    const haystack = (row.textContent || '').toLowerCase();
+    row.style.display = haystack.includes(norm) ? '' : 'none';
+  });
+}
+
+function attachSectionSearch(sectionEl, title) {
+  if (!sectionEl || sectionEl.querySelector('.cp-search-row')) return;
+
+  const row = document.createElement('div');
+  row.className = 'modal-content-padding cp-search-row';
+
+  const input = document.createElement('input');
+  input.type = 'search';
+  input.className = 'cp-search-input';
+  input.placeholder = `Search ${title}...`;
+  input.autocomplete = 'off';
+  input.setAttribute('aria-label', `${title} search`);
+
+  input.addEventListener('input', () => filterSectionRows(sectionEl, input.value));
+  row.appendChild(input);
+  sectionEl.prepend(row);
+}
+
+function ensureSectionSearchBars() {
+  attachSectionSearch(byUiId('quick-content'), 'Quick');
+  attachSectionSearch(byUiId('stats-content'), 'Stat');
+  attachSectionSearch(byUiId('misc-content'), 'Misc');
+}
 
 function ensureModalInjected() {
   if (byUiId('modal')) return;
@@ -10,7 +56,19 @@ function ensureModalInjected() {
   const cheatRoot = byUiId('cheat');
   if (!root || !cheatRoot) return;
 
-  cheatRoot.appendChild(renderTemplate(modalTemplate));
+  const modalEl = renderTemplate(modalTemplate);
+  modalEl.addEventListener('click', (event) => {
+    const id = event.target?.id;
+    if (id === 'close-modal-top' || id === 'close-modal-bottom') {
+      closeModal();
+      return;
+    }
+
+    if (id === 'quick-link' || id === 'stats-link' || id === 'misc-link') {
+      dispatch(id);
+    }
+  });
+  cheatRoot.appendChild(modalEl);
   refreshUiRefs();
 }
 
@@ -37,13 +95,9 @@ export function bloodEffect() {
 }
 
 export function openModal() {
-  if (get('modal.open') || (get('modal.isDelete') && get('modal.isCheatPressed'))) return;
+  if (get('modal.open')) return;
 
-  if (get('modal.isDelete')) {
-    set('modal.isCheatPressed', true);
-    showToast('Loading cheat, please slow down.');
-    return setTimeout(openModal, 100);
-  }
+  ensureModalHotkey(toggleModalByHotkey);
 
   ensureModalInjected();
   const modal = byUiId('modal');
@@ -51,29 +105,24 @@ export function openModal() {
 
   modal.style.display = 'block';
   set('modal.open', true);
-  if (typeof window.init_interface === 'function') {
-    window.init_interface();
-  } else {
-    // Retry briefly in case modules are still loading while user opens the modal.
-    let tries = 0;
-    const retry = () => {
-      if (typeof window.init_interface === 'function') {
-        window.init_interface();
-        return;
-      }
-      tries += 1;
-      if (tries < 80) setTimeout(retry, 100);
-    };
-    retry();
-  }
-  if (typeof window.loadall === 'function') window.loadall();
+  set('modal.isDelete', false);
+  set('modal.isCheatPressed', false);
+  dispatch('init_interface');
+  ensureSectionSearchBars();
+  dispatch('quick-link');
 }
 
 export function closeModal() {
   if (!get('modal.open')) return;
   const modal = byUiId('modal');
   if (!modal) return;
-  modal.style.display = 'none';
+
+  set('modal.isDelete', true);
+  modal.remove();
+  refreshUiRefs();
   set('modal.open', false);
-  deleteText();
+  set('modal.isDelete', false);
+  set('modal.isCheatPressed', false);
 }
+
+ensureModalHotkey(toggleModalByHotkey);

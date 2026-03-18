@@ -1,0 +1,47 @@
+#floating-button {
+  position: fixed;
+  top: 2%;
+  right: 20px;
+  z-index: 899;
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  transition: top 0.5s ease-in-out;
+}
+
+#floating-button button {
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: linear-gradient(180deg, #575757 0%, #3f3f3f 100%);
+  color: #f2f2f2;
+  font-weight: 600;
+}
+
+#floating-button button:hover {
+  background: linear-gradient(180deg, #646464 0%, #474747 100%);
+}
+
+#floating-button #cheat-open {
+  cursor: grab;
+  touch-action: none;
+  padding: 0 16px;
+  border-color: rgba(240, 212, 109, 0.55);
+  box-shadow: 0 0 0 1px rgba(240, 212, 109, 0.18);
+}
+
+#floating-button.cp-dragging,
+#floating-button.cp-dragging #cheat-open {
+  cursor: grabbing;
+  user-select: none;
+}
+
+#floating-button.cp-dragging,
+#floating-button.cp-custom-position {
+  transition: none;
+}
+
+#floating-button.moved {
+  top: 90%;
+}

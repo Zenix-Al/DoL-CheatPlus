@@ -1,0 +1,29 @@
+@media (max-width: 768px) {
+  .modal-content {
+    width: 96vw;
+    margin: 8px auto;
+  }
+
+  #modal-content-container {
+    height: 72vh;
+    max-height: 72vh;
+    overflow-y: auto;
+  }
+
+  .cp-search-row {
+    flex-wrap: wrap;
+  }
+
+  .cp-search-input {
+    width: 100%;
+  }
+
+  .toast-container,
+  #toastContainer,
+  #cp-fallback-toast-container {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: min(92vw, 420px);
+  }
+}

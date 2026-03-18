@@ -1,29 +1,31 @@
-import { initListeners, mainActions } from './listeners/index.js';
-import { initStorage, reactivateToggles } from '../services/storage.js';
-import { byUiId } from '../ui/helpers/dom-refs.js';
-import { getRuntimeWindow } from '../core/global-bridge.js';
-import { BOOTSTRAP_FLAG_KEY, CHEAT_ROOT_ID } from '../constants/index.js';
+import { CHEAT_ROOT_ID } from '../constants/ui.js';
+import { factory } from '../core/feature-factory.js';
+import { byUiId } from '../ui/helpers/dom-query.js';
 
-function canBootstrap() {
-  const runtimeWindow = getRuntimeWindow();
-  return Boolean(
-    (runtimeWindow?.SugarCube?.State?.variables || globalThis.SugarCube?.State?.variables) &&
-      byUiId(CHEAT_ROOT_ID)
-  );
+import { configureRuntimeObserverPolicy } from './listeners/index.js';
+
+import './registry.js'; // side-effect: registers all features into factory
+
+let bootstrapped = false;
+
+function canBootstrap(runtimeEngine) {
+  return Boolean(runtimeEngine?.adapter?.isReady?.() && byUiId(CHEAT_ROOT_ID));
 }
 
-function bootstrap() {
-  if (globalThis[BOOTSTRAP_FLAG_KEY]) return false;
-  if (!canBootstrap()) return false;
+function bootstrap({ runtimeEngine } = {}) {
+  if (bootstrapped) return false;
+  if (!canBootstrap(runtimeEngine)) return false;
 
-  initStorage();
-  reactivateToggles();
-  initListeners();
+  configureRuntimeObserverPolicy(runtimeEngine?.observerPolicy ?? {});
 
-  globalThis[BOOTSTRAP_FLAG_KEY] = true;
+  factory.registerAllActions();
+  factory.initAllFeatures();
+  factory.startAllObservers();
+
+  bootstrapped = true;
   return true;
 }
 
-export function bootstrapCheat() {
-  return bootstrap();
+export function bootstrapCheat(options = {}) {
+  return bootstrap(options);
 }

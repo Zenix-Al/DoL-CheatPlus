@@ -4,17 +4,17 @@ import pregnancyActions from './cheat/pregnancy-actions.js';
 import worldActions from './cheat/world-actions.js';
 import toggleRuntime from './cheat/toggle-runtime.js';
 
-export const mycode = Object.assign(
-  globalThis.mycode ?? {},
-  debugActions,
-  playerActions,
-  pregnancyActions,
-  worldActions,
-  toggleRuntime
-);
+// Compatibility facade for callers that still expect one object import.
+// Authoring modules remain function-first and independent of `this`.
+export const cheatActions = {
+  ...debugActions,
+  ...playerActions,
+  ...pregnancyActions,
+  ...worldActions,
+  ...toggleRuntime,
+};
 
-export function registerGlobals() {
-  globalThis.mycode = mycode;
-}
+// Backward compatibility alias; migrate imports to `cheatActions`.
+export const mycode = cheatActions;
 
-export default mycode;
+export default cheatActions;

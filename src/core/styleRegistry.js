@@ -18,14 +18,11 @@
  *   'both'     — registered for both targets
  */
 
-const REGISTRY_KEY = '__DOL_CHEATPLUS_STYLE_REGISTRY__';
+const registry = { shadow: [], document: [] };
 
 /** @returns {{ shadow: string[], document: string[] }} */
 function getRegistry() {
-  if (!globalThis[REGISTRY_KEY]) {
-    globalThis[REGISTRY_KEY] = { shadow: [], document: [] };
-  }
-  return globalThis[REGISTRY_KEY];
+  return registry;
 }
 
 /**
@@ -90,7 +87,8 @@ export function applyToDocument() {
  * Does NOT remove already-injected <style> nodes from the DOM.
  */
 export function resetRegistry() {
-  globalThis[REGISTRY_KEY] = { shadow: [], document: [] };
+  registry.shadow = [];
+  registry.document = [];
   appliedDocSheets.clear();
   // WeakSet has no .clear() — a new instance is created on next applyToShadow call,
   // so previously-applied shadow roots will receive sheets again if applyToShadow

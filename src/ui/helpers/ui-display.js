@@ -1,4 +1,4 @@
-import { getUiRefs } from './dom-refs.js';
+import { getUiRefs } from './dom-query.js';
 
 export function hideAllContent() {
   const { quicklink, statlink, misclink, quickcontent, statscontent, misccontent } = getUiRefs();

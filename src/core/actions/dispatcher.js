@@ -15,23 +15,22 @@
  *   clearErrorHook()         – remove the error hook
  *
  * Design notes:
- * - The registry is held on globalThis so re-injection doesn't drop handlers.
+ * - The registry is module-scoped and accessed via `getStore()`.
  * - `dispatch` never throws — all exceptions are caught and reported.
  * - The dispatcher lives in `core/` and has NO imports from `ui/` or `features/`.
  *   The error hook is injected at init time from the bootstrap layer.
  */
 
-const DISPATCHER_KEY = '__DOL_CHEATPLUS_DISPATCHER__';
+import debugLog from '../logger.js';
+
+const dispatcherStore = {
+  handlers: new Map(),
+  onError: null,
+};
 
 /** @returns {{ handlers: Map<string, Function>, onError: Function|null }} */
 function getStore() {
-  if (!globalThis[DISPATCHER_KEY]) {
-    globalThis[DISPATCHER_KEY] = {
-      handlers: new Map(),
-      onError: null,
-    };
-  }
-  return globalThis[DISPATCHER_KEY];
+  return dispatcherStore;
 }
 
 /**
@@ -43,13 +42,16 @@ function getStore() {
  */
 export function register(key, handler) {
   if (typeof key !== 'string' || !key) {
-    console.warn('[CheatPlus][dispatcher] register: key must be a non-empty string.');
+    debugLog('dispatcher', 'register: key must be a non-empty string.', { level: 'warn' });
     return;
   }
   if (typeof handler !== 'function') {
-    console.warn(`[CheatPlus][dispatcher] register: handler for "${key}" is not a function.`);
+    debugLog('dispatcher', `register: handler for "${key}" is not a function.`, {
+      level: 'warn',
+    });
     return;
   }
+  debugLog('dispatcher', `Registered action: ${key}`);
   getStore().handlers.set(key, handler);
 }
 
@@ -59,6 +61,7 @@ export function register(key, handler) {
  * @param {string} key
  */
 export function unregister(key) {
+  debugLog('dispatcher', `Unregistered action: ${key}`);
   getStore().handlers.delete(key);
 }
 
@@ -78,14 +81,15 @@ export function dispatch(key, context) {
   const handler = store.handlers.get(key);
 
   if (!handler) {
-    console.warn(`[CheatPlus][dispatcher] No handler registered for action: "${key}"`);
+    debugLog('dispatcher', `No handler registered for action: "${key}"`, { level: 'warn' });
     return;
   }
 
   try {
+    debugLog('dispatcher', `Dispatching action: ${key}`);
     return handler(context);
   } catch (err) {
-    console.error(`[CheatPlus][dispatcher] Handler "${key}" threw an error:`, err);
+    debugLog('dispatcher', `Handler error for action: ${key}`, { data: err, level: 'error' });
     if (typeof store.onError === 'function') {
       try {
         store.onError(key, err);

@@ -10,6 +10,41 @@
  */
 import { getVars, getSetup } from './state.js';
 
+function tokenizePath(path) {
+  if (typeof path !== 'string' || !path.trim()) return [];
+  const matches = path.match(/[^.[\]]+/g);
+  return matches ?? [];
+}
+
+function readAtPath(obj, path) {
+  const tokens = tokenizePath(path);
+  if (!tokens.length) return undefined;
+  let cursor = obj;
+  for (const token of tokens) {
+    if (cursor == null || typeof cursor !== 'object' || !(token in cursor)) return undefined;
+    cursor = cursor[token];
+  }
+  return cursor;
+}
+
+function writeAtPath(obj, path, value) {
+  const tokens = tokenizePath(path);
+  if (!tokens.length || obj == null || typeof obj !== 'object') return false;
+
+  let cursor = obj;
+  for (let i = 0; i < tokens.length - 1; i++) {
+    const token = tokens[i];
+    const nextToken = tokens[i + 1];
+    if (cursor[token] == null || typeof cursor[token] !== 'object') {
+      cursor[token] = /^\d+$/.test(nextToken) ? [] : {};
+    }
+    cursor = cursor[token];
+  }
+
+  cursor[tokens[tokens.length - 1]] = value;
+  return true;
+}
+
 // ---------------------------------------------------------------------------
 // Generic accessor pair (fallback for ad-hoc keys not yet named below)
 // ---------------------------------------------------------------------------
@@ -31,6 +66,39 @@ export function getVariable(key) {
 export function setVariable(key, value) {
   const vars = getVars();
   if (vars) vars[key] = value;
+}
+
+/**
+ * Read any nested `State.variables` path (dot/bracket notation).
+ * Example: `pregnancy.namedNPC[0].day`
+ *
+ * @param {string} path
+ * @returns {any}
+ */
+export function getVariablePath(path) {
+  return readAtPath(getVars(), path);
+}
+
+/**
+ * Write any nested `State.variables` path (dot/bracket notation).
+ * Missing intermediate objects are created automatically.
+ *
+ * @param {string} path
+ * @param {any} value
+ * @returns {boolean}
+ */
+export function setVariablePath(path, value) {
+  return writeAtPath(getVars(), path, value);
+}
+
+/**
+ * Checks whether a nested `State.variables` path exists.
+ *
+ * @param {string} path
+ * @returns {boolean}
+ */
+export function hasVariablePath(path) {
+  return getVariablePath(path) !== undefined;
 }
 
 /**

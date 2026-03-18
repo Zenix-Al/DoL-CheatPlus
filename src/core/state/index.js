@@ -9,36 +9,38 @@
  *   resetState()            – restore all keys to defaults (useful for re-inject)
  */
 
-const STATE_KEY = '__DOL_CHEATPLUS_APP_STATE__';
+const store = {
+  state: null,
+  subscribers: new Map(),
+};
 
 /** Default values. Add new keys here as phases introduce more managed state. */
 const initialState = () => ({
   modal: {
-    open: false, // was window.modalOpen
-    isDelete: false, // was window.isDelete
-    isCheatPressed: false, // was window.isCheatPressed
+    open: false,
+    isDelete: false,
+    isCheatPressed: false,
   },
-  ui: {
-    buttonId: null, // was window.buttonId / dom-refs.buttonId
-    clickCounter: 0, // was dom-refs.clickCounter
-    isLoad: false, // was dom-refs.isLoad
-  },
-  fetcher: {
-    isFetching: false, // was globalThis.isFetching
-    currentFetch: 0, // was globalThis.currentFetch
-    totalFetchFunction: 0, // was globalThis.totalFetchFunction
+  runtime: {
+    isLoad: false,
+    clickCounter: 0,
+    curDate: 0,
+    errorFunctions: 0,
+    progressFunctions: 0,
+    totalFunctions: 0,
+    extraNotif: false,
+    reactivatingToggles: false,
+    isTestingAllFunction: false,
+    pcPregnant: 0,
+    totalNpcPregnant: 0,
   },
 });
 
-/** Singleton store held on globalThis so re-injection keeps state intact. */
 function getStore() {
-  if (!globalThis[STATE_KEY]) {
-    globalThis[STATE_KEY] = {
-      state: initialState(),
-      subscribers: new Map(),
-    };
+  if (!store.state) {
+    store.state = initialState();
   }
-  return globalThis[STATE_KEY];
+  return store;
 }
 
 function getByPath(obj, path) {
@@ -80,7 +82,9 @@ export function set(path, value) {
     callbacks.forEach((cb) => {
       try {
         cb(value, oldValue, path);
-      } catch (e) {}
+      } catch (e) {
+        /* no-op */
+      }
     });
   }
 }

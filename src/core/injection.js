@@ -1,18 +1,21 @@
-import {
-  GAME_VERSION_ELEMENT_ID,
-  INJECTION_STATE_KEY,
-  SHADOW_HOST_ID,
-} from '../constants/index.js';
-import { getRuntimeWindow } from './global-bridge.js';
+import { SHADOW_HOST_ID } from '../constants/ui.js';
+import { bootstrapCheat } from '../features/bootstrap.js';
+import { mountInterface } from '../ui/index.js';
+
+import debugLog from './logger.js';
+import { ensureActiveRuntimeEngine } from './runtime-engine-registry.js';
+
+const injectionState = {
+  started: false,
+  ready: false,
+};
 
 function getInjectionState() {
-  if (!globalThis[INJECTION_STATE_KEY]) {
-    globalThis[INJECTION_STATE_KEY] = {
-      started: false,
-      ready: false,
-    };
-  }
-  return globalThis[INJECTION_STATE_KEY];
+  return injectionState;
+}
+
+function getDetectedRuntimeEngine() {
+  return ensureActiveRuntimeEngine();
 }
 
 function waitForCondition(check, { intervalMs = 50, timeoutMs = 30000 } = {}) {
@@ -38,113 +41,59 @@ function waitForCondition(check, { intervalMs = 50, timeoutMs = 30000 } = {}) {
   });
 }
 
-function hasCorePrerequisites() {
-  const runtimeWindow = getRuntimeWindow();
-  return Boolean(
-    runtimeWindow?.SugarCube?.State?.variables || globalThis.SugarCube?.State?.variables
-  );
+async function waitForRuntimeEngine() {
+  await waitForCondition(() => Boolean(getDetectedRuntimeEngine()), { timeoutMs: 30000 });
+  const runtimeEngine = getDetectedRuntimeEngine();
+  if (!runtimeEngine) {
+    throw new Error('No supported runtime engine detected.');
+  }
+  return runtimeEngine;
 }
 
-function hasRuntimePrerequisites() {
-  const runtimeWindow = getRuntimeWindow();
-  const sugarCube = runtimeWindow?.SugarCube || globalThis.SugarCube;
-  return Boolean(
-    hasCorePrerequisites() &&
-      sugarCube?.setup?.NPCNameList &&
-      document.getElementById(GAME_VERSION_ELEMENT_ID)
+async function waitForPrerequisites(runtimeEngine) {
+  await waitForCondition(() => runtimeEngine.hasRuntimePrerequisites(), { timeoutMs: 30000 }).catch(
+    async () => {
+      console.warn(
+        `[CheatPlus] ${runtimeEngine.label} runtime prerequisites not met within 30s — dumping status and retrying.`
+      );
+      console.warn('[CheatPlus] status:', runtimeEngine.describePrerequisiteState());
+
+      // Extended wait; fall back to core-only readiness if optional fields stay missing.
+      await waitForCondition(() => runtimeEngine.hasRuntimePrerequisites(), {
+        timeoutMs: 60000,
+      }).catch(async () => {
+        await waitForCondition(() => runtimeEngine.hasCorePrerequisites(), { timeoutMs: 60000 });
+        console.warn(`[CheatPlus] Continuing with core ${runtimeEngine.label} readiness only.`);
+      });
+    }
   );
 }
-
-import debugLog from './logger.js';
 
 export async function startCheatInjection() {
   const state = getInjectionState();
   if (state.started) return;
-
   state.started = true;
 
   try {
-    // emit initial framework-level trace (SugarCube-specific debug moved to adapter)
-    try {
-      debugLog('injection', 'startCheatInjection:before-mount', {
-        data: { bodyPresent: !!document.body },
-      });
-    } catch (e) {}
+    debugLog('injection', 'startCheatInjection:before-mount', {
+      data: { bodyPresent: !!document.body },
+    });
     await waitForCondition(() => Boolean(document.body), { timeoutMs: 20000 });
 
-    const { mountInterface } = await import('../ui/index.js');
-
     mountInterface();
-    try {
-      debugLog('injection', 'mountInterface() called', {
-        data: { hostPresent: !!document.getElementById(SHADOW_HOST_ID) },
-      });
-    } catch (e) {}
+    debugLog('injection', 'mountInterface() called', {
+      data: { hostPresent: !!document.getElementById(SHADOW_HOST_ID) },
+    });
 
-    // framework-level trace after interface mount
-    try {
-      debugLog('injection', 'after-mount', {
-        data: { sugarCubeDefined: !!(getRuntimeWindow()?.SugarCube || globalThis.SugarCube) },
-      });
-    } catch (e) {}
+    const runtimeEngine = await waitForRuntimeEngine();
+    debugLog('injection', 'runtime-engine-detected', {
+      data: { runtimeEngine: runtimeEngine.id },
+    });
 
-    try {
-      await waitForCondition(hasRuntimePrerequisites, { timeoutMs: 30000 });
-    } catch (err) {
-      console.warn(
-        '[CheatPlus] Runtime prerequisites not met within 30s — dumping status and retrying once with extended timeout.'
-      );
-      console.warn('[CheatPlus] status:', {
-        sugarCubeDefined: !!(getRuntimeWindow()?.SugarCube || globalThis.SugarCube),
-        sugarCubeState: !!(getRuntimeWindow()?.SugarCube?.State || globalThis.SugarCube?.State),
-        sugarCubeVariables: !!(
-          getRuntimeWindow()?.SugarCube?.State?.variables || globalThis.SugarCube?.State?.variables
-        ),
-        sugarCubeSetup: !!(getRuntimeWindow()?.SugarCube?.setup || globalThis.SugarCube?.setup),
-        npcList: !!(
-          getRuntimeWindow()?.SugarCube?.setup?.NPCNameList ||
-          globalThis.SugarCube?.setup?.NPCNameList
-        ),
-        versionElement: !!document.getElementById(GAME_VERSION_ELEMENT_ID),
-      });
+    await waitForPrerequisites(runtimeEngine);
 
-      // One more extended wait to tolerate slower environments
-      try {
-        await waitForCondition(hasRuntimePrerequisites, { timeoutMs: 60000 });
-      } catch {
-        // Do not hard-fail when optional runtime bits are missing; continue with core readiness.
-        await waitForCondition(hasCorePrerequisites, { timeoutMs: 60000 });
-        console.warn(
-          '[CheatPlus] Continuing with core SugarCube readiness; optional runtime fields are still missing.'
-        );
-      }
-    }
-
-    // ensure runtime modules that register globals are loaded
-    const actionsModule = await import('../features/actions.js');
-    const fetchersModule = await import('../features/fetchers/index.js');
-    const cheatInitModule = await import('../features/cheat-init.js');
-    const { registerGlobals: registerStorageGlobals } = await import('../services/storage.js');
-    const { registerGlobals: registerListenerGlobals } = await import(
-      '../features/listeners/index.js'
-    );
-
-    // Register legacy window.* globals in one explicit step — no side effects on import
-    actionsModule.registerGlobals();
-    fetchersModule.registerGlobals();
-    cheatInitModule.registerGlobals();
-    registerStorageGlobals();
-    registerListenerGlobals();
-
-    try {
-      debugLog('injection', 'after-cheat-init-import');
-    } catch (e) {}
-    const { bootstrapCheat } = await import('../features/bootstrap.js');
-    bootstrapCheat();
-    try {
-      debugLog('injection', 'after-bootstrap', { data: { ready: true } });
-    } catch (e) {}
-
+    bootstrapCheat({ runtimeEngine });
+    debugLog('injection', 'after-bootstrap', { data: { ready: true } });
     state.ready = true;
   } catch (error) {
     state.started = false;

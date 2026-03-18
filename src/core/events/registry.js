@@ -2,8 +2,7 @@
  * Event listener registry for CheatPlus.
  *
  * Stores teardown functions so re-injection and navigation changes do not leak
- * handlers. The store lives on globalThis so it persists across module
- * re-evaluations (userscript re-inject).
+ * handlers.
  *
  * API:
  *   on(target, type, handler, options?)  — attach and track
@@ -12,14 +11,11 @@
  *   getCount()                           — number of tracked entries (debug)
  */
 
-const REGISTRY_KEY = '__DOL_CHEATPLUS_EVENT_REGISTRY__';
+const registryStore = [];
 
 /** @returns {Array<{target: EventTarget, type: string, handler: Function, options: any}>} */
 function getStore() {
-  if (!globalThis[REGISTRY_KEY]) {
-    globalThis[REGISTRY_KEY] = [];
-  }
-  return globalThis[REGISTRY_KEY];
+  return registryStore;
 }
 
 /**
@@ -58,7 +54,9 @@ export function reset() {
   for (const { target, type, handler, options } of store) {
     try {
       target.removeEventListener(type, handler, options);
-    } catch (_) {}
+    } catch (_) {
+      /* no-op */
+    }
   }
   store.length = 0;
 }

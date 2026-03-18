@@ -1,10 +1,12 @@
 import debugLog from '../logger.js';
 import { getRuntimeWindow } from '../global-bridge.js';
-import { GAME_VERSION_ELEMENT_ID, SHADOW_HOST_ID } from '../../constants/index.js';
+import { GAME_VERSION_ELEMENT_ID, SHADOW_HOST_ID } from '../../constants/ui.js';
+
+let debugInstance = null;
 
 function collectStatus() {
   const runtimeWindow = getRuntimeWindow();
-  const sugarCube = runtimeWindow?.SugarCube || globalThis.SugarCube;
+  const sugarCube = runtimeWindow?.SugarCube;
   return {
     time: new Date().toISOString(),
     sugarCubeDefined: !!sugarCube,
@@ -18,7 +20,7 @@ function collectStatus() {
 }
 
 export function installDebug() {
-  if (globalThis.CheatPlusDebug) return globalThis.CheatPlusDebug;
+  if (debugInstance) return debugInstance;
 
   const debug = {
     last: null,
@@ -32,22 +34,28 @@ export function installDebug() {
       } catch (e) {
         try {
           console.info('[CheatPlus][Debug]', payload);
-        } catch (e2) {}
+        } catch (e2) {
+          /* no-op */
+        }
       }
 
       // Best-effort: copy to clipboard if available, but DO NOT write into page DOM by default
       try {
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(JSON.stringify(payload, null, 2)).catch(() => {});
+          navigator.clipboard.writeText(JSON.stringify(payload, null, 2)).catch(() => {
+            /* no-op */
+          });
         }
-      } catch (e) {}
+      } catch (e) {
+        /* no-op */
+      }
 
       return debug;
     },
   };
 
-  globalThis.CheatPlusDebug = debug;
-  return debug;
+  debugInstance = debug;
+  return debugInstance;
 }
 
 export default installDebug;

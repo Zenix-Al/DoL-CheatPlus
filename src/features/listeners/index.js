@@ -1,175 +1,86 @@
 import { showToast } from '../../ui/components/toast.js';
 import { openModal, closeModal } from '../../ui/components/modal.js';
 import {
-  moveButton,
   Enable_cheat_history,
   Enable_sidebar_button,
   simple_cheat_button,
 } from '../../ui/components/controls.js';
 import { showContent } from '../../ui/helpers/ui-display.js';
-import { executeSearch, restoreVariables } from '../../ui/renderers/cheat-form.js';
+import { executeSearch, restoreVariables } from '../search-actions.js';
+import { cheatActions } from '../actions.js';
 import {
-  getAltFetch,
-  getCheat,
-  getFirstload,
-  getIsLoad,
-  getMycode,
-  getUiRefs,
-  incrementClickCounter,
-  initStorage,
-  reactivateToggles,
-  setButtonId,
-  setIsLoad,
-} from '../../services/cheat-runtime.js';
-import {
-  createButtonActions,
-  createChangeActions,
-  createInputActions,
-  createMainActions,
-} from './action-maps.js';
-import { dispatch, isRegistered, setErrorHook } from '../../core/actions/dispatcher.js';
-import { registerAllActions } from '../cheat/register.js';
-import { isAtStart, isAtSettings } from '../../core/sugarcube/quirks.js';
+  hydrateCheatUi,
+  hydratePregnancy,
+  hydrateMiscSection,
+  hydrateQuickSection,
+  hydrateStatsSection,
+} from '../fetchers/index.js';
+import { init_interface } from '../cheat-init.js';
+import { byUiId, getUiRefs } from '../../ui/helpers/dom-query.js';
+import { getIsLoad, incrementClickCounter, setIsLoad } from '../../core/runtime-state.js';
+import { setErrorHook } from '../../core/actions/dispatcher.js';
+import { isAtSettings } from '../../core/sugarcube/quirks.js';
 import { on, reset } from '../../core/events/registry.js';
-import { traceEvent } from '../../core/events/tracing.js';
+import { initStorage, reactivateToggles } from '../../services/storage.js';
+import { ToggleScheduler } from '../../services/toggle-scheduler.js';
+import { createRuntimeObserverPolicy } from '../../core/runtime-observer-policy.js';
 
-const mycode = getMycode();
-const firstload = getFirstload();
-const altFetch = getAltFetch();
-function buildMainActions() {
-  return createMainActions({
-    closeModal,
-    moveButton,
-    openModal,
-    showContent,
-    uiRefs: getUiRefs(),
-    mycode,
-  });
+import { registerAllActions } from './action-maps.js';
+
+let actionsRegistered = false;
+let runtimeObserverPolicy = createRuntimeObserverPolicy();
+
+export function configureRuntimeObserverPolicy(overrides = {}) {
+  runtimeObserverPolicy = createRuntimeObserverPolicy(overrides);
 }
 
-let mainActions = buildMainActions();
+export function registerListenerActions() {
+  if (actionsRegistered) return;
+  registerAllActions({
+    closeModal,
+    openModal,
+    showContent,
+    getUiRefs,
+    cheatActions,
+    hydratePregnancy,
+    hydrateCheatUi,
+    hydrateQuickSection,
+    hydrateStatsSection,
+    hydrateMiscSection,
+    Enable_cheat_history,
+    Enable_sidebar_button,
+    simple_cheat_button,
+    executeSearch,
+    init_interface,
+  });
+  setErrorHook((key) => showToast(`Action "${key}" failed.`, { variant: 'error' }));
+  actionsRegistered = true;
+}
 
-let buttonActions = createButtonActions({
-  Enable_cheat_history,
-  Enable_sidebar_button,
-  executeSearch,
-  simple_cheat_button,
-  mycode,
-});
-
-let changeActions = createChangeActions({ altFetch, firstload });
-let inputActions = createInputActions({ firstload });
-
-// Register all action maps into the central dispatcher and install the toast error hook.
-// This runs once at module evaluation; re-registration on re-inject is harmless (handlers overwrite).
-registerAllActions({ buttonActions, mainActions, changeActions, inputActions });
-setErrorHook((key, _err) => showToast(`Action "${key}" failed.`));
-
-function initListeners() {
-  const cheat = getCheat();
+function initGameObservers() {
+  const cheat = byUiId('cheat');
   if (!cheat) return;
   reset(); // teardown previously-attached listeners — safe for idempotent re-injection
 
-  on(cheat, 'click', function (event) {
-    let target = event.target;
-    if (target && typeof target.closest === 'function') {
-      target = target.closest('[id]') || target;
-    }
-    if (!target.id) return;
-    setButtonId(target.id);
-
-    // Fast path: metadata-rendered controls carry data-action — route through dispatcher.
-    const dataAction = (event.target || target).dataset?.action;
-    if (dataAction && isRegistered(dataAction)) {
-      traceEvent('click', dataAction);
-      dispatch(dataAction);
-      event.stopPropagation();
-      return;
-    }
-
-    if (
-      (target.tagName === 'A' || target.tagName === 'BUTTON') &&
-      target.closest('.modal-content')
-    ) {
-      if (
-        isAtStart() &&
-        !(target.id == 'save_data' || target.id == 'load_data' || target.id == 'VrelCoinsUsage')
-      ) {
-        showToast('Still in the main menu!');
-        return;
-      }
-      if (target.id in buttonActions) {
-        traceEvent('click', target.id);
-        buttonActions[target.id]();
-      }
-    } else if (target.id in mainActions) {
-      // Modal and nav refs are injected lazily, so refresh map before dispatch.
-      mainActions = buildMainActions();
-      traceEvent('click', target.id);
-      mainActions[target.id]();
-    } else if (getIsLoad()) {
-      initStorage();
-      reactivateToggles();
-      showToast('Cheat state loaded');
-      setIsLoad(false);
-    }
-    event.stopPropagation();
-  });
-  on(cheat, 'change', function (event) {
-    if (isAtStart()) return;
-    let target = event.target;
-    // Fast path: data-action on metadata-rendered selects.
-    const dataAction = target.dataset?.action;
-    traceEvent('change', dataAction);
-    if (dataAction && isRegistered(dataAction)) {
-      dispatch(dataAction);
-      event.stopPropagation();
-      return;
-    }
-    if (target.id in changeActions) {
-      traceEvent('change', target.id);
-      changeActions[target.id]();
-    }
-    event.stopPropagation();
-  });
-
-  //input slider listener
-
-  on(cheat, 'input', function (event) {
-    let target = event.target;
-    // Fast path: data-action on metadata-rendered range/text inputs.
-    traceEvent('input', dataAction);
-    const dataAction = target.dataset?.action;
-    if (dataAction && isRegistered(dataAction)) {
-      dispatch(dataAction);
-      return;
-    }
-    if (target.id in inputActions) {
-      traceEvent('input', target.id);
-      inputActions[target.id]();
-    }
-    event.stopPropagation();
-  });
-
-  //document listener for toggle cheat
+  // document listener for toggle cheat
   on(document, 'click', function (event) {
     if (isAtSettings()) {
       //restore variables in certain passage to avoid error.
       restoreVariables();
     } else {
       incrementClickCounter();
-      mycode.runitall();
+      cheatActions.runitall();
     }
     //to avoid this variable undefined and causing an error
     let target = event.target;
-    if (target.classList.contains('macro-button') && target.innerHTML == 'SAVES') {
+    if (runtimeObserverPolicy.detectLoadTrigger(target)) {
       setIsLoad(true);
     } else if (getIsLoad()) {
       initStorage();
       reactivateToggles();
-      showToast('Cheat state loaded');
+      showToast('Cheat state loaded', { variant: 'success' });
       setIsLoad(false);
-    } else if (target.id == 'history-backward' || target.id === 'history-forward') {
+    } else if (runtimeObserverPolicy.detectHistoryNavigation(target)) {
       initStorage();
     }
   });
@@ -177,7 +88,7 @@ function initListeners() {
   on(document, 'keyup', function () {
     if (!isAtSettings()) {
       incrementClickCounter();
-      mycode.runitall();
+      cheatActions.runitall();
     }
   });
   on(cheat, 'keyup', function (event) {
@@ -185,12 +96,9 @@ function initListeners() {
   });
 }
 
-export function registerGlobals() {
-  window.initListeners = initListeners;
-  window.mainActions = mainActions;
-  window.buttonActions = buttonActions;
-  window.changeActions = changeActions;
-  window.inputActions = inputActions;
+function stopGameObservers() {
+  reset();
+  ToggleScheduler.reset();
 }
 
-export { initListeners, mainActions, buttonActions, changeActions, inputActions };
+export { initGameObservers, stopGameObservers };

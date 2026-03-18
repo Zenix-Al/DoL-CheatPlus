@@ -41,6 +41,20 @@
  * --- Lifecycle ---
  * @property {() => boolean}                     isReady
  *   Returns true if the engine is fully initialized and variables are accessible.
+ *
+ * @typedef {Object} RuntimeObserverPolicy
+ * @property {(target: EventTarget | null | undefined) => boolean} detectLoadTrigger
+ * @property {(target: EventTarget | null | undefined) => boolean} detectHistoryNavigation
+ *
+ * @typedef {Object} RuntimeEngineProfile
+ * @property {string}               id
+ * @property {string}               label
+ * @property {() => boolean}        detect
+ * @property {EngineAdapter}        adapter
+ * @property {RuntimeObserverPolicy} observerPolicy
+ * @property {() => boolean}        hasCorePrerequisites
+ * @property {() => boolean}        hasRuntimePrerequisites
+ * @property {() => Record<string, boolean>} describePrerequisiteState
  */
 
 // This file contains no runtime code — it is purely a JSDoc contract.

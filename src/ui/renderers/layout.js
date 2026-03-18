@@ -14,7 +14,7 @@ const modalTemplate = {
             { tag: 'div', id: 'quick-link', class: 'nav-link gold', text: 'Quick' },
             { tag: 'div', id: 'stats-link', class: 'nav-link', text: 'Stat' },
             { tag: 'div', id: 'misc-link', class: 'nav-link', text: 'Misc' },
-            { tag: 'div', id: 'closeButton', class: 'close nav-link', text: '×' },
+            { tag: 'div', id: 'close-modal-top', class: 'close nav-link', text: '×' },
           ],
         },
         {
@@ -29,7 +29,7 @@ const modalTemplate = {
         {
           tag: 'div',
           class: 'navbar',
-          children: [{ tag: 'div', id: 'closeButton', class: 'close nav-link', text: '×' }],
+          children: [{ tag: 'div', id: 'close-modal-bottom', class: 'close nav-link', text: '×' }],
         },
       ],
     },
@@ -48,8 +48,6 @@ const layoutTemplate = {
         { tag: 'button', id: 'cheat-history-forwards', text: '→', hidden: true },
         { tag: 'button', id: 'cheat-sidebar', text: '☰', hidden: true },
         { tag: 'button', id: 'cheat-open', text: 'Cheat' },
-        { tag: 'button', id: 'cheat-up', text: '▲', hidden: true },
-        { tag: 'button', id: 'cheat-down', text: '▼' },
       ],
     },
     { tag: 'div', id: 'toastContainer' },

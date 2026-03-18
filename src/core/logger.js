@@ -1,23 +1,30 @@
 // Central debug logger for CheatPlus
 const LS_DEBUG_KEY = 'CheatPlus:debug';
+let debugEnabled = null;
 
 export function isDebugEnabled() {
   try {
-    if (typeof __F95UE_DEBUG__ !== 'undefined') return Boolean(__F95UE_DEBUG__);
-  } catch (e) {}
-  if (globalThis.CheatPlusDebugEnabled != null) return Boolean(globalThis.CheatPlusDebugEnabled);
+    if (typeof __DOL_DEBUG__ !== 'undefined') return Boolean(__DOL_DEBUG__);
+  } catch (e) {
+    /* no-op */
+  }
+  if (debugEnabled != null) return Boolean(debugEnabled);
   try {
     return localStorage.getItem(LS_DEBUG_KEY) === '1';
-  } catch (e) {}
+  } catch (e) {
+    /* no-op */
+  }
   return false;
 }
 
 export function setDebugEnabled(value) {
-  globalThis.CheatPlusDebugEnabled = Boolean(value);
+  debugEnabled = Boolean(value);
   try {
     if (value) localStorage.setItem(LS_DEBUG_KEY, '1');
     else localStorage.removeItem(LS_DEBUG_KEY);
-  } catch (e) {}
+  } catch (e) {
+    /* no-op */
+  }
 }
 
 function debugLog(feature, msg, { data = null, level = 'log' } = {}) {
@@ -34,11 +41,15 @@ function debugLog(feature, msg, { data = null, level = 'log' } = {}) {
     try {
       logMethod(`[CheatPlus][${feature}] ${msg}`);
       if (data) logMethod(data);
-    } catch (err) {}
+    } catch (err) {
+      /* no-op */
+    }
   } finally {
     try {
       console.groupEnd();
-    } catch (e) {}
+    } catch (e) {
+      /* no-op */
+    }
   }
 }
 
