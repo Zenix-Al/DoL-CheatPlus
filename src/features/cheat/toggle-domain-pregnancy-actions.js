@@ -6,9 +6,11 @@ import {
 } from '../../core/runtime-state.js';
 import {
   getBaseNpcPregnancyChance,
+  getNPCsPriority,
   getStoredCheatNPCs,
   getStoredNPCsDate,
   setBaseNpcPregnancyChance,
+  setNPCsPriority,
   setStoredCheatNPCs,
   setStoredNPCsDate,
 } from '../../core/sugarcube/cheat-config.js';
@@ -132,60 +134,78 @@ export function createToggleDomainPregnancyActions(toggleState, actionBagRef) {
 
     invinityNPCPregnancy() {
       const vars = getVars();
-      if (getStoredNPCsDate()) return;
-      let priorityQueue = 0;
-      let waitQueue = 0;
+
+      if (!vars) return;
+
       const limit = 8;
-      const activeNpcStore = {};
-      const waitingNpcStore = {};
-      let dateLeft = 0;
+      const hardLimit = 10;
+      const mainNPCs = vars.storedNPCs || {};
+      const mainLength = Object.keys(mainNPCs).length;
+      const priority = getNPCsPriority() || 0;
+
       const gameTime = vars.timeStamp;
-      const date = (gameTime - (gameTime % SECONDS_PER_DAY)) / SECONDS_PER_DAY;
+      const currentDate = Math.floor(gameTime / SECONDS_PER_DAY);
+      const lastDate = getStoredNPCsDate();
+      const dateLeft = lastDate !== 0 ? (currentDate - lastDate) * 3 : 0;
 
-      if (getStoredNPCsDate() !== 0) {
-        dateLeft = (date - getStoredNPCsDate()) * 3;
+      // === SMART EARLY EXIT ===
+      if (dateLeft === 0) {
+        // No time passed
+        if (mainLength <= limit) return; // has space
+        if (mainLength >= limit && priority >= 8) return; // full + high priority = no birth yet
       }
-      setStoredNPCsDate(date);
 
-      for (const key in vars.storedNPCs) {
-        const left = vars.storedNPCs[key].pregnancy.timerEnd - vars.storedNPCs[key].pregnancy.timer;
+      // If we reach here, we need to do work (time passed or state changed)
+
+      setStoredNPCsDate(currentDate);
+
+      const cheatNPCs = { ...(getStoredCheatNPCs() || {}) };
+
+      let priorityQueue = 0;
+      const active = {};
+      const waiting = {};
+
+      // Process main NPCs
+      for (const key in mainNPCs) {
+        const npc = mainNPCs[key];
+        const left = npc.pregnancy.timerEnd - npc.pregnancy.timer;
+
         if (left <= 3 && priorityQueue <= limit) {
-          activeNpcStore['stored_' + priorityQueue] = vars.storedNPCs[key];
-          if (priorityQueue === 8) {
-            showToast('NPC about to give abirth, you cant bustin nuts in people for today!');
-          }
+          active[`stored_${priorityQueue}`] = npc;
+          if (priorityQueue === 8)
+            showToast('NPC about to give birth, you cant bustin nuts in people for today!');
           priorityQueue++;
         } else {
-          waitingNpcStore['stored_' + waitQueue] = vars.storedNPCs[key];
-          waitQueue++;
+          waiting[`stored_${Object.keys(waiting).length}`] = npc;
         }
       }
 
-      const storedCheatNPCs = getStoredCheatNPCs();
-      for (const key in storedCheatNPCs) {
-        const timerEnd = storedCheatNPCs[key].pregnancy.timerEnd;
-        const timer = storedCheatNPCs[key].pregnancy.timer;
+      // Process + advance cheat NPCs
+      for (const key in cheatNPCs) {
+        const npc = cheatNPCs[key];
+        let timer = npc.pregnancy.timer;
+        const timerEnd = npc.pregnancy.timerEnd;
+
         if (dateLeft > 0) {
-          storedCheatNPCs[key].pregnancy.timer += dateLeft;
-          if (storedCheatNPCs[key].pregnancy.timer > timerEnd) {
-            storedCheatNPCs[key].pregnancy.timer = timerEnd;
-          }
+          timer += dateLeft;
+          if (timer > timerEnd) timer = timerEnd;
+          npc.pregnancy.timer = timer;
         }
+
         const left = timerEnd - timer;
-        if (left <= 3 && priorityQueue <= limit) {
-          activeNpcStore['stored_' + priorityQueue] = storedCheatNPCs[key];
-          if (priorityQueue === 8) {
-            showToast('NPC about to give abirth, you cant bustin nuts in people for today!');
-          }
+
+        if (left <= 3 && priorityQueue <= hardLimit) {
+          active[`stored_${priorityQueue}`] = npc;
+          if (priorityQueue === 8) showToast('NPC about to give birth...');
           priorityQueue++;
         } else {
-          waitingNpcStore['stored_' + waitQueue] = storedCheatNPCs[key];
-          waitQueue++;
+          waiting[`stored_${Object.keys(waiting).length}`] = npc;
         }
       }
 
-      vars.storedNPCs = activeNpcStore;
-      setStoredCheatNPCs(waitingNpcStore);
+      setNPCsPriority(priorityQueue);
+      vars.storedNPCs = active;
+      setStoredCheatNPCs(waiting);
     },
 
     allNPCInstaPregnant() {

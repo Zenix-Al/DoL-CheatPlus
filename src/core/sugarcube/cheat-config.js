@@ -126,7 +126,13 @@ export function setStoredNPCsDate(value) {
   const c = cfg();
   if (c) c.storedNPCsDate = value;
 }
-
+export function getNPCsPriority() {
+  return cfg()?.storedNPCsPriority ?? 0;
+}
+export function setNPCsPriority(value) {
+  const c = cfg();
+  if (c) c.storedNPCsPriority = value;
+}
 // ---------------------------------------------------------------------------
 // NPC base pregnancy chance (saved/restored by allNPCInstaPregnant toggle)
 // ---------------------------------------------------------------------------

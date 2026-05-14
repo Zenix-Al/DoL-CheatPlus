@@ -75,12 +75,46 @@ Done. A small **floating button** should appear (you can drag it).
 
 ## Supported Versions
 
-| Version                  | URL pattern                          | Status     | Notes                              |
-|--------------------------|--------------------------------------|------------|------------------------------------|
-| Vanilla                  | `https://vanilla.dolmods.net/*`      | Working    | Main test target                   |
-| DoL Plus                 | `https://dolp.dolmods.net/*`         | Working    | Most popular online version        |
-| Bees / Firemod / others  | `*.dolmods.net/*`                    | Should work| Usually compatible                 |
-| Local HTML / NW.js       | local files                          | Partial    | May need manual injection          |
+| Version                 | URL pattern                     | Status      | Notes                            |
+| ----------------------- | ------------------------------- | ----------- | -------------------------------- |
+| Vanilla                 | `https://vanilla.dolmods.net/*` | Working     | Main test target                 |
+| DoL Plus                | `https://dolp.dolmods.net/*`    | Working     | Most popular online version      |
+| Bees / Firemod / others | `*.dolmods.net/*`               | Should work | Usually compatible               |
+| Local HTML / NW.js      | local files                     | Working     | Use inject/restore scripts below |
+
+### Local HTML Inject / Restore
+
+For offline DoL HTML builds, you can inject and later remove the panel script safely:
+
+1. Build end-user injector package:
+   `npm run build:injector`
+2. Open `dist/injector-tools`
+3. Double-click `DoL-Companion-Injector.bat`
+4. Click **Yes** to inject or **No** to restore
+5. Pick your game HTML file when asked
+
+If you see "Target HTML not found" and your path includes `(Compressed)` or `.zip`, extract the archive first and pick the extracted HTML file.
+
+The tool handles everything else automatically.
+
+To distribute only injection tools (without shipping game files):
+End users only need files inside `dist/injector-tools` (including `companion-panel.user.js`).
+
+To distribute only injection tools (without shipping game files):
+
+1. Build injector package
+2. Share files from `dist/injector-tools` only
+
+Optional remote payload mode (download panel script at inject time):
+
+`npm run inject:local -- --html "dist/DolP/DoLPlus0.5.7.9.html" --source-url "https://example.com/DoL-CheatPlus.user.js"`
+
+By default, the injected script file is copied to `dist/injected/companion-panel.user.js`.
+
+Safety behavior:
+
+- The injected loader is non-fatal. If payload file is missing/deleted, the game continues without the panel.
+- Restore remains safe even if the injected payload file was manually deleted.
 
 ## Usage
 

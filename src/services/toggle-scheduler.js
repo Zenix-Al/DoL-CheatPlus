@@ -11,11 +11,25 @@ let scheduledRun = false;
 let frameExpected = 0;
 let frameProgress = 0;
 let frameFailures = 0;
+let framePending = new Set();
+let frameLastProgressKey = null;
 
 function resetFrameState() {
   frameExpected = 0;
   frameProgress = 0;
   frameFailures = 0;
+  framePending = new Set();
+  frameLastProgressKey = null;
+}
+
+function getFramePendingSample(limit = 8) {
+  if (!framePending || framePending.size === 0) return [];
+  const out = [];
+  for (const key of framePending) {
+    out.push(key);
+    if (out.length >= limit) break;
+  }
+  return out;
 }
 
 function runEntriesSequentially(entries, { onProgress = null, onDone = null, daily = false } = {}) {
@@ -149,9 +163,16 @@ export const ToggleScheduler = {
 
     if (frameExpected > 0 && frameProgress < frameExpected) {
       frameFailures += 1;
+      const pendingSample = getFramePendingSample();
       debugLog(
         'toggle:scheduler',
-        `Frame watchdog: progress ${frameProgress}/${frameExpected} (failures: ${frameFailures})`,
+        `Frame watchdog: progress ${frameProgress}/${frameExpected} (failures: ${frameFailures})` +
+          (frameLastProgressKey ? `; last completed: ${frameLastProgressKey}` : '') +
+          (framePending.size
+            ? `; pending ${framePending.size}: ${pendingSample.join(', ')}${
+                framePending.size > pendingSample.length ? ', ...' : ''
+              }`
+            : ''),
         {
           level: 'warn',
         }
@@ -161,9 +182,15 @@ export const ToggleScheduler = {
       }
 
       if (frameFailures > DEFAULT_MAX_FAILURES) {
+        const pendingSample2 = getFramePendingSample();
         debugLog(
           'toggle:scheduler',
-          `Watchdog triggered: failures exceeded max (${frameFailures} > ${DEFAULT_MAX_FAILURES})`,
+          `Watchdog triggered: failures exceeded max (${frameFailures} > ${DEFAULT_MAX_FAILURES})` +
+            (framePending.size
+              ? `; pending ${framePending.size}: ${pendingSample2.join(', ')}${
+                  framePending.size > pendingSample2.length ? ', ...' : ''
+                }`
+              : ''),
           {
             level: 'warn',
           }
@@ -185,6 +212,8 @@ export const ToggleScheduler = {
     frameExpected = entries.length;
     frameProgress = 0;
     frameFailures = 0;
+    framePending = new Set(entries.map(([key]) => key));
+    frameLastProgressKey = null;
     debugLog('toggle:scheduler', `runFrame: Starting frame with ${frameExpected} toggles`);
     if (typeof onFrameState === 'function') {
       onFrameState({ expected: frameExpected, progress: frameProgress, failures: frameFailures });
@@ -193,6 +222,8 @@ export const ToggleScheduler = {
     this.scheduleRunAll({
       onProgress: (key) => {
         frameProgress += 1;
+        frameLastProgressKey = key;
+        framePending.delete(key);
         if (typeof onProgress === 'function') onProgress(key);
       },
     });

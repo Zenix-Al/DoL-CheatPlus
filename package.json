@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "build": "node build/build.cjs",
+    "build:injector": "npm run build && node build/build-injector-tools.cjs",
+    "inject:local": "node build/inject-local-html.cjs",
+    "restore:local": "node build/restore-local-html.cjs",
     "lint:actions": "node build/validate-action-ids.cjs",
     "lint:actions:strict": "node build/validate-action-ids.cjs --strict-parity --strict-metadata-unique",
     "test": "node --test test/unit test/integration test/regression",

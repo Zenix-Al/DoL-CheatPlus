@@ -9,8 +9,7 @@ export function createToggleDomainBasicActions(toggleState) {
     everyone_horny() {
       const vars = getVars();
       if (vars.NPCName === undefined) return;
-      const npcnamelist = getNpcNameList();
-      for (let index = 0; index < npcnamelist.length; index++) {
+      for (let index = 0; index < vars.NPCName.length; index++) {
         if (vars.NPCName[index].description !== 'Ivory Wraith') vars.NPCName[index].lust = 100;
       }
     },

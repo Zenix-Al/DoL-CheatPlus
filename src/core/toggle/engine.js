@@ -81,7 +81,7 @@ export function createToggleEngine(toggleState, getActionById, getToggleConfigBy
         data: { button: !!button, label: buttonLabel },
       });
       ToggleScheduler.unregister(id, { daily: isDaily });
-      deactivateToggle(id);
+      if (!getReactivatingToggles()) deactivateToggle(id);
       delete mapActive[id];
       if (button) {
         if (button instanceof HTMLInputElement && button.type === 'checkbox') {
@@ -110,7 +110,7 @@ export function createToggleEngine(toggleState, getActionById, getToggleConfigBy
     });
 
     ToggleScheduler.register(id, actionFn, { daily: isDaily, cooldownMs, maxFailures });
-    activateToggle(id);
+    if (!getReactivatingToggles()) activateToggle(id);
     mapActive[id] = true;
     if (button) {
       if (button instanceof HTMLInputElement && button.type === 'checkbox') {

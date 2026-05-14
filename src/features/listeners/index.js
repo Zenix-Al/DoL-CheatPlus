@@ -17,13 +17,19 @@ import {
 } from '../fetchers/index.js';
 import { init_interface } from '../cheat-init.js';
 import { byUiId, getUiRefs } from '../../ui/helpers/dom-query.js';
-import { getIsLoad, incrementClickCounter, setIsLoad } from '../../core/runtime-state.js';
+import {
+  getIsLoad,
+  getReactivatingToggles,
+  incrementClickCounter,
+  setIsLoad,
+} from '../../core/runtime-state.js';
 import { setErrorHook } from '../../core/actions/dispatcher.js';
 import { isAtSettings } from '../../core/sugarcube/quirks.js';
 import { on, reset } from '../../core/events/registry.js';
 import { initStorage, reactivateToggles } from '../../services/storage.js';
 import { ToggleScheduler } from '../../services/toggle-scheduler.js';
 import { createRuntimeObserverPolicy } from '../../core/runtime-observer-policy.js';
+import { getToggles } from '../../core/sugarcube/cheat-config.js';
 
 import { registerAllActions } from './action-maps.js';
 
@@ -62,8 +68,28 @@ function initGameObservers() {
   if (!cheat) return;
   reset(); // teardown previously-attached listeners — safe for idempotent re-injection
 
+  function ensureTogglesActive() {
+    if (!actionsRegistered) return;
+    if (getIsLoad() || getReactivatingToggles()) return;
+
+    const stored = getToggles();
+    const storedCount = stored && typeof stored === 'object' ? Object.keys(stored).length : 0;
+    if (!storedCount) return;
+
+    const bundles = ToggleScheduler.getBundles();
+    const runtimeCount =
+      Object.keys(bundles.functionbundle || {}).length +
+      Object.keys(bundles.dailyfunctionbundle || {}).length;
+
+    if (runtimeCount === 0) {
+      initStorage();
+      reactivateToggles();
+    }
+  }
+
   // document listener for toggle cheat
   on(document, 'click', function (event) {
+    ensureTogglesActive();
     if (isAtSettings()) {
       //restore variables in certain passage to avoid error.
       restoreVariables();
@@ -86,6 +112,7 @@ function initGameObservers() {
   });
 
   on(document, 'keyup', function () {
+    ensureTogglesActive();
     if (!isAtSettings()) {
       incrementClickCounter();
       cheatActions.runitall();

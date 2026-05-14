@@ -18,4 +18,11 @@ export function clearActiveToggles() {
   }
 }
 
+export function clearAllActiveToggles() {
+  clearActiveToggles();
+  for (const key in toggleState.toggleActiveDaily) {
+    delete toggleState.toggleActiveDaily[key];
+  }
+}
+
 export default toggleState;
