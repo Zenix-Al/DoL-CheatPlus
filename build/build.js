@@ -14,14 +14,14 @@ const BUILD_TARGETS = [
     scriptName: 'DoL Cheat Plus',
     minify: false,
     tmpOutfile: 'dist/userscript.js',
-    finalOutfile: 'dist/DoL-CheatPlus.user.js',
+    finalOutfile: 'dist/DoL-Companion-Panel.user.js',
   },
   {
     label: 'Uglify Build',
     scriptName: 'DoL Cheat Plus (Uglified)',
     minify: true,
     tmpOutfile: 'dist/uglified.js',
-    finalOutfile: 'dist/DoL-CheatPlus.uglified.user.js',
+    finalOutfile: 'dist/DoL-Companion-Panel.uglified.user.js',
   },
 ];
 
