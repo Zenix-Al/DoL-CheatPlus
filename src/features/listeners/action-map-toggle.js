@@ -15,7 +15,6 @@ export const TOGGLE_DEFINITIONS = [
   { id: 'unliarousal', label: 'arousal', trigger: 'frame' },
   { id: 'everyone_horny', label: 'Horny', trigger: 'frame' },
   { id: 'farm_safe', label: 'Safe', trigger: 'frame' },
-  { id: 'checkArray', label: 'Scan', trigger: 'frame', cooldownMs: 400 },
   { id: 'interact_child', label: 'Auto', trigger: 'frame', cooldownMs: 200 },
   { id: 'pregnancy_detection', label: 'Activate', trigger: 'frame', cooldownMs: 250 },
   { id: 'invincibleAngel', label: 'Activate', trigger: 'frame' },

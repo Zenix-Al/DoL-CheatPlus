@@ -123,16 +123,6 @@ export function set_school_rep() {
   setVariable(selected, input);
 }
 
-export function max_Ferocity() {
-  setVariable('wolfpackferocity', 22);
-  showToast('Activated!');
-}
-
-export function max_harmony() {
-  setVariable('wolfpackharmony', 22);
-  showToast('Activated!');
-}
-
 export function sidebar_cheat() {
   byId('ui-bar-toggle')?.click();
 }
@@ -233,8 +223,6 @@ const worldActions = {
   clean_cum_uretus,
   check_fruit_selling,
   set_school_rep,
-  max_Ferocity,
-  max_harmony,
   sidebar_cheat,
   cheat_backwards,
   cheat_forwards,

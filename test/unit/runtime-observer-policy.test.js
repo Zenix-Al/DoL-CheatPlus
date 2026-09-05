@@ -11,7 +11,7 @@ function macroButton(text) {
   };
 }
 
-test('defaultDetectLoadTrigger does not treat SAVES as a load event', () => {
+test('defaultDetectLoadTrigger treats the SAVES macro button as a load event', () => {
   assert.equal(defaultDetectLoadTrigger(macroButton('SAVES')), true);
 });
 

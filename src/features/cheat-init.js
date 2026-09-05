@@ -1,61 +1,80 @@
-import { renderRegistry } from '../ui/renderers/metadata-renderer.js';
+import { showToast } from '../ui/components/toast.js';
+import { dispatch } from '../core/actions/dispatcher.js';
+import { cheatCatalog } from '../cheats/index.js';
+import { createCheatRuntimeBuilder } from '../cheats/runtime/builder.js';
+import { createAdapterCheatConfigProvider } from '../cheats/runtime/config-provider.js';
+import { setActiveCheatBuilder, getActiveCheatBuilder } from '../cheats/runtime/active-builder.js';
 import {
-  createQuickMetadata,
-  createStatMetadata,
-  createMiscMetadata,
-  validateRegistry,
-} from '../ui/metadata/index.js';
+  createProductionCheatToggleRuntime,
+  createProductionSchedulerAdapter,
+} from '../cheats/runtime/toggle-runtime.js';
+import { createSectionShells } from '../ui/shell/definitions.js';
+import { renderSectionShell } from '../ui/shell/renderer.js';
 import { byUiId } from '../ui/helpers/dom-query.js';
 import {
   cheatVer,
   cheatVerType,
   curVer,
   isServer,
-  npcnamelist,
   testedOn,
 } from '../core/game-context.js';
 import { getRuntimeWindow } from '../core/global-bridge.js';
 import debugLog from '../core/logger.js';
 import { safeCall } from '../core/safe-exec.js';
+import { createProductionDiagnostics } from '../diagnostics/production.js';
 import {
-  animals,
-  babyOptions,
-  bodyparts,
-  characteristics,
   downloadSite,
-  exam,
-  fame,
-  hentaiSkill,
-  npctrait,
-  parasitename,
-  school_rep,
   sourceCode,
-  talent_skill,
 } from '../config/game-data.js';
 
 //generate interface (ids, inputs, textInputs)
 //quick
-function init_interface() {
+export function configureCheatRuntime(runtimeEngine) {
+  const adapter = runtimeEngine?.adapter;
+  if (!adapter) throw new TypeError('Cheat runtime configuration requires an active adapter.');
+  const runtimeLogger = {
+    error: (message, data) => debugLog('cheat-runtime', message, { data, level: 'error' }),
+  };
+  const scheduler = createProductionSchedulerAdapter();
+  const toggle = createProductionCheatToggleRuntime({ logger: runtimeLogger, scheduler });
+  let builder;
+  const diagnostics = createProductionDiagnostics({
+    catalog: cheatCatalog,
+    adapter,
+    getHealth: () => builder?.health() ?? { total: 0, mounted: 0, failed: 0 },
+    getAliases: () => [],
+    scheduler,
+  });
+  builder = createCheatRuntimeBuilder({
+    catalog: cheatCatalog,
+    adapter,
+    config: createAdapterCheatConfigProvider(adapter),
+    document,
+    dispatchShellAction: dispatch,
+    feedback: {
+      success: (message) => showToast(message, { variant: 'success' }),
+      error: (message) => showToast(message, { variant: 'error' }),
+      warning: (message) => showToast(message, { variant: 'warning' }),
+      info: (message) => showToast(message, { variant: 'info' }),
+    },
+    services: { toggle, scheduler, logger: runtimeLogger, diagnostics },
+    logger: {
+      error: (message, data) => debugLog('cheat-builder', message, { data, level: 'error' }),
+    },
+  });
+  builder.compile();
+  return setActiveCheatBuilder(builder);
+}
+
+async function init_interface() {
   safeCall('init_interface-start', () => {
     debugLog('cheat-init', 'init_interface-start');
   });
   const runtimeWindow = getRuntimeWindow();
   const context = {
     data: {
-      animals,
-      babyOptions,
-      bodyparts,
-      characteristics,
       downloadSite,
-      exam,
-      fame,
-      hentaiSkill,
-      npcnamelist: npcnamelist || runtimeWindow?.npcnamelist,
-      npctrait,
-      parasitename,
-      school_rep,
       sourceCode,
-      talent_skill,
     },
     runtime: {
       testedOn: testedOn || runtimeWindow?.testedOn,
@@ -86,23 +105,24 @@ function init_interface() {
     }
   );
 
-  const quick = createQuickMetadata(context);
-  const stat = createStatMetadata(context);
-  const misc = createMiscMetadata(context);
+  const shells = createSectionShells(context);
 
-  validateRegistry(quick, 'quickMetadata');
-  validateRegistry(stat, 'statMetadata');
-  validateRegistry(misc, 'miscMetadata');
-
-  renderRegistry(quick, byUiId('quick-content'), {
-    requiredPaths: ['passage', 'arousal'],
-  });
-  renderRegistry(stat, byUiId('stats-content'), {
-    requiredPaths: ['passage', 'money'],
-  });
-  renderRegistry(misc, byUiId('misc-content'), {
-    requiredPaths: ['passage'],
-  });
+  const builder = getActiveCheatBuilder();
+  if (builder) {
+    await builder.mountSection('quick', byUiId('quick-content'), shells.quick);
+    await builder.mountSection('stats', byUiId('stats-content'), shells.stats);
+    await builder.mountSection('misc', byUiId('misc-content'), shells.misc);
+  } else {
+    for (const section of ['quick', 'stats', 'misc']) {
+      renderSectionShell({
+        section,
+        rows: shells[section],
+        container: byUiId(`${section === 'stats' ? 'stats' : section}-content`),
+        document,
+        dispatchAction: dispatch,
+      });
+    }
+  }
 
   var element = byUiId('tmpText') || document.getElementById('tmpText');
   if (element) element.classList.add('tmpText');

@@ -14,7 +14,7 @@ const modalTemplate = {
             { tag: 'div', id: 'quick-link', class: 'nav-link gold', text: 'Quick' },
             { tag: 'div', id: 'stats-link', class: 'nav-link', text: 'Stat' },
             { tag: 'div', id: 'misc-link', class: 'nav-link', text: 'Misc' },
-            { tag: 'div', id: 'close-modal-top', class: 'close nav-link', text: '×' },
+            { tag: 'div', id: 'close-modal-top', class: 'close nav-link', text: '\u00d7' },
           ],
         },
         {
@@ -29,7 +29,7 @@ const modalTemplate = {
         {
           tag: 'div',
           class: 'navbar',
-          children: [{ tag: 'div', id: 'close-modal-bottom', class: 'close nav-link', text: '×' }],
+          children: [{ tag: 'div', id: 'close-modal-bottom', class: 'close nav-link', text: '\u00d7' }],
         },
       ],
     },
@@ -44,9 +44,9 @@ const layoutTemplate = {
       tag: 'div',
       id: 'floating-button',
       children: [
-        { tag: 'button', id: 'cheat-history-backwards', text: '←', hidden: true },
-        { tag: 'button', id: 'cheat-history-forwards', text: '→', hidden: true },
-        { tag: 'button', id: 'cheat-sidebar', text: '☰', hidden: true },
+        { tag: 'button', id: 'cheat-history-backwards', text: '\u2190', hidden: true },
+        { tag: 'button', id: 'cheat-history-forwards', text: '\u2192', hidden: true },
+        { tag: 'button', id: 'cheat-sidebar', text: '\u2630', hidden: true },
         { tag: 'button', id: 'cheat-open', text: 'Cheat' },
       ],
     },

@@ -2,7 +2,6 @@ const toggleState = {
   toggleActive: {},
   toggleActiveDaily: {},
   toggleDeactivated: false,
-  checkArrayThreshold: 0,
   initNPCinstapreg: false,
   tmpArousal: 0,
   orgasmdown: 0,

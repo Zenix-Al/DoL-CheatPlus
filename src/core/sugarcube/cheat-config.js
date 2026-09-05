@@ -14,8 +14,9 @@
  *   orgasmCount        {number}  — counter used by intenseCum toggle
  *   baseNpcPregnancyChance {number} — saved baseline before allNPCInstaPregnant raises it
  *   unlicumMode        {boolean} — whether intense-cum mode is engaged
- *   arrayCheck         {boolean} — debug flag set when a broken array is found
  */
+import { normalizeCheatConfig } from '../config/cheat-config-schema.js';
+
 import { getVars } from './state.js';
 
 // ---------------------------------------------------------------------------
@@ -39,18 +40,10 @@ export function initCheatConfig() {
   const vars = getVars();
   if (!vars) return;
 
-  vars.cheatPlus ??= {};
+  vars.cheatPlus = normalizeCheatConfig(vars.cheatPlus, {
+    baseNpcPregnancyChance: vars.baseNpcPregnancyChance,
+  });
   const c = vars.cheatPlus;
-
-  c.angel ??= 0;
-  c.angelMode ??= true;
-  c.toggles ??= {};
-  c.storedNPCs ??= {};
-  c.storedNPCsDate ??= 0;
-  c.trueDivine ??= '';
-  c.orgasmCount ??= 0;
-  c.baseNpcPregnancyChance ??= vars.baseNpcPregnancyChance;
-  c.unlicumMode ??= false;
 
   // Handle save data that used penisstate/vaginastate to decide first trueDivine
   if (!c.trueDivine && vars.penisstate === 0 && vars.vaginastate === 0) {
@@ -173,16 +166,4 @@ export function incrementOrgasmCount() {
 export function resetOrgasmCount() {
   const c = cfg();
   if (c) c.orgasmCount = 0;
-}
-
-// ---------------------------------------------------------------------------
-// Debug
-// ---------------------------------------------------------------------------
-
-export function getArrayCheck() {
-  return cfg()?.arrayCheck ?? false;
-}
-export function setArrayCheck(value) {
-  const c = cfg();
-  if (c) c.arrayCheck = value;
 }

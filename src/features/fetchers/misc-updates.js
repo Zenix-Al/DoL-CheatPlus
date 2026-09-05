@@ -1,5 +1,4 @@
 import {
-  getCheatPlus,
   getFarm,
   getVariable,
   getVariablePath,
@@ -37,10 +36,6 @@ export function update_farm_animals_like() {
   });
 }
 
-export function update_array_checker() {
-  setText('auto_check_status', getCheatPlus()?.arrayCheck ? 'found' : 'not found');
-}
-
 export function randomEncounterUpdate() {
   setText('randomEncounterSet', getVariable('alluremod') === 0 ? 'Disabled' : 'Enabled');
 }
@@ -50,7 +45,6 @@ const miscUpdates = {
   update_farm_assault_day,
   update_farm_buildtime,
   update_farm_animals_like,
-  update_array_checker,
   randomEncounterUpdate,
 };
 

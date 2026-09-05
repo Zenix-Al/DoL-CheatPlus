@@ -3,6 +3,7 @@ import { modalTemplate, renderTemplate } from '../renderers/layout.js';
 import { get, set } from '../../core/state/index.js';
 import { dispatch } from '../../core/actions/dispatcher.js';
 import { ensureModalHotkey } from '../helpers/modal-hotkey.js';
+import { teardownActiveCheatBuilder } from '../../cheats/runtime/active-builder.js';
 
 function toggleModalByHotkey() {
   if (get('modal.open')) closeModal();
@@ -117,6 +118,7 @@ export function closeModal() {
   const modal = byUiId('modal');
   if (!modal) return;
 
+  void teardownActiveCheatBuilder();
   set('modal.isDelete', true);
   modal.remove();
   refreshUiRefs();

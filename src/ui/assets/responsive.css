@@ -18,6 +18,35 @@
     width: 100%;
   }
 
+  .cp-cheat-descriptor {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 5px;
+    padding-top: 9px;
+    padding-bottom: 12px;
+  }
+
+  .cp-cheat-label {
+    min-height: auto;
+  }
+
+  .cp-cheat-status {
+    margin-left: 0;
+  }
+
+  .cp-cheat-controls {
+    width: 100%;
+  }
+
+  .cp-cheat-control-unit {
+    max-width: 100%;
+  }
+
+  .cp-cheat-control-unit > .modal-content-width,
+  .cp-cheat-control-unit > select {
+    min-width: 0;
+    max-width: min(100%, 280px);
+  }
+
   .toast-container,
   #toastContainer,
   #cp-fallback-toast-container {
@@ -26,4 +55,15 @@
     transform: translateX(-50%);
     width: min(92vw, 420px);
   }
+}
+
+@media (max-width: 480px) {
+  .cheat-content {
+    padding: 0.75rem 0.75rem 3.5rem !important;
+  }
+
+  .cp-cheat-controls {
+    column-gap: 8px;
+  }
+
 }

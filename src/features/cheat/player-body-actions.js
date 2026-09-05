@@ -5,28 +5,6 @@ import { hydrateCheatUi } from '../fetchers/index.js';
 
 export function createPlayerBodyActions() {
   return {
-    moneymanager() {
-      const input = parseInt(byId('moneyinput').value);
-      if (isNaN(input)) {
-        showToast('failed : input is not a number!');
-        return;
-      }
-      showToast('Activated!');
-      getVars().money = input;
-    },
-
-    bodymanager() {
-      const bodypick = byId('bodypick')?.value;
-      const bodySizes = { Tiny: 0, Small: 1, Normal: 2, Large: 3 };
-      if (bodypick in bodySizes) {
-        getVars().bodysize = bodySizes[bodypick];
-        showToast('Activated!');
-        hydrateCheatUi.bodycurrent();
-      } else {
-        showToast('Failed!');
-      }
-    },
-
     bodytypemanager() {
       const bodytypepick = byId('bodytypepick')?.value;
       const bodyTypes = { Masculine: 'm', Feminine: 'f', Androgynous: 'a' };

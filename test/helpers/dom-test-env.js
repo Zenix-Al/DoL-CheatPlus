@@ -25,7 +25,7 @@ export function createDomWithSugarCube({ passage = 'Town', vars = {} } = {}) {
     window.confirm = () => true;
   }
 
-  const previous = new Map();
+  const previousDescriptors = new Map();
   const keys = [
     'window',
     'document',
@@ -43,32 +43,42 @@ export function createDomWithSugarCube({ passage = 'Town', vars = {} } = {}) {
   ];
 
   keys.forEach((key) => {
-    previous.set(key, globalThis[key]);
+    previousDescriptors.set(key, Object.getOwnPropertyDescriptor(globalThis, key));
   });
 
-  globalThis.window = window;
-  globalThis.document = window.document;
-  globalThis.navigator = window.navigator;
-  globalThis.HTMLElement = window.HTMLElement;
-  globalThis.HTMLInputElement = window.HTMLInputElement;
-  globalThis.HTMLSelectElement = window.HTMLSelectElement;
-  globalThis.HTMLButtonElement = window.HTMLButtonElement;
-  globalThis.Event = window.Event;
-  globalThis.MouseEvent = window.MouseEvent;
-  globalThis.Node = window.Node;
-  globalThis.requestAnimationFrame =
-    window.requestAnimationFrame?.bind(window) ?? ((cb) => setTimeout(() => cb(Date.now()), 0));
-  globalThis.cancelAnimationFrame =
-    window.cancelAnimationFrame?.bind(window) ?? ((id) => clearTimeout(id));
-  globalThis.unsafeWindow = window;
+  const globals = {
+    window,
+    document: window.document,
+    navigator: window.navigator,
+    HTMLElement: window.HTMLElement,
+    HTMLInputElement: window.HTMLInputElement,
+    HTMLSelectElement: window.HTMLSelectElement,
+    HTMLButtonElement: window.HTMLButtonElement,
+    Event: window.Event,
+    MouseEvent: window.MouseEvent,
+    Node: window.Node,
+    requestAnimationFrame:
+      window.requestAnimationFrame?.bind(window) ?? ((cb) => setTimeout(() => cb(Date.now()), 0)),
+    cancelAnimationFrame: window.cancelAnimationFrame?.bind(window) ?? ((id) => clearTimeout(id)),
+    unsafeWindow: window,
+  };
+
+  Object.entries(globals).forEach(([key, value]) => {
+    Object.defineProperty(globalThis, key, {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value,
+    });
+  });
 
   function cleanup() {
     keys.forEach((key) => {
-      const value = previous.get(key);
-      if (value === undefined) {
+      const descriptor = previousDescriptors.get(key);
+      if (!descriptor) {
         delete globalThis[key];
       } else {
-        globalThis[key] = value;
+        Object.defineProperty(globalThis, key, descriptor);
       }
     });
     window.close();

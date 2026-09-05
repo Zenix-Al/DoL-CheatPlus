@@ -2,8 +2,6 @@ import { validateMethodEntries } from './action-map-schema.js';
 
 /** @type {import('./action-map-schema.js').MethodActionEntry[]} */
 export const METHOD_ACTIONS = [
-  { actionKey: 'max_harmony' },
-  { actionKey: 'max_Ferocity' },
   { actionKey: 'vow-virgin', methodName: 'imvirgintemple' },
   { actionKey: 'arousal_player' },
   { actionKey: 'arousal_enemy' },
@@ -11,14 +9,11 @@ export const METHOD_ACTIONS = [
   { actionKey: 'jk-lol', methodName: 'imdonefor' },
   { actionKey: 'hesoyam' },
   { actionKey: 'kill_player' },
-  { actionKey: 'ArrayChecker' },
   { actionKey: 'statset', methodName: 'statmanager' },
   { actionKey: 'enemycalm' },
   { actionKey: 'kill_enemy' },
   { actionKey: 'statsete', methodName: 'statmanagere' },
-  { actionKey: 'moneyset', methodName: 'moneymanager' },
   { actionKey: 'sprayset', methodName: 'sprayunlimited' },
-  { actionKey: 'bodyset', methodName: 'bodymanager' },
   { actionKey: 'bodytypeset', methodName: 'bodytypemanager' },
   { actionKey: 'ballsset', methodName: 'ballsmanager' },
   { actionKey: 'virginityset', methodName: 'virginitymanager' },
@@ -55,7 +50,6 @@ export const METHOD_ACTIONS = [
   { actionKey: 'clean_cum_uretus' },
   { actionKey: 'in_game_cheat' },
   { actionKey: 'alt_cheat' },
-  { actionKey: 'stringJSSet' },
   { actionKey: 'randomEncounterSet' },
   { actionKey: 'npc_abortion_purge', methodName: 'purgeNPCPregnancy' },
   { actionKey: 'purgeNPCBaby' },

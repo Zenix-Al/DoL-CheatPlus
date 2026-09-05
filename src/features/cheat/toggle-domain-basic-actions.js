@@ -1,10 +1,6 @@
-import { getNpcNameList } from '../../core/game-context.js';
-import { setArrayCheck } from '../../core/sugarcube/cheat-config.js';
 import { getVars } from '../../core/sugarcube/state.js';
-import { showToast } from '../../ui/components/toast.js';
-import { isBrokenStringIndexedArray, walkValueTree } from '../utils/value-tree.js';
 
-export function createToggleDomainBasicActions(toggleState) {
+export function createToggleDomainBasicActions() {
   return {
     everyone_horny() {
       const vars = getVars();
@@ -25,22 +21,6 @@ export function createToggleDomainBasicActions(toggleState) {
     },
     edenshrooms() {
       getVars().edenshrooms = 4;
-    },
-
-    checkArray() {
-      const vars = getVars();
-      toggleState.checkArrayThreshold += 1;
-      if (toggleState.checkArrayThreshold <= 10) return;
-
-      toggleState.checkArrayThreshold = 0;
-      setArrayCheck(false);
-
-      walkValueTree(vars, 'SugarCube.State.variables', (value, _path, controls) => {
-        if (!isBrokenStringIndexedArray(value)) return;
-        setArrayCheck(true);
-        showToast('Broken array has been found!');
-        controls.stop();
-      });
     },
 
     maxchruchtask() {

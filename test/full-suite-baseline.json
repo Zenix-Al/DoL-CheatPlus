@@ -1,0 +1,12 @@
+{
+  "recordedAt": "2026-08-30",
+  "minimumTests": 172,
+  "minimumPass": 170,
+  "maximumSkipped": 0,
+  "maximumTodo": 2,
+  "maximumDurationMs": 60000,
+  "allowedTodoTitles": [
+    "server save Export registers save_data and exports available save slots to the local server",
+    "server save Import registers load_data and imports the selected local-server save data"
+  ]
+}

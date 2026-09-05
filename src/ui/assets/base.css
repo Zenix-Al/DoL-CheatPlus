@@ -1,5 +1,5 @@
 #cheat {
-  font-family: var(--cp-font-ui, 'Trebuchet MS', 'Segoe UI', sans-serif);
+  font-family: var(--cp-font-ui, Arial, sans-serif);
   color: var(--cp-text-primary, #fff);
 }
 

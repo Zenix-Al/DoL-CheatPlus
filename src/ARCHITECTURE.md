@@ -1,5 +1,26 @@
 # DoL-CheatPlus Architecture Guide
 
+## Planned cheat-definition boundary
+
+Wave 2 freezes `src/cheats/types.js` as the public authoring contract. Pure
+descriptor modules will live under `src/cheats/definitions/`; the generated
+manifest and catalog will import them without registration side effects. An
+explicit builder will later connect catalog entries to the renderer, scheduler,
+config facade, and active runtime adapter.
+
+```text
+cheats/definitions -> generated manifest -> catalog -> explicit builder
+                                                   -> renderer/control scopes
+                                                   -> toggle scheduler
+                                                   -> config facade -> SugarCube save adapter
+                                                   -> game adapter -> SugarCube live state
+```
+
+Definitions may import the pure factory and value-only helpers. They may not
+import the dispatcher, renderer, scheduler, storage provider, SugarCube adapter,
+or ambient DOM/game globals. See `docs/CHEAT_FACTORY_CONTRACT.md` for the frozen
+contract; Wave 3 supplies the factory, generator, and catalog implementations.
+
 ## Module Boundaries
 
 ```

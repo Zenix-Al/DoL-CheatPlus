@@ -3,6 +3,7 @@ import { factory } from '../core/feature-factory.js';
 import { byUiId } from '../ui/helpers/dom-query.js';
 
 import { configureRuntimeObserverPolicy } from './listeners/index.js';
+import { configureCheatRuntime } from './cheat-init.js';
 
 import './registry.js'; // side-effect: registers all features into factory
 
@@ -19,6 +20,7 @@ function bootstrap({ runtimeEngine } = {}) {
   configureRuntimeObserverPolicy(runtimeEngine?.observerPolicy ?? {});
 
   factory.registerAllActions();
+  configureCheatRuntime(runtimeEngine);
   factory.initAllFeatures();
   factory.startAllObservers();
 

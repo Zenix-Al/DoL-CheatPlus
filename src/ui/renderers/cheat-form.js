@@ -3,16 +3,6 @@ import { getIsTestingAllFunction, setIsTestingAllFunction } from '../../core/run
 import { set as setState } from '../../core/state/index.js';
 import { timedToast } from '../components/toast.js';
 
-export const convertStringIndexArrayToObject = (arr) => {
-  const obj = {};
-  for (const key in arr) {
-    if (typeof key === 'string') {
-      obj[key] = arr[key];
-    }
-  }
-  return obj;
-};
-
 export function deleteText() {
   setState('modal.isDelete', true);
 

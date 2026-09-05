@@ -4,10 +4,6 @@ function isCanonicalArrayIndex(key, length) {
   return Number.isInteger(index) && index >= 0 && index < length && String(index) === key;
 }
 
-export function isBrokenStringIndexedArray(value) {
-  return Array.isArray(value) && value.length === 0 && Object.keys(value).length > 0;
-}
-
 export function walkValueTree(rootValue, rootPath, visitor) {
   let stopped = false;
 

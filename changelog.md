@@ -1,267 +1,479 @@
-v2.0.0
-Major release: project revived into a proper cheat framework.
+# Changelog
 
-Framework and architecture:
-• Feature lifecycle moved to structured bootstrap/factory flow.
-• Runtime state, persistence config, and adapter boundaries separated.
-• SugarCube-specific access isolated behind adapter/selectors.
-• Runtime-engine strategy introduced with registry/profile model.
-• RenPy-web backend scaffold added as portability reference.
+All notable changes to this project will be documented in this file.
 
-UI and renderer:
-• Metadata-driven UI pipeline completed and normalized.
-• Renderer split into focused modules (primitives, runtime binding, policy, wiring).
-• Modal/floating/toast styling split and modernized.
-• Modal behavior stabilized (search row, fixed-height scroll container, close controls).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-Actions and reliability:
-• Dispatcher + action map system refactored with schema validation.
-• Toggle runtime extracted into scheduler/engine with clearer responsibilities.
-• Added test coverage for action policies, renderer lifecycle, and regression checks.
+## [3.0.0] - Major Framework Overhaul
 
-Cleanup:
-• Legacy/deprecated paths removed (old standalone tooling and stale UI wiring).
-• Large modules decomposed by domain for maintainability.
+A major release that moves the cheat system to a more reliable descriptor-based
+framework and modernizes the in-game interface.
 
-v1.2.3
-minor changes :
-• Layout fix, layout was making in game layout messed up
+### Added
 
-Development update :
-• Add function to test all cheat function, can test quicker now.
+- Added descriptor-based cheat definitions for the game's cheat controls
+- Added support for dynamic controls, toggles, persistence, diagnostics, and
+  clearer unavailable states
+- Added dedicated layout sections for headings, help text, compatibility
+  information, and other interface elements
 
-v1.2.2
-now things are tested properly after major changes, no more alpha version.
-Update :
-• safeguards and checks
+### Changed
 
-v1.2.1 alpha
-Bugfix :
-• initialize failed fixed
-• saveguard in cheat functions
+- Rebuilt Quick, Stat, and Misc rendering around one consistent system
+- Improved control styling, responsive layout, and Shadow DOM behavior
+- Improved cheat placement, refresh behavior, and toggle restoration
 
-Update :
-• Cheat injection more optimized
+### Removed
 
-Todo :
-• More cleanup
+- Removed the old metadata renderer and duplicate legacy cheat controls
+- Removed misplaced slots, detached headings, and other legacy layout issues
 
-v1.2.0 alpha
-The cheat now revived again from slumber!
+## [2.0.7]
 
-Update :
-• Major changes for the cheat
-• Repo more clean and easier to build
-• Optimization here and there
-• Checked and tested for latest version.
-Remove :
-• server sync now removed forever.
+### Fixed
 
-v1.1.6
-Update :
-• new cheat, NPC max pregnancy rate
-• new cheat, Multiple pregnancy, always able to impregnant any NPC for multiple times for each bustin nuts.
-• NPC pregnancy purge in pregnancy manager.
-• NPC baby purge in pregnancy manager. (this will including named npc)
-Remove :
-• Demon sex is removed, replaced by NPC max pregnancy rate.
-bugfix :
-• NPC pregnancy abortion.
-v1.1.5
-Update :
-• Update game version and quick test.
-Optimization :
-• Typing when cheat opened now wont trigger to the game.
-• unlimited toggle optimization, ensuring it triggered even by using keyboard control.
-v1.1.4
-update :
-• Add debug text to js, path variable editor without opening browser console.
-• Turn off random encounter cheat.
-• Add support for offline DoL plus version.
-Optimization :
-• Optimize divine transformation toggle cheat to prevent you turn to wrong divine transformation.
-• Optimize unlicum to ensure intense orgasm for 3 turns no matter in what DoL version.
-v1.1.3
-bugfix :
-• removed limit semen/milk set and fix refil for both.
-• update images in online and server version
-• i forgot i think i compile DoL plus version in vanilla instead.
-update :
-• adjusted unlimited cum to based your max volume.
-• debug tool search update, instead of showing result in console, it shown below it.
-• NPC pregnancy that stored in cheat now included to NPC abortion.
-• optimize pregnancy detection and fixed pregnancy detection to count named npc despite not pregnant
-• Pregnancy detection now also include fetus that stored in cheat.
+- Fixed toggle cheat not persisting state correctly
+- Fixed auto-load cheat state on page refresh
 
-v.1.1.2
-updated and quick tested to current version(0.4.7.2).
-bugfix :
-• infinity pregnancy fix and wrong variable for Offspring manager which is still placeholder.
-• array error check error after changes.
-Will added the manager for pregnancy that stored in cheat when Infinite npc pregnancy activated.
-v.1.1.1
-new cheat :
-• Infinite NPC pregnancy, It will store pregnancy on the cheat untill it reach 1 day before give birth.
-• Demon sex, It will make you temporarely demon during sex(demon ability to force pregnancy).
-• New means prone to bugs, so be cautious.
-bugfix :
-• invincible angel has another exploit fix.
-Optimization :
-• cheat throttle for fetching and toggles are lower for smooth experience.
-v.1.1.0
-bugfix :
-• online version css, i entirely forgot, lol.
-• update vanilla DoL in server version.
-Optimization :
-• Now the cheat impact less on the game performance.
-• Now toggle state saved on your save file, you dont need to reactivate them again when loading, refreshing the game.
-backend changes (boring stuff) :
-• move non cheat as part of main function.
-• add delay for info fetcher reducing performance impact by the cheat.
-• storage for the cheat in save file.
-• listener now using lookup, reducing performance impact by the cheat.
-• UI optimization
-• UI now become generative, reducing performance impact by the cheat.
-• add prevention for excessive opening and closing cheat too fast to avoid error.
-v.1.0.19
-• New cheat :
-clean cum become hygiene, you can also Makes yourself dirty also Flush cum inside your uretus.
-Enable in game debuging mode at ease. same like cheat but more advance, this disable feats, but you can disable it again.
-since enable debugging mode enable cheat also, now i'll not adding what's already in there unless it prevents you to get feats when using in game cheat or i'll add it for quick cheat.
-• Bugfix :
-invincible angel, its new, so its a bit messy
-Abortion, unable to abort anything that inside anus
-Abortion, things went wrong when you abort a "Hermaphrodite" parasite where you still can being pregnat with 4 parasite.
-• Optimization for listener.
-v.1.0.18
-• New cheat to retain angle transformation even when losing virginity.
-• Bug fixes :
-Unable to change cum/milk volume and refactory rate.
-Info fetcher unable to fetch tentacle info.
+### Planned
 
-v.1.0.17
-• You can now do an abortion (caution it might cause some problem to an event, e.g : alex pregnancy event)
-• small ui change.
-v.1.0.16
-• Update cheat for v0.4.6.3 for vanilla version
-• other version dont need update.
-• Important : Current cheat version isnt fully tested to v0.4.6.3.
-v.1.0.15
-• Now you able to see sources from github!
-• The previous changelog is seen in the zip files
+- Additional bug fixes related to these changes
+- Improved injector tool usability
 
-v.1.0.14
-• Bugfix
-• Add support for firebase NWJS version.
-v.1.0.13
-• added support for online DoL versions, this is not fully tested yet, if any problem occour, you can contact me.
-v.1.0.12
-• fix some cheat doesnt work after changes
-• unlimited cum : cum not intense
-• array fix : function unable to get accessed
-v.1.0.11
-server version changes :
-• everything including the cheat script is moved to index.php, less files to see.
-• Add warning before server save if the version is different.
-changes :
-• add information about server save and why array error exist
-• array error fix is now become a tool.
-update :
-• New accessibility, enable history button, sidebar button, simplify cheat button, aimed to make mobile user easily open/close sidebar and access history button.
-• Brought back the sex skill cheat. I just forgot to re-add them again.
-v.1.0.10
-server version changes :
-• new start-admin.bat, to run the server with admin privilege if error : Failed to open stream: Permission denied when opening the ip.
-non server version changes :
-• compatibility fix : due to Cross-Origin Resource Sharing (CORS) policy in some browser, the cheat might be refuse to load, so the script now moved one with the DoL.
-v.1.0.9
-bugfix :
-• pregnancy lock for npc error
-• Cheat prevention in main menu fix
-update :
-• wolf ferocity changed from toggle to regular cheat at misc tab.
-• MC offspring manager now available.
-optimization :
-• new daily toggle to reduce computing.
-• info fetcher optimization.
-v.1.0.8
-update :
-• pregnancy manager : pregnancy lock and day control.
-• UI small changes, description now using tooltip.
-v.1.0.7
-update :
-• school reputation
-• farm vegetables sold in process checker in misc
-• quick performance settings in misc
-bugfix :
-• pregnancy detector
-optimization :
-• code improovement
-v.1.0.6
-major changes:
-• 2 cheat version :
-• server version
-• allows the cheat to work on any version(might cause bug on not tested version)
-• non server version
-• only works on current version
-• no server save
-• work without server like the game itself
-update :
-• cheat info
-• pregnancy detection for npc/player
+## [2.0.0] - Major Framework Overhaul
 
-    optimization :
-    	• more script optimization, especially for toggles.
+A major release that revived the project into a proper, maintainable cheat framework with clear architecture and improved reliability.
 
-    bugfix :
-    	• wolf ferocity and harmony not working
+### Framework and Architecture
 
-v.1.0.5
-update :
-• wolfpack ferocity and harmony max
-• auto interact with child
+- Moved feature lifecycle to structured bootstrap/factory flow
+- Separated runtime state, persistence config, and adapter boundaries
+- Isolated SugarCube-specific access behind adapter/selectors
+- Introduced runtime-engine strategy with registry/profile model
+- Added RenPy-web backend scaffold as portability reference
 
-    optimization :
-    	• script optimization
-    	• sync optimization
+### UI and Renderer
 
-    removed :
-    	• mayor project fix(array error fix able to fix it)
+- Completed metadata-driven UI pipeline with normalization
+- Split renderer into focused modules (primitives, runtime binding, policy, wiring)
+- Split and modernized modal/floating/toast styling
+- Stabilized modal behavior (search row, fixed-height scroll container, close controls)
 
-v.1.0.4
-update :
-• Array error fix : fix wrong array usage that causing data loss (beta, might cause problem)
-• Auto detect array error : game sometimes create new wrong array usage that might cause another data loss.
+### Actions and Reliability
 
-    bugfix :
-    	• Upgrade crime mod that cause problem.
+- Refactored dispatcher and action map system with schema validation
+- Extracted toggle runtime into scheduler/engine with clearer responsibilities
+- Added test coverage for action policies, renderer lifecycle, and regression checks
 
-    Upgrade :
-    	• debug deep search now more detail.
-    	• codes improovement.
+### Cleanup
 
-v.1.0.3
-update :
-• mayor project fix, this caused by the game, so this cheat will fix it if its gone in your gameplay, only works if all of the project is undiscovered. (it'll mark all project finished)
+- Removed legacy/deprecated paths (old standalone tooling and stale UI wiring)
+- Decomposed large modules by domain for maintainability
 
-    bugfix :
-    	• parasite removal or infection didnt work
+## [1.2.3]
 
-v.1.0.2
-update :
-• fame and npc manager add scope to see the current variable
-• exam manager
-• talent manager
+### Fixed
 
-    bugfix :
-    	• fix cumming only little to nothing, now its become always intense when activate unlimited cum
-    	• more error handling for server save function.
+- Fixed layout issue that was breaking in-game layout
 
-v.1.0.1
-bugfix :
-• server import/export not yet done but alert already shown
-• server import/export not exporting if there's a gap from 1• 9 of the save
-• unlimited toggle didnt work properly
-• add prevention to activate cheat in main menu.
-v.1.0.0
-initial
+### Added
+
+- Added function to test all cheat functions for quicker iteration
+
+## [1.2.2]
+
+### Changed
+
+- Properly tested after major changes; no longer alpha version
+
+### Added
+
+- Added additional safeguards and checks
+
+## [1.2.1] - Alpha
+
+### Fixed
+
+- Fixed initialization failure
+- Added safeguard in cheat functions
+
+### Changed
+
+- Optimized cheat injection
+
+### TODO
+
+- More cleanup needed
+
+## [1.2.0] - Alpha - The Revival
+
+The cheat has been revived from slumber!
+
+### Changed
+
+- Major changes to cheat architecture
+- Cleaned up repo for easier build process
+- General optimization improvements
+- Verified compatibility with latest game version
+
+### Removed
+
+- Server sync functionality removed permanently
+
+## [1.1.6]
+
+### Added
+
+- New cheat: NPC max pregnancy rate
+- New cheat: Multiple pregnancy (ability to impregnate any NPC multiple times)
+- NPC pregnancy purge in pregnancy manager
+- NPC baby purge in pregnancy manager (including named NPCs)
+
+### Changed
+
+- Replaced Demon sex cheat with NPC max pregnancy rate
+
+### Fixed
+
+- Fixed NPC pregnancy abortion
+
+## [1.1.5]
+
+### Added
+
+- Support for latest game version with verification testing
+
+### Changed
+
+- Optimized: Typing while cheat is open no longer triggers in-game actions
+- Optimized: Unlimited toggle now triggers reliably even with keyboard control
+
+## [1.1.4]
+
+### Added
+
+- Added debug text to JavaScript (path variable editor without opening browser console)
+- Added support for offline DoL Plus version
+
+### Changed
+
+- Turned off random encounter cheat
+- Optimized divine transformation toggle to prevent incorrect transformations
+- Optimized unlimited cum to ensure intense orgasm for 3 turns regardless of DoL version
+
+## [1.1.3]
+
+### Fixed
+
+- Removed semen/milk limit set and fixed refill for both
+- Updated images in online and server versions
+- Fixed DoL Plus version compilation (was incorrectly compiled as vanilla)
+
+### Changed
+
+- Adjusted unlimited cum to be based on max volume
+- Updated debug tool search to display results below interface instead of console
+- Optimized pregnancy detection to count named NPCs even if not pregnant
+- Updated pregnancy detection to include stored fetuses in cheat
+
+## [1.1.2]
+
+### Fixed
+
+- Fixed infinite pregnancy logic
+- Fixed wrong variable for offspring manager (was still placeholder)
+- Fixed array error checking after changes
+
+### Planned
+
+- Will add manager for pregnancies stored in cheat when Infinite NPC pregnancy is activated
+
+## [1.1.1]
+
+### Added
+
+- New cheat: Infinite NPC pregnancy (stores pregnancies until 1 day before birth)
+- New cheat: Demon sex (temporarily become demon during sex for forced pregnancy ability)
+
+### Fixed
+
+- Added additional exploit fix for invincible angel
+
+### Changed
+
+- Lowered cheat throttle for fetching and toggles for smooth experience
+
+### Note
+
+- New features may be prone to bugs; use with caution
+
+## [1.1.0]
+
+### Fixed
+
+- Fixed online version CSS
+- Updated vanilla DoL in server version
+
+### Changed
+
+- Optimized: Cheat now has less performance impact on game
+- Optimized: Toggle state now saved in save file; no need to reactivate when loading/refreshing game
+- Moved non-cheat functionality as part of main function
+- Added delay for info fetcher to reduce performance impact
+- Optimized UI to be generative, reducing performance impact
+- Added prevention for excessive opening/closing to avoid errors
+
+### Backend Changes
+
+- Implemented storage for cheat in save file
+- Changed listener to use lookup table for reduced performance impact
+- Updated info fetcher with added delay for performance improvement
+
+## [1.0.19]
+
+### Added
+
+- New cheat: Clean cum (now becomes hygiene; can make yourself dirty and flush cum)
+- In-game debug mode (advance version of cheat, disables feats but can be disabled again)
+
+### Fixed
+
+- Fixed invincible angel cheat
+- Fixed abortion for items inside anus
+- Fixed abortion logic for "Hermaphrodite" parasites
+
+### Changed
+
+- Optimized listener
+- Debug mode integration with cheat system
+
+## [1.0.18]
+
+### Added
+
+- New cheat to retain angel transformation even when losing virginity
+
+### Fixed
+
+- Fixed inability to change cum/milk volume and refactory rate
+- Fixed info fetcher unable to fetch tentacle info
+
+## [1.0.17]
+
+### Added
+
+- Ability to perform abortion
+
+### Changed
+
+- Small UI improvements
+
+### Note
+
+- Caution: May cause some event problems (e.g., Alex pregnancy event)
+
+## [1.0.16]
+
+### Changed
+
+- Updated cheat for v0.4.6.3 for vanilla version
+- Other versions do not require update
+
+### Note
+
+- Current cheat version is not fully tested for v0.4.6.3
+
+## [1.0.15]
+
+### Added
+
+- Sources now available on GitHub
+- Previous changelog available in zip files
+
+## [1.0.14]
+
+### Added
+
+- Support for Firebase NWJS version
+
+### Fixed
+
+- Various bugfixes
+
+## [1.0.13]
+
+### Added
+
+- Added support for online DoL versions
+
+### Note
+
+- Not fully tested yet; contact maintainer if issues occur
+
+## [1.0.12]
+
+### Fixed
+
+- Fixed some cheats not working after changes
+- Fixed unlimited cum (cum not intense)
+- Fixed array access function
+
+## [1.0.11]
+
+### Server Version Changes
+
+- Moved all cheat script to index.php (fewer files)
+- Added warning before server save if version differs
+
+### Changes
+
+- Added information about server save and array errors
+- Array error fix now available as a tool
+
+### Added
+
+- New accessibility features: enable history button, sidebar button, simplify cheat button
+- Aimed at mobile users for easier sidebar and history access
+- Brought back sex skill cheat (was forgotten)
+
+## [1.0.10]
+
+### Server Version Changes
+
+- New `start-admin.bat` to run server with admin privileges (fixes permission denied errors)
+
+### Non-Server Version Changes
+
+- Fixed CORS policy compatibility issue; script now moved with DoL
+
+## [1.0.9]
+
+### Fixed
+
+- Fixed pregnancy lock for NPC error
+- Fixed cheat prevention in main menu
+
+### Added
+
+- MC offspring manager now available
+
+### Changed
+
+- Changed wolf ferocity from toggle to regular cheat in misc tab
+
+### Optimized
+
+- New daily toggle to reduce computing
+- Info fetcher optimization
+
+## [1.0.8]
+
+### Added
+
+- Pregnancy manager: pregnancy lock and day control
+
+### Changed
+
+- Small UI improvements; descriptions now use tooltips
+
+## [1.0.7]
+
+### Added
+
+- School reputation cheat
+- Farm vegetables sold in process checker (misc tab)
+- Quick performance settings in misc
+
+### Fixed
+
+- Fixed pregnancy detector
+
+### Changed
+
+- Code improvements
+
+## [1.0.6] - Major Release
+
+### Added
+
+- Two cheat versions:
+  - **Server version**: Works on any version (may cause bugs on untested versions)
+  - **Non-server version**: Works only on current version, no server save required
+- Cheat info display
+- Pregnancy detection for NPC/player
+
+### Changed
+
+- General script optimization, especially for toggles
+
+### Fixed
+
+- Fixed wolf ferocity and harmony issues
+
+## [1.0.5]
+
+### Added
+
+- Wolfpack ferocity and harmony max cheats
+- Auto interact with child
+
+### Changed
+
+- Script optimization
+- Sync optimization
+
+### Removed
+
+- Removed mayor project fix (array error fix handles this now)
+
+## [1.0.4]
+
+### Added
+
+- Array error fix for wrong array usage causing data loss (beta)
+- Auto detect array error functionality
+
+### Fixed
+
+- Fixed crime mod upgrade that caused problems
+
+### Changed
+
+- Debug deep search now shows more detail
+- Code improvements
+
+## [1.0.3]
+
+### Added
+
+- Mayor project fix (if project is gone during gameplay and all projects undiscovered, fix will mark all as finished)
+
+### Fixed
+
+- Fixed parasite removal and infection logic
+
+## [1.0.2]
+
+### Added
+
+- Fame and NPC manager with scope to see current variables
+- Exam manager
+- Talent manager
+
+### Fixed
+
+- Fixed unlimited cum (now always intense when activated)
+- Better error handling for server save function
+
+## [1.0.1]
+
+### Fixed
+
+- Server import/export alert (functionality not yet implemented)
+- Fixed server import/export with gaps in save data (1-9)
+- Fixed unlimited toggle not working properly
+- Added prevention for cheat activation in main menu
+
+## [1.0.0] - Initial Release
+
+Initial release of DoL CheatPlus

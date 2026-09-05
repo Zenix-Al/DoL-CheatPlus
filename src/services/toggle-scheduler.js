@@ -102,6 +102,9 @@ function runEntriesSequentially(entries, { onProgress = null, onDone = null, dai
             }
           );
         }
+        if (typeof meta.onFailureThreshold === 'function') {
+          meta.onFailureThreshold({ id: key, failures: meta.failureCount, error: e, daily });
+        }
       }
     }
 
@@ -116,13 +119,25 @@ export const ToggleScheduler = {
   register(
     id,
     fn,
-    { daily = false, cooldownMs = DEFAULT_COOLDOWN_MS, maxFailures = DEFAULT_MAX_FAILURES } = {}
+    {
+      daily = false,
+      cooldownMs = DEFAULT_COOLDOWN_MS,
+      maxFailures = DEFAULT_MAX_FAILURES,
+      onFailureThreshold = null,
+    } = {}
   ) {
     if (!id) return;
     debugLog('toggle:scheduler', `Registering ${daily ? 'daily' : 'regular'} toggle: ${id}`, {
       data: { cooldownMs, maxFailures, fnExists: typeof fn === 'function' },
     });
-    const meta = { fn, lastRun: 0, failureCount: 0, cooldownMs, maxFailures };
+    const meta = {
+      fn,
+      lastRun: 0,
+      failureCount: 0,
+      cooldownMs,
+      maxFailures,
+      onFailureThreshold,
+    };
     if (daily) dailyMap.set(id, meta);
     else functionMap.set(id, meta);
   },
@@ -283,6 +298,16 @@ export const ToggleScheduler = {
     const map = daily ? dailyMap : functionMap;
     const meta = map.get(id);
     return meta?.fn;
+  },
+
+  has(id, { daily = false } = {}) {
+    return (daily ? dailyMap : functionMap).has(id);
+  },
+
+  list({ daily = null } = {}) {
+    if (daily === true) return [...dailyMap.keys()];
+    if (daily === false) return [...functionMap.keys()];
+    return [...functionMap.keys(), ...dailyMap.keys()];
   },
 };
 
